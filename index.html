@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="KAMPUS helps CHRIST University students discover clubs, events and campus communities at Bangalore Central Campus.">
+<meta name="color-scheme" content="light dark">
+<title>KAMPUS — Clubs, Events & Campus Life</title>
+<style>
+:root{--ink:#151515;--muted:#666;--paper:#f7f5f1;--card:#fff;--line:#e7e2da;--accent:#b21f24;--accent-soft:#fff0f1;--gold:#f2b84b;--blue:#5b8def;--green:#52b788;--nav-h:72px}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}a{color:inherit}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+nav{min-height:var(--nav-h);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 6%;position:sticky;top:0;z-index:50}.logo{font-weight:900;letter-spacing:-1px;font-size:26px;text-decoration:none}.logo span{font-size:13px;margin-left:5px;color:var(--gold);vertical-align:top}.nav-links{display:flex;align-items:center;gap:28px}.nav-links a{text-decoration:none;color:#222;font-size:14px;font-weight:700;line-height:1;display:inline-flex;align-items:center;height:40px}.nav-links a:hover{color:var(--accent)}.theme-toggle,.menu-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;font-size:19px;display:inline-flex;align-items:center;justify-content:center;transition:.2s}.theme-toggle:hover,.menu-toggle:hover{transform:translateY(-1px)}.menu-toggle{display:none}.nav-links a:focus-visible,.theme-toggle:focus-visible,.menu-toggle:focus-visible,.btn:focus-visible,.filter:focus-visible,.search input:focus-visible,.search button:focus-visible{outline:3px solid #5b8def66;outline-offset:3px}
+.hero{padding:80px 6% 60px;position:relative;overflow:hidden;background:radial-gradient(circle at 82% 18%,#4d2025 0,#171717 32%),#171717;color:white}.hero::after{content:"";position:absolute;width:420px;height:420px;border:1px solid #ffffff14;border-radius:50%;right:-150px;bottom:-250px;box-shadow:0 0 0 55px #ffffff05,0 0 0 110px #ffffff03}.hero-inner{max-width:1050px;margin:auto;position:relative;z-index:1}.eyebrow{text-transform:uppercase;letter-spacing:2px;color:#e5b9ba;font-size:12px;font-weight:800}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.98;letter-spacing:-4px;margin:16px 0}.hero-accent{color:#f0b8bb}.hero p{font-size:19px;max-width:700px;color:#d7d7d7;line-height:1.6}.search{margin-top:32px;display:flex;max-width:720px}.search input{min-width:0;flex:1;padding:18px 20px;border:0;border-radius:10px 0 0 10px;font-size:16px}.search button{border:0;background:var(--accent);color:#fff;padding:0 26px;border-radius:0 10px 10px 0;font-weight:800;cursor:pointer}
+main{max-width:1100px;margin:auto;padding:55px 6%}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px}.section-head h2,.main-gallery h2{font-size:32px;margin:0 0 8px}.section-kicker{color:var(--accent)!important;letter-spacing:1.6px;margin-bottom:6px}.muted{color:var(--muted)}section[id]{scroll-margin-top:calc(var(--nav-h) + 18px)}
+.filters{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 24px}.filter{border:1px solid var(--line);background:#fff;padding:9px 14px;border-radius:999px;cursor:pointer;font-weight:700;transition:.18s;color:var(--ink)}.filter:hover{transform:translateY(-2px);border-color:#d7b2b5}.filter.active{background:#171717;color:#fff;box-shadow:0 6px 16px #0002}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#fff 72%,#fff9f7 100%);border:1px solid var(--line);border-radius:16px;padding:25px;transition:.2s}.card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#d9485f,#f2b84b,#5b8def,#52b788)}.card::after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-48px;bottom:-48px;background:#b21f2408}.card:hover{transform:translateY(-3px);box-shadow:0 10px 30px #0000000d}.tag{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;background:#f0ece5;padding:6px 9px;border-radius:999px}.card:nth-child(3n+1) .tag{background:#fff0f2;color:#a51d34}.card:nth-child(3n+2) .tag{background:#fff6df;color:#8a6200}.card:nth-child(3n) .tag{background:#edf3ff;color:#315ea8}.card:nth-child(4n) .tag{background:#edf9f2;color:#28764d}.card h3{margin:15px 0 8px;font-size:23px;letter-spacing:-.3px}.card p{color:var(--muted);line-height:1.5;font-size:14px}.btn{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;margin-top:12px;background:#171717;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:800;border:0;cursor:pointer;transition:.18s}.btn:hover{transform:translateY(-2px);background:var(--accent)}
+.events{margin-top:65px;padding-top:10px}.event{display:grid;grid-template-columns:85px 1fr auto;gap:20px;align-items:center;background:#fff;border:1px solid var(--line);padding:20px;border-radius:14px;margin:12px 0;transition:.2s}.event:hover{transform:translateX(4px);box-shadow:0 8px 24px #0000000b}.date{text-align:center;border-right:1px solid var(--line);padding-right:18px}.date b{font-size:28px;display:block}.date small{color:var(--accent);font-weight:800}.event h3{margin:0 0 6px}.event p{margin:0;color:var(--muted);font-size:14px}
+.main-gallery{margin-top:70px;overflow:hidden;padding:48px 0 18px}.main-gallery::before{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin-bottom:28px}.main-gallery-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.gallery-track,.club-gallery{display:flex;gap:16px;width:max-content;animation:kampusSlide 42s linear infinite}.gallery-track:hover,.club-gallery:hover{animation-play-state:paused}.gallery-track img,.club-gallery img{width:230px;height:150px;object-fit:cover;border-radius:18px;box-shadow:0 10px 28px #0002;display:block;flex:none}.gallery-track img:nth-child(3n){transform:translateY(8px)}@keyframes kampusSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+#about{margin-top:40px}#about .card{padding:34px 36px;background:linear-gradient(135deg,var(--card),var(--accent-soft));border-left:4px solid var(--accent)}#about .card p{max-width:850px;line-height:1.75;font-size:15px}
+footer{background:#171717;color:#aaa;padding:30px 6%;margin-top:40px;border-top:3px solid var(--accent)}.footer-contact{max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:20px;font-size:14px}.footer-contact .left{text-align:left}.footer-contact .middle{text-align:center}.footer-contact .right{text-align:right}.footer-label{color:#fff;font-weight:800;letter-spacing:.4px}.contact-link{color:#ddd;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:8px}.contact-link:hover{color:#fff;text-decoration:underline}.contact-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.footer-notes{max-width:1100px;margin:18px auto 0;padding-top:16px;border-top:1px solid #ffffff12;color:#777;font-size:12px;line-height:1.55}.footer-notes a{color:#999}.footer-notes a:hover{color:#ddd}
+
+/* Single-file club profile route: works locally and when hosted */
+.club-page{display:none;position:fixed;inset:0;z-index:80;overflow:auto;background:linear-gradient(180deg,#fffdf9 0%,#f7f5f1 100%);color:var(--ink)}
+.club-page.show{display:block}.club-page-inner{max-width:980px;margin:auto;padding:34px 6% 70px}.club-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:34px}.back{display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border-radius:10px;background:var(--accent);color:#fff;border:0;text-decoration:none;font-size:14px;font-weight:800;box-shadow:0 10px 24px rgba(178,31,36,.18);cursor:pointer}.back:hover{background:#8f181d;transform:translateX(-2px)}.share-wrap{text-align:right}.share-btn{margin:0;background:#fff;color:#222;border:1px solid var(--line);box-shadow:none}.share-btn:hover{background:#f7f5f1;color:#111}.share-status{font-size:12px;color:var(--muted);min-height:16px;margin-top:6px}.club-page .tag{background:var(--accent-soft);color:var(--accent);padding:8px 13px}.club-title{font-size:clamp(46px,7vw,76px);line-height:.96;letter-spacing:-3.5px;margin:16px 0 18px;max-width:760px}.club-hero-desc{font-size:18px;line-height:1.7;color:var(--muted);max-width:720px}.club-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:38px 0 52px}.club-meta div{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff}.club-meta div:nth-child(1){border-top:4px solid var(--accent);background:#fff7f7}.club-meta div:nth-child(2){border-top:4px solid var(--gold);background:#fffaf0}.club-meta div:nth-child(3){border-top:4px solid var(--blue);background:#f6f9ff}.club-meta div:nth-child(4){border-top:4px solid var(--green);background:#f4fbf7}.club-meta strong{display:block;text-transform:uppercase;font-size:11px;letter-spacing:1px;color:#777;margin-bottom:8px}.pending{color:var(--muted);font-size:14px}.club-section{margin-top:54px;overflow:hidden}.club-section h2{font-size:30px;letter-spacing:-.7px;margin:0 0 10px}.club-section.about-section{padding:28px 30px;background:#fff;border-left:5px solid var(--accent);border-radius:0 16px 16px 0}.club-section.gallery-section{padding:34px 0}.club-section.events-section{padding:28px 30px;background:#fff8ed;border:1px dashed #e9c87b;border-radius:18px}.club-gallery-wrap{overflow:hidden;margin-top:22px;padding:4px 0 12px}.club-gallery img:nth-child(1),.club-gallery img:nth-child(4){transform:translateY(8px)}
+body.dark .club-page{background:linear-gradient(180deg,#121212,#181818)}body.dark .club-meta div{background:#1d1d1d}body.dark .club-meta div:nth-child(1){background:#21191a}body.dark .club-meta div:nth-child(2){background:#211e18}body.dark .club-meta div:nth-child(3){background:#181d26}body.dark .club-meta div:nth-child(4){background:#17211c}body.dark .club-section.about-section{background:#1c1c1c}body.dark .club-section.events-section{background:#221e17;border-color:#6c5730}body.dark .share-btn{background:#262626;color:#eee;border-color:#444}
+@media(max-width:760px){.club-page-inner{padding-top:24px}.club-topbar{margin-bottom:28px}.club-meta{grid-template-columns:repeat(2,1fr)}.club-title{font-size:52px}.club-section.about-section,.club-section.events-section{padding:22px}.club-gallery img:nth-child(1),.club-gallery img:nth-child(4){transform:none}}
+@media(max-width:520px){.club-meta{grid-template-columns:1fr}.club-title{font-size:46px}.club-topbar{align-items:flex-start;flex-direction:column}.share-wrap{text-align:left}.share-btn{margin-top:0}.club-page-inner{padding-left:5%;padding-right:5%}}
+
+body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#303030;--accent-soft:#321f21;background:#141414;color:#f3f0ea}body.dark nav{background:#181818}body.dark .nav-links a{color:#eee}body.dark .card,body.dark .event{background:#1d1d1d}body.dark .filter{background:#1d1d1d;color:#eee;border-color:#333}body.dark .filter.active{background:#eee;color:#111}body.dark .theme-toggle,body.dark .menu-toggle{background:#262626;color:#fff;border-color:#444}body.dark #about .card{background:linear-gradient(135deg,#1d1d1d,#271b1c)}
+@media(max-width:760px){:root{--nav-h:64px}nav{min-height:64px;height:auto;padding:0 5%;flex-wrap:wrap}.logo{font-size:23px}.menu-toggle{display:inline-flex}.nav-actions{display:flex;align-items:center;gap:8px}.nav-links{display:none;order:3;width:100%;padding:2px 0 14px;gap:6px 16px;flex-wrap:wrap}.nav-links.open{display:flex}.nav-links a{height:34px;font-size:13px}.theme-toggle{width:36px;height:36px;font-size:17px}.hero{padding:55px 5% 48px}.hero h1{letter-spacing:-2px}.hero p{font-size:17px}.hero::after{width:260px;height:260px;right:-150px}.search button{padding:0 16px}.section-head{align-items:flex-start;flex-direction:column}.section-head #count{align-self:flex-end}.event{grid-template-columns:65px 1fr;gap:14px}.event .btn{grid-column:2;margin-top:4px;justify-self:start}.date{padding-right:12px}.gallery-track img,.club-gallery img{width:190px;height:130px}.footer-contact{grid-template-columns:1fr;text-align:center!important;gap:12px}.footer-contact .left,.footer-contact .middle,.footer-contact .right{text-align:center}.footer-notes{text-align:center}.card{padding:22px}}
+@media(max-width:420px){main{padding-left:5%;padding-right:5%}.hero h1{font-size:46px}.search input{font-size:15px;padding:16px 14px}.search button{padding:0 13px}.grid{grid-template-columns:1fr}.nav-links{gap:4px 14px}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gallery-track,.club-gallery{animation:none;width:auto;overflow-x:auto;scroll-snap-type:x proximity}.gallery-track img,.club-gallery img{transform:none!important;scroll-snap-align:start}*{transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<nav>
+  <a class="logo" href="#top" aria-label="KAMPUS home">KAMPUS<span>✦</span></a>
+  <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-controls="navLinks" aria-expanded="false" onclick="toggleMenu()">☰</button>
+  <div class="nav-links" id="navLinks"><a href="#clubs" onclick="closeMenu()">Clubs</a><a href="#events" onclick="closeMenu()">Events</a><a href="#gallery" onclick="closeMenu()">Gallery</a><a href="#about" onclick="closeMenu()">About</a><button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode"><span id="themeIcon">☾</span></button></div>
+</nav>
+
+<section class="hero" id="top">
+ <div class="hero-inner">
+  <div class="eyebrow">BUILT FOR CHRIST UNIVERSITY STUDENTS · BANGALORE CENTRAL CAMPUS</div>
+  <h1>Find your people.<br><span class="hero-accent">Find your club.</span></h1>
+  <p>One lively home for clubs, communities and campus experiences. Discover what excites you, meet your people and make your time on campus count.</p>
+  <div class="search"><label class="sr-only" for="search">Search clubs, categories or interests</label><input id="search" type="search" aria-label="Search clubs, categories or interests" placeholder="Search clubs, categories or interests..." oninput="renderClubs()" onkeydown="handleSearchKey(event)"><button type="button" onclick="searchAndScroll()">Search</button></div>
+ </div>
+</section>
+
+<main>
+<section id="clubs">
+ <div class="section-head"><div><div class="eyebrow section-kicker">DISCOVER · CONNECT · CREATE</div><h2>Explore clubs</h2><div class="muted">From business and finance to arts, gaming and the environment — find a space that feels like yours.</div></div><div id="count" class="muted" aria-live="polite"></div></div>
+ <div class="filters" id="filters" aria-label="Filter clubs by category"></div>
+ <div class="grid" id="clubGrid"></div>
+</section>
+
+<section class="events" id="events">
+ <div class="section-head"><div><div class="eyebrow section-kicker">MARK YOUR CALENDAR</div><h2>Upcoming events</h2><div class="muted">What's happening around campus.</div></div></div>
+ <div id="eventList"></div>
+</section>
+
+<section class="main-gallery" id="gallery">
+ <div class="main-gallery-head"><div><div class="eyebrow" style="color:var(--accent);margin-bottom:8px">Bangalore Central Campus</div><h2>Campus Gallery</h2></div></div>
+ <div class="gallery-track"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Christ_University%2C_Bangalore%2C_main_campus.jpg" alt="Tree-lined walkway at CHRIST University Bangalore Central Campus" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Christ_University_Bangalore.jpg" alt="Central block at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Christ_University_buildings%2C_Bangalore_11.jpg" alt="Green campus grounds at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Christ_University_buildings%2C_Bangalore_12.jpg" alt="Campus garden and walkway at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Christ_University_buildings%2C_Bangalore_01.jpg" alt="CHRIST University campus sign in Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Christ_University%2C_Bangalore%2C_main_campus.jpg" alt="Tree-lined walkway at CHRIST University Bangalore Central Campus" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Christ_University_Bangalore.jpg" alt="Central block at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Christ_University_buildings%2C_Bangalore_11.jpg" alt="Green campus grounds at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Christ_University_buildings%2C_Bangalore_12.jpg" alt="Campus garden and walkway at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Christ_University_buildings%2C_Bangalore_01.jpg" alt="CHRIST University campus sign in Bangalore" loading="lazy" decoding="async"></div>
+</section>
+
+<section id="about">
+ <div class="card"><h2>A single home for campus communities.</h2><p>KAMPUS brings students, clubs and campus opportunities together in one place. It makes discovering communities easier, helps students explore what genuinely interests them, and creates a simple space to stay connected with events, activities and the people who make campus life memorable.</p></div>
+</section>
+</main>
+
+
+<div class="club-page" id="clubPage" aria-hidden="true">
+  <div class="club-page-inner">
+    <div class="club-topbar">
+      <button class="back" type="button" onclick="goBackFromClub()">← Back to clubs</button>
+      <div class="share-wrap"><button class="btn share-btn" type="button" onclick="shareClub()">Share club</button><div id="shareStatus" class="share-status" aria-live="polite"></div></div>
+    </div>
+    <div id="clubPageContent"></div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-contact">
+    <div class="left"><span class="footer-label">BUSINESS ENQUIRIES</span></div>
+    <div class="middle"><a href="mailto:kampus.clubs@gmail.com" class="contact-link" aria-label="Email KAMPUS"><span class="contact-icon"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span><span>kampus.clubs@gmail.com</span></a></div>
+    <div class="right"><a href="tel:+917200237112" class="contact-link" aria-label="Call KAMPUS"><span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .8 2.9a2 2 0 0 1-.4 2.1L8.2 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.4 1.9.7 2.9.8A2 2 0 0 1 22 16.9z"/></svg></span><span>+91 72002 37112</span></a></div>
+  </div>
+  <div class="footer-notes">
+    <div>Central Campus photographs: Rajiv1840478, Tanyapandey99 and Pinakpani via <a href="https://commons.wikimedia.org/wiki/Category:Christ_University,_Bengaluru" target="_blank" rel="noopener noreferrer">Wikimedia Commons</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>.</div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script>
+// clubs/events are now loaded from Supabase (see loadKampusData below)
+// instead of being hardcoded here.
+let clubs=[];
+let events=[];
+
+// ---- Row mapping: matches the actual `clubs` / `events` schema ----
+// clubs(id, name, description, student_head, faculty_coordinator, instagram, whatsapp, created_at)
+// There is no `category` or `slug` column, so a slug is generated
+// client-side from the club name for the #club/<slug> routes.
+function slugify(str){
+  return String(str||'').toLowerCase().trim().replace(/[^a-z0-9]+/g,'-').replace(/(^-+|-+$)/g,'') || 'club';
+}
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+}
+function formatContactLink(value, type){
+  if(!value) return '<span class="pending">Coming soon</span>';
+  const safe = escapeHtml(value);
+  if(/^https?:\/\//i.test(value)){
+    return `<a href="${value}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
+  }
+  if(type==='instagram'){
+    const handle = value.replace(/^@/,'');
+    return `<a href="https://instagram.com/${encodeURIComponent(handle)}" target="_blank" rel="noopener noreferrer">@${escapeHtml(handle)}</a>`;
+  }
+  if(type==='whatsapp'){
+    const digits = value.replace(/[^\d+]/g,'');
+    if(digits) return `<a href="https://wa.me/${digits}" target="_blank" rel="noopener noreferrer">${safe}</a>`;
+  }
+  return safe;
+}
+function mapClubRow(row){
+  return {
+    id: row.id,
+    name: row.name,
+    slug: slugify(row.name),
+    desc: row.description,
+    head: row.student_head || 'Student Coordinator',
+    faculty: row.faculty_coordinator || 'Faculty Coordinator',
+    instagram: row.instagram || '',
+    whatsapp: row.whatsapp || ''
+  };
+}
+function mapEventRow(row, clubNameById){
+  const d = row.event_date ? new Date(row.event_date+'T00:00:00') : null;
+  return {
+    id: row.id,
+    club_id: row.club_id,
+    name: row.title,
+    desc: row.description,
+    club: clubNameById[row.club_id] || 'Club',
+    place: row.venue,
+    day: d ? String(d.getDate()) : '--',
+    month: d ? d.toLocaleString('en-US',{month:'short'}).toUpperCase() : '',
+    time: formatEventTime(row.event_time)
+  };
+}
+function formatEventTime(t){
+  if(!t) return '';
+  const parts=String(t).split(':');
+  let h=parseInt(parts[0],10); const m=parts[1]||'00';
+  if(isNaN(h)) return String(t);
+  const ap=h>=12?'PM':'AM'; h=h%12; if(h===0)h=12;
+  return `${h}:${m} ${ap}`;
+}
+
+async function loadKampusData(){
+  const grid=document.getElementById('clubGrid');
+  if(grid) grid.innerHTML='<div class="card"><h3>Loading clubs…</h3><p>One moment.</p></div>';
+  try{
+    const { data: clubRows, error: clubErr } = await supabaseClient.from('clubs').select('*').order('name');
+    if(clubErr) throw clubErr;
+    clubs = (clubRows||[]).map(mapClubRow);
+
+    const clubNameById={}; clubs.forEach(c=>{ clubNameById[c.id]=c.name; });
+
+    const { data: eventRows, error: eventErr } = await supabaseClient.from('events').select('*').order('event_date',{ascending:true});
+    if(eventErr) throw eventErr;
+    events = (eventRows||[]).map(row=>mapEventRow(row, clubNameById));
+    return true;
+  }catch(err){
+    console.error('KAMPUS: failed to load data from Supabase', err);
+    if(grid) grid.innerHTML='<div class="card"><h3>Unable to load clubs right now</h3><p>Please refresh the page or check back shortly.</p></div>';
+    return false;
+  }
+}
+
+// No `category` column exists on `clubs`, so there is nothing to
+// populate the category filter bar with — it stays empty and the
+// search box (name + description) is the only filter.
+function renderClubs(){
+ const q=document.getElementById('search').value.toLowerCase().trim();
+ const data=clubs.filter(c=>(`${c.name} ${c.desc||''}`).toLowerCase().includes(q));
+ document.getElementById('count').textContent=`${data.length} clubs`;
+ document.getElementById('clubGrid').innerHTML=data.map(c=>`<article class="card"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.desc||'')}</p><a class="btn" href="#club/${c.slug}">View club →</a></article>`).join('') || `<div class="card"><h3>No clubs found</h3><p>Try another search.</p></div>`;
+}
+function searchAndScroll(){renderClubs();document.getElementById('clubs').scrollIntoView({behavior:'smooth',block:'start'})}
+function handleSearchKey(event){if(event.key==='Enter'){event.preventDefault();searchAndScroll()}}
+function renderEvents(){
+ document.getElementById('eventList').innerHTML=events.map(e=>{
+   const c=clubs.find(x=>x.name===e.club);
+   const link=c?`<a class="btn" href="#club/${c.slug}">View club →</a>`:'';
+   return `<div class="event"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${link}</div>`;
+ }).join('') || '<p class="muted">No upcoming events yet.</p>';
+}
+
+let currentClub=null;
+const clubGalleryImgs=[
+ 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80',
+ 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80',
+ 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=900&q=80',
+ 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=900&q=80',
+ 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80',
+ 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80'
+];
+function showClub(slug){
+ const c=clubs.find(x=>x.slug===slug); if(!c){location.hash='#clubs';return}
+ currentClub=c;
+ const clubEvents=events.filter(e=>e.club===c.name);
+ document.getElementById('clubPageContent').innerHTML=`
+   <h1 class="club-title">${escapeHtml(c.name)}</h1>
+   <p class="club-hero-desc">${escapeHtml(c.desc||'')}</p>
+   <div class="club-meta">
+     <div><strong>Student Head</strong>${escapeHtml(c.head)}</div>
+     <div><strong>Faculty Coordinator</strong>${escapeHtml(c.faculty)}</div>
+     <div><strong>Instagram</strong>${formatContactLink(c.instagram,'instagram')}</div>
+     <div><strong>WhatsApp</strong>${formatContactLink(c.whatsapp,'whatsapp')}</div>
+   </div>
+   <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">Explore activities, achievements, recruitment opportunities and everything that makes ${escapeHtml(c.name)} unique.</p></section>
+   <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap"><div class="club-gallery">${[...clubGalleryImgs,...clubGalleryImgs].map((src,n)=>`<img src="${src}" alt="${escapeHtml(c.name)} gallery image ${(n%clubGalleryImgs.length)+1}" loading="lazy" decoding="async">`).join('')}</div></div></section>
+   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div></div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
+ const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
+}
+function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.overflow='';currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
+function handleRoute(){const m=location.hash.match(/^#club\/([^/?#]+)/);if(m){showClub(decodeURIComponent(m[1]));}else{hideClub();}}
+function goBackFromClub(){if(location.hash.startsWith('#club/')){history.back();setTimeout(()=>{if(location.hash.startsWith('#club/'))location.hash='#clubs'},120)}else{location.hash='#clubs'}}
+async function shareClub(){const status=document.getElementById('shareStatus');if(!currentClub)return;const url=location.href;try{if(navigator.share){await navigator.share({title:`${currentClub.name} — KAMPUS`,text:`Check out ${currentClub.name} on KAMPUS`,url});status.textContent='Shared.';return}if(navigator.clipboard){await navigator.clipboard.writeText(url);status.textContent='Link copied.';return}status.textContent='Copy the URL from your browser to share.';}catch(err){if(!err||err.name!=='AbortError')status.textContent='Copy the URL from your browser to share.'}}
+window.addEventListener('hashchange',handleRoute);
+
+function toggleTheme(){
+ const dark=document.body.classList.toggle('dark');
+ const icon=document.getElementById('themeIcon');
+ if(icon) icon.textContent=dark?'☀':'☾';
+ localStorage.setItem('kampusTheme',dark?'dark':'light');
+}
+(function(){
+ if(localStorage.getItem('kampusTheme')==='dark'){
+   document.body.classList.add('dark');
+   const icon=document.getElementById('themeIcon'); if(icon) icon.textContent='☀';
+ }
+})();
+function toggleMenu(){
+ const links=document.getElementById('navLinks');
+ const btn=document.getElementById('menuToggle');
+ const open=links.classList.toggle('open');
+ btn.setAttribute('aria-expanded',String(open));
+ btn.textContent=open?'×':'☰';
+}
+function closeMenu(){
+ const links=document.getElementById('navLinks');
+ const btn=document.getElementById('menuToggle');
+ if(links){links.classList.remove('open')} if(btn){btn.setAttribute('aria-expanded','false');btn.textContent='☰'}
+}
+
+(async function initKampus(){
+  await loadKampusData();
+  renderClubs();
+  renderEvents();
+  handleRoute();
+})();
+</script>
+</body>
+</html>
