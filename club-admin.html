@@ -49,6 +49,13 @@ textarea{resize:vertical;min-height:80px}
 @media(max-width:640px){.grid-3{grid-template-columns:1fr}}
 .empty{color:var(--muted);font-size:14px;padding:20px 0}
 .spinner-text{color:var(--muted);font-size:14px}
+.gallery-upload-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:16px}
+.gallery-upload-row input[type=file]{flex:1;min-width:200px;padding:9px 10px}
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px;margin-top:20px}
+.gallery-item{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1/1;background:#efece6}
+.gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
+.gallery-item .btn-remove{position:absolute;top:8px;right:8px;background:#fff;color:var(--accent);border:1px solid #f0c7c8;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer}
+.gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
 </style>
 </head>
 <body>
@@ -141,6 +148,25 @@ textarea{resize:vertical;min-height:80px}
       </div>
     </div>
 
+    <div id="gallerySection" class="section hidden">
+      <div class="section-head">
+        <h2>Club Gallery</h2>
+      </div>
+      <div class="card">
+        <label for="galleryFiles">Upload photos</label>
+        <p class="muted" style="margin:0;font-size:13px">You can select more than one photo at once.</p>
+        <div class="gallery-upload-row">
+          <input id="galleryFiles" type="file" accept="image/*" multiple>
+          <button class="btn" type="button" id="galleryUploadBtn" onclick="handleGalleryUpload()">Upload</button>
+        </div>
+        <div id="galleryUploadMsg" class="msg"></div>
+      </div>
+
+      <div id="galleryGridWrap">
+        <p class="empty">Loading photos…</p>
+      </div>
+    </div>
+
   </div>
 
 </main>
@@ -163,11 +189,14 @@ textarea{resize:vertical;min-height:80px}
 const CLUB_LEADERS_TABLE = 'club_leaders';
 const CLUBS_TABLE = 'clubs';
 const EVENTS_TABLE = 'events';
+const GALLERY_TABLE = 'club_gallery';
+const GALLERY_BUCKET = 'club-gallery';
 
 let currentUser = null;
 let currentClub = null;      // { id, name, description, student_head, faculty_coordinator, instagram, whatsapp }
 let currentEvents = [];      // raw rows from `events`
 let editingEventId = null;   // null = adding, otherwise the event id being edited
+let currentGallery = [];     // raw rows from `club_gallery`
 
 function show(el){ el.classList.remove('hidden'); }
 function hide(el){ el.classList.add('hidden'); }
@@ -229,6 +258,7 @@ async function showDashboard(){
   hide($('noClubMsg'));
   hide($('clubHeaderWrap'));
   hide($('eventsSection'));
+  hide($('gallerySection'));
 
   // 1) Find which club this leader is linked to.
   const { data: leaderRow, error: leaderErr } = await supabaseClient
@@ -265,8 +295,10 @@ async function showDashboard(){
   $('clubDesc').textContent = club.description || '';
   show($('clubHeaderWrap'));
   show($('eventsSection'));
+  show($('gallerySection'));
 
   await loadEvents();
+  await loadGallery();
 }
 
 async function loadEvents(){
@@ -396,6 +428,126 @@ async function deleteEvent(eventId){
     return;
   }
   await loadEvents();
+}
+
+// ---------- Club Gallery ----------
+async function loadGallery(){
+  const wrap = $('galleryGridWrap');
+  wrap.innerHTML = '<p class="empty">Loading photos…</p>';
+  const { data, error } = await supabaseClient
+    .from(GALLERY_TABLE)
+    .select('*')
+    .eq('club_id', currentClub.id)
+    .order('created_at', { ascending: false });
+
+  if(error){
+    console.error('KAMPUS admin: could not load gallery', error);
+    wrap.innerHTML = '<p class="empty">Could not load photos. Please refresh.</p>';
+    return;
+  }
+  currentGallery = data || [];
+  renderGallery();
+}
+
+function renderGallery(){
+  const wrap = $('galleryGridWrap');
+  if(!currentGallery.length){
+    wrap.innerHTML = '<p class="empty">No photos added yet.</p>';
+    return;
+  }
+  wrap.innerHTML = `<div class="gallery-grid">${currentGallery.map(g => `
+    <div class="gallery-item">
+      <img src="${g.image_url}" alt="Club gallery photo" loading="lazy">
+      <button class="btn-remove" type="button" onclick="deleteGalleryImage('${g.id}', '${String(g.storage_path).replace(/'/g, "\\'")}')">Delete</button>
+    </div>
+  `).join('')}</div>`;
+}
+
+async function handleGalleryUpload(){
+  const input = $('galleryFiles');
+  const msg = $('galleryUploadMsg'); msg.textContent = ''; msg.className = 'msg';
+  const files = input.files;
+
+  if(!files || !files.length){
+    msg.textContent = 'Choose at least one photo first.';
+    msg.className = 'msg error';
+    return;
+  }
+
+  const btn = $('galleryUploadBtn');
+  btn.disabled = true;
+  msg.textContent = 'Uploading…';
+
+  let uploadedCount = 0;
+  let failedCount = 0;
+
+  for(const file of files){
+    const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const path = `${currentClub.id}/${Date.now()}_${Math.random().toString(36).slice(2, 8)}_${safeName}`;
+
+    const { error: uploadErr } = await supabaseClient.storage
+      .from(GALLERY_BUCKET)
+      .upload(path, file);
+
+    if(uploadErr){
+      console.error('KAMPUS admin: could not upload photo', uploadErr);
+      failedCount++;
+      continue;
+    }
+
+    const { data: pub } = supabaseClient.storage.from(GALLERY_BUCKET).getPublicUrl(path);
+    const imageUrl = pub && pub.publicUrl;
+
+    const { error: insertErr } = await supabaseClient
+      .from(GALLERY_TABLE)
+      .insert({ club_id: currentClub.id, storage_path: path, image_url: imageUrl });
+
+    if(insertErr){
+      console.error('KAMPUS admin: could not save gallery record', insertErr);
+      failedCount++;
+      // Best-effort cleanup so we don't leave an orphaned file in storage.
+      await supabaseClient.storage.from(GALLERY_BUCKET).remove([path]);
+      continue;
+    }
+
+    uploadedCount++;
+  }
+
+  btn.disabled = false;
+  input.value = '';
+
+  if(uploadedCount && !failedCount){
+    msg.textContent = `Uploaded ${uploadedCount} photo${uploadedCount === 1 ? '' : 's'}.`;
+    msg.className = 'msg ok';
+  }else if(uploadedCount && failedCount){
+    msg.textContent = `Uploaded ${uploadedCount}, but ${failedCount} failed. Please try the failed ones again.`;
+    msg.className = 'msg error';
+  }else{
+    msg.textContent = 'Could not upload photos. Please try again.';
+    msg.className = 'msg error';
+  }
+
+  await loadGallery();
+}
+
+async function deleteGalleryImage(id, storagePath){
+  if(!confirm('Delete this photo? This cannot be undone.')) return;
+
+  const { error: storageErr } = await supabaseClient.storage.from(GALLERY_BUCKET).remove([storagePath]);
+  if(storageErr){
+    console.error('KAMPUS admin: could not delete photo from storage', storageErr);
+    alert(storageErr.message || 'Could not delete this photo.');
+    return;
+  }
+
+  const { error: dbErr } = await supabaseClient.from(GALLERY_TABLE).delete().eq('id', id);
+  if(dbErr){
+    console.error('KAMPUS admin: could not delete gallery record', dbErr);
+    alert(dbErr.message || 'Could not delete this photo.');
+    return;
+  }
+
+  await loadGallery();
 }
 
 boot();
