@@ -30,6 +30,18 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 @media(max-width:760px){:root{--nav-h:64px}nav{min-height:64px;height:auto;padding:0 5%;flex-wrap:wrap}.logo{font-size:23px}.menu-toggle{display:inline-flex}.nav-actions{display:flex;align-items:center;gap:8px}.nav-links{display:none;order:3;width:100%;padding:2px 0 14px;gap:6px 16px;flex-wrap:wrap}.nav-links.open{display:flex}.nav-links a{height:34px;font-size:13px}.theme-toggle{width:36px;height:36px;font-size:17px}.hero{padding:55px 5% 48px}.hero h1{letter-spacing:-2px}.hero p{font-size:17px}.hero::after{width:260px;height:260px;right:-150px}.search button{padding:0 16px}.section-head{align-items:flex-start;flex-direction:column}.section-head #count{align-self:flex-end}.event{grid-template-columns:65px 1fr;gap:14px}.event .btn{grid-column:2;margin-top:4px;justify-self:start}.date{padding-right:12px}.gallery-track img,.club-gallery img{width:190px;height:130px}.footer-contact{grid-template-columns:1fr;text-align:center!important;gap:12px}.footer-contact .left,.footer-contact .middle,.footer-contact .right{text-align:center}.footer-notes{text-align:center}.card{padding:22px}}
 @media(max-width:420px){main{padding-left:5%;padding-right:5%}.hero h1{font-size:46px}.search input{font-size:15px;padding:16px 14px}.search button{padding:0 13px}.grid{grid-template-columns:1fr}.nav-links{gap:4px 14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gallery-track,.club-gallery{animation:none;width:auto;overflow-x:auto;scroll-snap-type:x proximity}.gallery-track img,.club-gallery img{transform:none!important;scroll-snap-align:start}*{transition-duration:.01ms!important}}
+
+.event-clickable{cursor:pointer}
+.event-clickable:hover{transform:translateY(-2px)}
+.event-description-modal{display:none;position:fixed;inset:0;z-index:100;background:#0009;padding:24px;overflow:auto}
+.event-description-modal.show{display:flex;align-items:center;justify-content:center}
+.event-description-box{width:min(620px,100%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 20px 60px #0004;position:relative}
+.event-description-box .close-event{position:absolute;right:16px;top:16px;width:36px;height:36px;border:0;border-radius:50%;background:var(--paper);color:var(--ink);font-size:22px;cursor:pointer}
+.event-description-box .event-popup-label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
+.event-description-box h2{font-size:30px;line-height:1.1;margin:10px 42px 10px 0}
+.event-description-box .event-popup-meta{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:22px}
+.event-description-box .event-popup-description{font-size:16px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
+@media(max-width:520px){.event-description-modal{padding:14px}.event-description-box{padding:24px 20px}.event-description-box h2{font-size:25px}}
 </style>
 </head>
 <body>
@@ -70,6 +82,17 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 </section>
 </main>
 
+
+
+<div class="event-description-modal" id="eventDescriptionModal" aria-hidden="true" onclick="closeEventDescription(event)">
+  <div class="event-description-box" onclick="event.stopPropagation()">
+    <button class="close-event" type="button" aria-label="Close" onclick="closeEventDescription()">×</button>
+    <div class="event-popup-label">Event details</div>
+    <h2 id="eventPopupTitle"></h2>
+    <div class="event-popup-meta" id="eventPopupMeta"></div>
+    <div class="event-popup-description" id="eventPopupDescription"></div>
+  </div>
+</div>
 
 <div class="club-page" id="clubPage" aria-hidden="true">
   <div class="club-page-inner">
@@ -197,9 +220,34 @@ function renderEvents(){
  document.getElementById('eventList').innerHTML=events.map(e=>{
    const c=clubs.find(x=>x.name===e.club);
    const link=c?`<a class="btn" href="#club/${c.slug}">View club →</a>`:'';
-   return `<div class="event"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${link}</div>`;
+   return `<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${link}</div>`;
  }).join('') || '<p class="muted">No upcoming events yet.</p>';
 }
+
+
+function openEventDescription(eventId){
+  const e = events.find(x => String(x.id) === String(eventId));
+  if(!e) return;
+  document.getElementById('eventPopupTitle').textContent = e.name || 'Event';
+  document.getElementById('eventPopupMeta').textContent =
+    `${e.club || 'Club'} · ${e.place || 'Venue'} · ${e.time || ''}${e.day && e.month ? ` · ${e.day} ${e.month}` : ''}`;
+  document.getElementById('eventPopupDescription').textContent =
+    e.desc || 'No description has been added for this event yet.';
+  const modal = document.getElementById('eventDescriptionModal');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+function closeEventDescription(event){
+  if(event && event.target !== event.currentTarget) return;
+  const modal = document.getElementById('eventDescriptionModal');
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden','true');
+  if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow='';
+}
+document.addEventListener('keydown', event => {
+  if(event.key === 'Escape') closeEventDescription();
+});
 
 let currentClub=null;
 const clubGalleryImgs=[
@@ -225,7 +273,7 @@ function showClub(slug){
    </div>
    <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">Explore activities, achievements, recruitment opportunities and everything that makes ${escapeHtml(c.name)} unique.</p></section>
    <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap"><div class="club-gallery">${[...clubGalleryImgs,...clubGalleryImgs].map((src,n)=>`<img src="${src}" alt="${escapeHtml(c.name)} gallery image ${(n%clubGalleryImgs.length)+1}" loading="lazy" decoding="async">`).join('')}</div></div></section>
-   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div></div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
+   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div></div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
  const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
 }
 function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.overflow='';currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
