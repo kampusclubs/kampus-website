@@ -42,6 +42,12 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 .event-description-box .event-popup-meta{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:22px}
 .event-description-box .event-popup-description{font-size:16px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
 @media(max-width:520px){.event-description-modal{padding:14px}.event-description-box{padding:24px 20px}.event-description-box h2{font-size:25px}}
+
+.club-gallery img{cursor:zoom-in}
+.lightbox-modal{display:none;position:fixed;inset:0;z-index:110;background:#000d;padding:24px;align-items:center;justify-content:center}
+.lightbox-modal.show{display:flex}
+.lightbox-modal img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px #0008;object-fit:contain}
+.lightbox-close{position:fixed;right:20px;top:20px;background:#fff;color:#111}
 </style>
 </head>
 <body>
@@ -92,6 +98,11 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
     <div class="event-popup-meta" id="eventPopupMeta"></div>
     <div class="event-popup-description" id="eventPopupDescription"></div>
   </div>
+</div>
+
+<div class="lightbox-modal" id="lightboxModal" aria-hidden="true" onclick="closeLightbox()">
+  <button class="close-event lightbox-close" type="button" aria-label="Close" onclick="closeLightbox()">×</button>
+  <img id="lightboxImg" src="" alt="Enlarged gallery photo">
 </div>
 
 <div class="club-page" id="clubPage" aria-hidden="true">
@@ -246,19 +257,59 @@ function closeEventDescription(event){
   if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow='';
 }
 document.addEventListener('keydown', event => {
-  if(event.key === 'Escape') closeEventDescription();
+  if(event.key === 'Escape'){
+    closeEventDescription();
+    closeLightbox();
+  }
 });
 
+function openLightbox(src){
+  const modal = document.getElementById('lightboxModal');
+  document.getElementById('lightboxImg').src = src;
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden', 'false');
+  document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){
+  const modal = document.getElementById('lightboxModal');
+  if(!modal.classList.contains('show')) return;
+  modal.classList.remove('show');
+  modal.setAttribute('aria-hidden', 'true');
+  if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow = '';
+}
+
 let currentClub=null;
-const clubGalleryImgs=[
- 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=900&q=80',
- 'https://images.unsplash.com/photo-1523240795612-9a054b0db644?auto=format&fit=crop&w=900&q=80',
- 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=900&q=80',
- 'https://images.unsplash.com/photo-1523580846011-d3a5bc25702b?auto=format&fit=crop&w=900&q=80',
- 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?auto=format&fit=crop&w=900&q=80',
- 'https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&w=900&q=80'
-];
-function showClub(slug){
+
+// Club gallery photos now come from Supabase (table `club_gallery`,
+// storage bucket `club-gallery`) instead of a hardcoded demo list.
+async function fetchClubGallery(clubId){
+  try{
+    const { data, error } = await supabaseClient
+      .from('club_gallery')
+      .select('*')
+      .eq('club_id', clubId)
+      .order('created_at', { ascending:false });
+    if(error) throw error;
+    return data || [];
+  }catch(err){
+    console.error('KAMPUS: failed to load club gallery', err);
+    return [];
+  }
+}
+
+function renderClubGallery(photos, clubName){
+  const wrap = document.getElementById('clubGalleryWrap');
+  if(!wrap) return; // user navigated away before photos finished loading
+  if(!photos.length){
+    wrap.innerHTML = '<p class="muted">No photos added yet.</p>';
+    return;
+  }
+  const urls = photos.map(p=>p.image_url);
+  const looped = [...urls, ...urls]; // doubled so the marquee animation loops seamlessly
+  wrap.innerHTML = `<div class="club-gallery">${looped.map((src,n)=>`<img src="${src}" alt="${escapeHtml(clubName)} gallery image ${(n%urls.length)+1}" loading="lazy" decoding="async" onclick="openLightbox('${String(src).replace(/'/g,"\\'")}')">`).join('')}</div>`;
+}
+
+async function showClub(slug){
  const c=clubs.find(x=>x.slug===slug); if(!c){location.hash='#clubs';return}
  currentClub=c;
  const clubEvents=events.filter(e=>e.club===c.name);
@@ -272,9 +323,12 @@ function showClub(slug){
      <div><strong>WhatsApp</strong>${formatContactLink(c.whatsapp,'whatsapp')}</div>
    </div>
    <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">Explore activities, achievements, recruitment opportunities and everything that makes ${escapeHtml(c.name)} unique.</p></section>
-   <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap"><div class="club-gallery">${[...clubGalleryImgs,...clubGalleryImgs].map((src,n)=>`<img src="${src}" alt="${escapeHtml(c.name)} gallery image ${(n%clubGalleryImgs.length)+1}" loading="lazy" decoding="async">`).join('')}</div></div></section>
+   <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap" id="clubGalleryWrap"><p class="muted">Loading photos…</p></div></section>
    <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div></div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
  const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
+
+ const photos = await fetchClubGallery(c.id);
+ if(currentClub && currentClub.id===c.id) renderClubGallery(photos, c.name);
 }
 function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.overflow='';currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
 function handleRoute(){const m=location.hash.match(/^#club\/([^/?#]+)/);if(m){showClub(decodeURIComponent(m[1]));}else{hideClub();}}
