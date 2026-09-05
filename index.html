@@ -249,12 +249,29 @@ function openEventDescription(eventId){
   modal.setAttribute('aria-hidden','false');
   document.body.style.overflow='hidden';
 }
+// Opens an event popup from a direct/shared link (e.g. index.html#event/12).
+// Works for logged-out visitors: it just needs the public `events` data,
+// which loadKampusData() already fetches with no auth required.
+function openEventDescriptionFromShare(eventId){
+  const e = events.find(x => String(x.id) === String(eventId));
+  if(!e){
+    // Data may not have an event with this id (deleted, or bad link).
+    // Fail quietly rather than throwing — just land on the normal homepage.
+    return;
+  }
+  openEventDescription(e.id);
+}
 function closeEventDescription(event){
   if(event && event.target !== event.currentTarget) return;
   const modal = document.getElementById('eventDescriptionModal');
   modal.classList.remove('show');
   modal.setAttribute('aria-hidden','true');
   if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow='';
+  // Clean the #event/<id> share link out of the URL once the visitor
+  // closes the popup, so refreshing/back doesn't just reopen it oddly.
+  if(location.hash.startsWith('#event/')){
+    history.replaceState(null, '', location.pathname + location.search + '#events');
+  }
 }
 document.addEventListener('keydown', event => {
   if(event.key === 'Escape'){
@@ -331,7 +348,13 @@ async function showClub(slug){
  if(currentClub && currentClub.id===c.id) renderClubGallery(photos, c.name);
 }
 function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.overflow='';currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
-function handleRoute(){const m=location.hash.match(/^#club\/([^/?#]+)/);if(m){showClub(decodeURIComponent(m[1]));}else{hideClub();}}
+function handleRoute(){
+  const clubMatch=location.hash.match(/^#club\/([^/?#]+)/);
+  const eventMatch=location.hash.match(/^#event\/([^/?#]+)/);
+  if(clubMatch){ showClub(decodeURIComponent(clubMatch[1])); }
+  else{ hideClub(); }
+  if(eventMatch){ openEventDescriptionFromShare(decodeURIComponent(eventMatch[1])); }
+}
 function goBackFromClub(){if(location.hash.startsWith('#club/')){history.back();setTimeout(()=>{if(location.hash.startsWith('#club/'))location.hash='#clubs'},120)}else{location.hash='#clubs'}}
 async function shareClub(){const status=document.getElementById('shareStatus');if(!currentClub)return;const url=location.href;try{if(navigator.share){await navigator.share({title:`${currentClub.name} — KAMPUS`,text:`Check out ${currentClub.name} on KAMPUS`,url});status.textContent='Shared.';return}if(navigator.clipboard){await navigator.clipboard.writeText(url);status.textContent='Link copied.';return}status.textContent='Copy the URL from your browser to share.';}catch(err){if(!err||err.name!=='AbortError')status.textContent='Copy the URL from your browser to share.'}}
 window.addEventListener('hashchange',handleRoute);
