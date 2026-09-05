@@ -105,6 +105,43 @@ textarea{resize:vertical;min-height:80px}
       <p class="muted" id="clubDesc"></p>
     </div>
 
+    <div id="clubInfoSection" class="section hidden">
+      <div class="section-head">
+        <h2>Club information</h2>
+      </div>
+      <div class="card">
+        <form id="clubInfoForm" onsubmit="handleClubInfoSubmit(event)">
+          <label for="ciDesc">Club description</label>
+          <textarea id="ciDesc" maxlength="1000"></textarea>
+
+          <div class="two-col">
+            <div>
+              <label for="ciHead">Student Head</label>
+              <input id="ciHead" type="text" maxlength="120">
+            </div>
+            <div>
+              <label for="ciFaculty">Faculty Coordinator</label>
+              <input id="ciFaculty" type="text" maxlength="120">
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
+              <label for="ciInstagram">Instagram</label>
+              <input id="ciInstagram" type="text" placeholder="@yourclub or full URL" maxlength="200">
+            </div>
+            <div>
+              <label for="ciWhatsapp">WhatsApp</label>
+              <input id="ciWhatsapp" type="text" placeholder="+91XXXXXXXXXX or full URL" maxlength="200">
+            </div>
+          </div>
+
+          <button class="btn" type="submit" id="ciSaveBtn" style="margin-top:20px">Save Changes</button>
+          <div id="ciMsg" class="msg"></div>
+        </form>
+      </div>
+    </div>
+
     <div id="eventsSection" class="section hidden">
       <div class="section-head">
         <h2>Your events</h2>
@@ -257,6 +294,7 @@ async function showDashboard(){
   show($('dashboardView'));
   hide($('noClubMsg'));
   hide($('clubHeaderWrap'));
+  hide($('clubInfoSection'));
   hide($('eventsSection'));
   hide($('gallerySection'));
 
@@ -294,11 +332,66 @@ async function showDashboard(){
   $('clubName').textContent = club.name || 'Your club';
   $('clubDesc').textContent = club.description || '';
   show($('clubHeaderWrap'));
+
+  populateClubInfoForm(club);
+  show($('clubInfoSection'));
+
   show($('eventsSection'));
   show($('gallerySection'));
 
   await loadEvents();
   await loadGallery();
+}
+
+// ---------- Club information (description / heads / contacts) ----------
+function populateClubInfoForm(club){
+  $('ciDesc').value = club.description || '';
+  $('ciHead').value = club.student_head || '';
+  $('ciFaculty').value = club.faculty_coordinator || '';
+  $('ciInstagram').value = club.instagram || '';
+  $('ciWhatsapp').value = club.whatsapp || '';
+  const msg = $('ciMsg'); msg.textContent = ''; msg.className = 'msg';
+}
+
+async function handleClubInfoSubmit(evt){
+  evt.preventDefault();
+  const msg = $('ciMsg'); msg.textContent = ''; msg.className = 'msg';
+  const btn = $('ciSaveBtn');
+
+  const payload = {
+    description: $('ciDesc').value.trim(),
+    student_head: $('ciHead').value.trim(),
+    faculty_coordinator: $('ciFaculty').value.trim(),
+    instagram: $('ciInstagram').value.trim(),
+    whatsapp: $('ciWhatsapp').value.trim()
+  };
+
+  btn.disabled = true;
+  // .eq('id', currentClub.id) scopes this to the leader's own club on the
+  // client side, but the real protection is the Supabase RLS policy on
+  // `clubs` (see supabase_policies.sql) — it only allows an UPDATE to go
+  // through when the signed-in user is linked, via club_leaders, to that
+  // exact club id. Even a tampered request for another club's id is
+  // rejected by the database itself.
+  const { data, error } = await supabaseClient
+    .from(CLUBS_TABLE)
+    .update(payload)
+    .eq('id', currentClub.id)
+    .select()
+    .single();
+  btn.disabled = false;
+
+  if(error){
+    console.error('KAMPUS admin: could not save club info', error);
+    msg.textContent = error.message || 'Could not save changes.';
+    msg.className = 'msg error';
+    return;
+  }
+
+  currentClub = { ...currentClub, ...data };
+  $('clubDesc').textContent = currentClub.description || '';
+  msg.textContent = 'Saved. Changes are now live on the public site.';
+  msg.className = 'msg ok';
 }
 
 async function loadEvents(){
@@ -332,10 +425,51 @@ function renderEventList(){
       ${e.description ? `<p>${escapeHtml(e.description)}</p>` : ''}
       <div class="row">
         <button class="btn secondary" type="button" onclick="openEventForm('${e.id}')">Edit</button>
+        <button class="btn secondary" type="button" onclick="shareEvent('${e.id}', this)">Share</button>
         <button class="btn danger" type="button" onclick="deleteEvent('${e.id}')">Delete</button>
       </div>
     </div>
   `).join('');
+}
+
+// ---------- Share event ----------
+// Builds a direct link to the public site that opens this exact event's
+// description popup via index.html's #event/<id> route. Resolved relative
+// to this page's own folder, so it works regardless of where KAMPUS is
+// hosted (root domain, subfolder, custom domain, etc.) and needs no login.
+function buildEventShareUrl(eventId){
+  const url = new URL('index.html', location.href);
+  url.hash = `event/${eventId}`;
+  return url.toString();
+}
+
+async function shareEvent(eventId, btnEl){
+  const url = buildEventShareUrl(eventId);
+  const originalLabel = btnEl ? btnEl.textContent : '';
+
+  try{
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(url);
+      flashShareButton(btnEl, 'Link copied!', originalLabel);
+      return;
+    }
+    throw new Error('Clipboard API unavailable');
+  }catch(err){
+    // Clipboard blocked/unavailable (e.g. non-HTTPS or older browser) —
+    // fall back to showing the link so it can still be copied manually.
+    window.prompt('Copy this event link:', url);
+    flashShareButton(btnEl, 'Link ready', originalLabel);
+  }
+}
+
+function flashShareButton(btnEl, tempLabel, originalLabel){
+  if(!btnEl) return;
+  btnEl.textContent = tempLabel;
+  btnEl.disabled = true;
+  setTimeout(()=>{
+    btnEl.textContent = originalLabel || 'Share';
+    btnEl.disabled = false;
+  }, 1800);
 }
 
 function formatDate(d){
