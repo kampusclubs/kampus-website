@@ -394,7 +394,36 @@ function handleRoute(){
   if(eventMatch){ openEventDescriptionFromShare(decodeURIComponent(eventMatch[1])); }
 }
 function goBackFromClub(){if(location.hash.startsWith('#club/')){history.back();setTimeout(()=>{if(location.hash.startsWith('#club/'))location.hash='#clubs'},120)}else{location.hash='#clubs'}}
-async function shareClub(){const status=document.getElementById('shareStatus');if(!currentClub)return;const url=location.href;try{if(navigator.share){await navigator.share({title:`${currentClub.name} — KAMPUS`,text:`Check out ${currentClub.name} on KAMPUS`,url});status.textContent='Shared.';return}if(navigator.clipboard){await navigator.clipboard.writeText(url);status.textContent='Link copied.';return}status.textContent='Copy the URL from your browser to share.';}catch(err){if(!err||err.name!=='AbortError')status.textContent='Copy the URL from your browser to share.'}}
+async function shareClub(){
+  const status=document.getElementById('shareStatus');
+  if(!currentClub)return;
+
+  const url=location.href;
+  const title=`KAMPUS · ${currentClub.name}`;
+  const text=`Discover ${currentClub.name} at CHRIST University`;
+
+  try{
+    if(navigator.share){
+      await navigator.share({title,text,url});
+      status.textContent='Shared.';
+      return;
+    }
+
+    const shareText=`${title}\n\n${text}\n\n${url}`;
+
+    if(navigator.clipboard){
+      await navigator.clipboard.writeText(shareText);
+      status.textContent='Share text copied.';
+      return;
+    }
+
+    status.textContent='Copy the URL from your browser to share.';
+  }catch(err){
+    if(!err||err.name!=='AbortError'){
+      status.textContent='Copy the URL from your browser to share.';
+    }
+  }
+}
 window.addEventListener('hashchange',handleRoute);
 
 function toggleTheme(){
