@@ -135,7 +135,7 @@ let clubs=[];
 let events=[];
 
 // ---- Row mapping: matches the actual `clubs` / `events` schema ----
-// clubs(id, name, description, about, student_head, faculty_coordinator, instagram, whatsapp, created_at)
+// clubs(id, name, description, student_head, faculty_coordinator, instagram, whatsapp, created_at)
 // There is no `category` or `slug` column, so a slug is generated
 // client-side from the club name for the #club/<slug> routes.
 function slugify(str){
@@ -340,7 +340,7 @@ async function showClub(slug){
      <div><strong>Instagram</strong>${formatContactLink(c.instagram,'instagram')}</div>
      <div><strong>WhatsApp</strong>${formatContactLink(c.whatsapp,'whatsapp')}</div>
    </div>
-   <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">Explore activities, achievements, recruitment opportunities and everything that makes ${escapeHtml(c.name)} unique.</p></section>
+   <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">${escapeHtml(c.about || 'No information has been added yet.')}</p></section>
    <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap" id="clubGalleryWrap"><p class="muted">Loading photos…</p></div></section>
    <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div></div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
  const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
