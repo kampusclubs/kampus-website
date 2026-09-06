@@ -111,8 +111,8 @@ textarea{resize:vertical;min-height:80px}
       </div>
       <div class="card">
         <form id="clubInfoForm" onsubmit="handleClubInfoSubmit(event)">
-          <label for="ciDesc">Club description</label>
-          <textarea id="ciDesc" maxlength="1000"></textarea>
+          <label for="ciAbout">About the Club</label>
+          <textarea id="ciAbout" maxlength="3000" placeholder="Tell students about your club, its activities, purpose, achievements, recruitment, and what makes it unique."></textarea>
 
           <div class="two-col">
             <div>
@@ -343,9 +343,9 @@ async function showDashboard(){
   await loadGallery();
 }
 
-// ---------- Club information (description / heads / contacts) ----------
+// ---------- Club information (about / heads / contacts) ----------
 function populateClubInfoForm(club){
-  $('ciDesc').value = club.description || '';
+  $('ciAbout').value = club.about || '';
   $('ciHead').value = club.student_head || '';
   $('ciFaculty').value = club.faculty_coordinator || '';
   $('ciInstagram').value = club.instagram || '';
@@ -359,7 +359,7 @@ async function handleClubInfoSubmit(evt){
   const btn = $('ciSaveBtn');
 
   const payload = {
-    description: $('ciDesc').value.trim(),
+    about: $('ciAbout').value.trim(),
     student_head: $('ciHead').value.trim(),
     faculty_coordinator: $('ciFaculty').value.trim(),
     instagram: $('ciInstagram').value.trim(),
