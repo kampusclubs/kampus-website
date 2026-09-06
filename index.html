@@ -48,6 +48,16 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 .lightbox-modal.show{display:flex}
 .lightbox-modal img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px #0008;object-fit:contain}
 .lightbox-close{position:fixed;right:20px;top:20px;background:#fff;color:#111}
+
+.club-branding{margin:0 0 38px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 35px #0000000b}
+.club-cover{height:260px;background:linear-gradient(135deg,#241719,#6b2a30);position:relative;overflow:hidden}
+.club-cover img{width:100%;height:100%;object-fit:cover;display:block}
+.club-branding-body{position:relative;padding:0 28px 26px}
+.club-logo{width:108px;height:108px;border-radius:22px;border:5px solid #fff;background:#f3eee7;object-fit:cover;margin-top:-54px;position:relative;z-index:2;box-shadow:0 10px 28px #0002}
+.club-branding-placeholder{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:38px;letter-spacing:-2px}
+body.dark .club-branding{background:#1c1c1c}
+body.dark .club-logo{border-color:#1c1c1c;background:#292929}
+@media(max-width:760px){.club-cover{height:190px}.club-branding-body{padding:0 20px 22px}.club-logo{width:88px;height:88px;margin-top:-44px;border-radius:18px}}
 </style>
 </head>
 <body>
@@ -173,7 +183,9 @@ function mapClubRow(row){
     head: row.student_head || 'Student Coordinator',
     faculty: row.faculty_coordinator || 'Faculty Coordinator',
     instagram: row.instagram || '',
-    whatsapp: row.whatsapp || ''
+    whatsapp: row.whatsapp || '',
+    logo_url: row.logo_url || '',
+    cover_url: row.cover_url || ''
   };
 }
 function mapEventRow(row, clubNameById){
@@ -342,7 +354,14 @@ async function showClub(slug){
  const c=clubs.find(x=>x.slug===slug); if(!c){location.hash='#clubs';return}
  currentClub=c;
  const clubEvents=events.filter(e=>e.club===c.name);
+ const logoMarkup = c.logo_url
+   ? `<img class="club-logo" src="${escapeHtml(c.logo_url)}" alt="${escapeHtml(c.name)} logo" loading="eager">`
+   : `<div class="club-logo club-branding-placeholder" aria-label="${escapeHtml(c.name)} logo placeholder">${escapeHtml((c.name||'C').trim().charAt(0).toUpperCase())}</div>`;
  document.getElementById('clubPageContent').innerHTML=`
+   <div class="club-branding">
+     <div class="club-cover">${c.cover_url ? `<img src="${escapeHtml(c.cover_url)}" alt="${escapeHtml(c.name)} cover image" loading="eager">` : ''}</div>
+     <div class="club-branding-body">${logoMarkup}</div>
+   </div>
    <h1 class="club-title">${escapeHtml(c.name)}</h1>
    <p class="club-hero-desc">${escapeHtml(c.desc||'')}</p>
    <div class="club-meta">
