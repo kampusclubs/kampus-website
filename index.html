@@ -135,7 +135,7 @@ let clubs=[];
 let events=[];
 
 // ---- Row mapping: matches the actual `clubs` / `events` schema ----
-// clubs(id, name, description, student_head, faculty_coordinator, instagram, whatsapp, created_at)
+// clubs(id, name, description, about, student_head, faculty_coordinator, instagram, whatsapp, created_at)
 // There is no `category` or `slug` column, so a slug is generated
 // client-side from the club name for the #club/<slug> routes.
 function slugify(str){
@@ -166,6 +166,7 @@ function mapClubRow(row){
     name: row.name,
     slug: slugify(row.name),
     desc: row.description,
+    about: row.about || '',
     head: row.student_head || 'Student Coordinator',
     faculty: row.faculty_coordinator || 'Faculty Coordinator',
     instagram: row.instagram || '',
