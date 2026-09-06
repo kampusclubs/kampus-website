@@ -190,6 +190,9 @@ textarea{resize:vertical;min-height:80px}
             </div>
           </div>
 
+          <label for="evRegistrationLink">Registration / Application Link</label>
+          <input id="evRegistrationLink" type="url" placeholder="https://..." maxlength="500">
+
           <div class="row" style="margin-top:20px">
             <button class="btn" type="submit" id="eventSubmitBtn">Save event</button>
             <button class="btn secondary" type="button" onclick="closeEventForm()">Cancel</button>
@@ -523,6 +526,7 @@ function openEventForm(eventId){
     $('evDate').value = ev.event_date || '';
     $('evTime').value = (ev.event_time||'').slice(0,5);
     $('evVenue').value = ev.venue || '';
+    $('evRegistrationLink').value = ev.registration_link || '';
   }else{
     $('eventFormTitle').textContent = 'Add event';
     $('eventSubmitBtn').textContent = 'Save event';
@@ -548,6 +552,7 @@ async function handleEventSubmit(evt){
     event_date: $('evDate').value,
     event_time: $('evTime').value,
     venue: $('evVenue').value.trim(),
+    registration_link: $('evRegistrationLink').value.trim() || null,
     club_id: currentClub.id
   };
 
