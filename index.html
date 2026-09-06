@@ -97,6 +97,7 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
     <h2 id="eventPopupTitle"></h2>
     <div class="event-popup-meta" id="eventPopupMeta"></div>
     <div class="event-popup-description" id="eventPopupDescription"></div>
+    <div id="eventPopupActions"></div>
   </div>
 </div>
 
@@ -186,7 +187,8 @@ function mapEventRow(row, clubNameById){
     place: row.venue,
     day: d ? String(d.getDate()) : '--',
     month: d ? d.toLocaleString('en-US',{month:'short'}).toUpperCase() : '',
-    time: formatEventTime(row.event_time)
+    time: formatEventTime(row.event_time),
+    registration_link: row.registration_link || ''
   };
 }
 function formatEventTime(t){
@@ -231,11 +233,15 @@ function renderClubs(){
 function searchAndScroll(){renderClubs();document.getElementById('clubs').scrollIntoView({behavior:'smooth',block:'start'})}
 function handleSearchKey(event){if(event.key==='Enter'){event.preventDefault();searchAndScroll()}}
 function renderEvents(){
- document.getElementById('eventList').innerHTML=events.map(e=>{
-   const c=clubs.find(x=>x.name===e.club);
-   const link=c?`<a class="btn" href="#club/${c.slug}">View club →</a>`:'';
-   return `<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${link}</div>`;
- }).join('') || '<p class="muted">No upcoming events yet.</p>';
+  document.getElementById('eventList').innerHTML=events.map(e=>{
+    const c=clubs.find(x=>x.name===e.club);
+    const clubLink=c?`<a class="btn" href="#club/${c.slug}">View club →</a>`:'';
+    const registerLink=e.registration_link
+      ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Register →</a>`
+      : '';
+    const actions=`<div>${clubLink}${registerLink}</div>`;
+    return `<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${actions}</div>`;
+  }).join('') || '<p class="muted">No upcoming events yet.</p>';
 }
 
 
@@ -247,6 +253,9 @@ function openEventDescription(eventId){
     `${e.club || 'Club'} · ${e.place || 'Venue'} · ${e.time || ''}${e.day && e.month ? ` · ${e.day} ${e.month}` : ''}`;
   document.getElementById('eventPopupDescription').textContent =
     e.desc || 'No description has been added for this event yet.';
+  document.getElementById('eventPopupActions').innerHTML = e.registration_link
+    ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer">Register →</a>`
+    : '';
   const modal = document.getElementById('eventDescriptionModal');
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
@@ -351,7 +360,7 @@ async function showClub(slug){
       </div>
     </div>
    <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap" id="clubGalleryWrap"><p class="muted">Loading photos…</p></div></section>
-   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div></div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
+   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${e.registration_link?`<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Register →</a>`:''}</div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
  const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
 
  const photos = await fetchClubGallery(c.id);
