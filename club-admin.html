@@ -116,6 +116,20 @@ textarea{resize:vertical;min-height:80px}
 
           <div class="two-col">
             <div>
+              <label for="ciRecruitmentOpen">Club Recruitment</label>
+              <select id="ciRecruitmentOpen">
+                <option value="false">Closed</option>
+                <option value="true">Open</option>
+              </select>
+            </div>
+            <div>
+              <label for="ciRecruitmentDeadline">Application Deadline</label>
+              <input id="ciRecruitmentDeadline" type="date">
+            </div>
+          </div>
+
+          <div class="two-col">
+            <div>
               <label for="ciHead">Student Head</label>
               <input id="ciHead" type="text" maxlength="120">
             </div>
@@ -346,6 +360,8 @@ async function showDashboard(){
 // ---------- Club information (about / heads / contacts) ----------
 function populateClubInfoForm(club){
   $('ciAbout').value = club.about || '';
+  $('ciRecruitmentOpen').value = club.recruitment_open ? 'true' : 'false';
+  $('ciRecruitmentDeadline').value = club.recruitment_deadline || '';
   $('ciHead').value = club.student_head || '';
   $('ciFaculty').value = club.faculty_coordinator || '';
   $('ciInstagram').value = club.instagram || '';
@@ -360,6 +376,8 @@ async function handleClubInfoSubmit(evt){
 
   const payload = {
     about: $('ciAbout').value.trim(),
+    recruitment_open: $('ciRecruitmentOpen').value === 'true',
+    recruitment_deadline: $('ciRecruitmentDeadline').value || null,
     student_head: $('ciHead').value.trim(),
     faculty_coordinator: $('ciFaculty').value.trim(),
     instagram: $('ciInstagram').value.trim(),
