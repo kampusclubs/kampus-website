@@ -55,7 +55,17 @@ textarea{resize:vertical;min-height:80px}
 .gallery-item{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--line);aspect-ratio:1/1;background:#efece6}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-item .btn-remove{position:absolute;top:8px;right:8px;background:#fff;color:var(--accent);border:1px solid #f0c7c8;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer}
-.gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+.gallery-item .btn-remove:hover{background:var(--accent);color:#fff}.branding-preview{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px}
+.branding-box{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#f4f1eb}
+.branding-box.cover{grid-column:1/-1}
+.branding-box .branding-image{width:100%;height:150px;object-fit:cover;display:block}
+.branding-box.logo-box{padding:18px;text-align:center}
+.branding-box.logo-box .branding-image{width:130px;height:130px;margin:auto;border-radius:18px;object-fit:contain;background:#fff}
+.branding-caption{font-size:12px;font-weight:800;color:var(--muted);padding:10px 12px;background:#fff;border-top:1px solid var(--line)}
+.branding-upload{margin-top:20px;padding-top:18px;border-top:1px dashed var(--line)}
+.branding-upload input[type=file]{width:100%;padding:9px 10px}
+@media(max-width:520px){.branding-preview{grid-template-columns:1fr}.branding-box.cover{grid-column:auto}}
+
 </style>
 </head>
 <body>
@@ -156,6 +166,40 @@ textarea{resize:vertical;min-height:80px}
       </div>
     </div>
 
+    <div id="brandingSection" class="section hidden">
+      <div class="section-head">
+        <h2>Club branding</h2>
+      </div>
+      <div class="card">
+        <p class="muted" style="margin:0;font-size:13px">Add the images students will see on your public club page.</p>
+
+        <div class="branding-preview">
+          <div class="branding-box logo-box">
+            <img id="brandingLogoPreview" class="branding-image" src="" alt="Club logo preview">
+            <div class="branding-caption">Club Logo</div>
+          </div>
+          <div class="branding-box cover">
+            <img id="brandingCoverPreview" class="branding-image" src="" alt="Club cover preview">
+            <div class="branding-caption">Cover Image</div>
+          </div>
+        </div>
+
+        <div class="branding-upload">
+          <label for="clubLogoFile">Club Logo</label>
+          <input id="clubLogoFile" type="file" accept="image/*">
+          <button class="btn" type="button" id="logoUploadBtn" onclick="handleBrandingUpload('logo')" style="margin-top:12px">Upload Logo</button>
+        </div>
+
+        <div class="branding-upload">
+          <label for="clubCoverFile">Cover Image</label>
+          <input id="clubCoverFile" type="file" accept="image/*">
+          <button class="btn" type="button" id="coverUploadBtn" onclick="handleBrandingUpload('cover')" style="margin-top:12px">Upload Cover</button>
+        </div>
+
+        <div id="brandingMsg" class="msg"></div>
+      </div>
+    </div>
+
     <div id="eventsSection" class="section hidden">
       <div class="section-head">
         <h2>Your events</h2>
@@ -245,6 +289,7 @@ const CLUBS_TABLE = 'clubs';
 const EVENTS_TABLE = 'events';
 const GALLERY_TABLE = 'club_gallery';
 const GALLERY_BUCKET = 'club-gallery';
+const BRANDING_BUCKET = 'club-branding';
 
 let currentUser = null;
 let currentClub = null;      // { id, name, description, student_head, faculty_coordinator, instagram, whatsapp }
@@ -314,6 +359,7 @@ async function showDashboard(){
   hide($('clubInfoSection'));
   hide($('eventsSection'));
   hide($('gallerySection'));
+  hide($('brandingSection'));
 
   // 1) Find which club this leader is linked to.
   const { data: leaderRow, error: leaderErr } = await supabaseClient
@@ -353,8 +399,10 @@ async function showDashboard(){
   populateClubInfoForm(club);
   show($('clubInfoSection'));
 
+  show($('brandingSection'));
   show($('eventsSection'));
   show($('gallerySection'));
+  populateBrandingPreviews(club);
 
   await loadEvents();
   await loadGallery();
@@ -413,6 +461,100 @@ async function handleClubInfoSubmit(evt){
   $('clubDesc').textContent = currentClub.description || '';
   msg.textContent = 'Saved. Changes are now live on the public site.';
   msg.className = 'msg ok';
+}
+
+function populateBrandingPreviews(club){
+  const logo = $('brandingLogoPreview');
+  const cover = $('brandingCoverPreview');
+  logo.src = club.logo_url || '';
+  cover.src = club.cover_url || '';
+  logo.style.display = club.logo_url ? 'block' : 'none';
+  cover.style.display = club.cover_url ? 'block' : 'none';
+  $('brandingMsg').textContent = '';
+  $('brandingMsg').className = 'msg';
+}
+
+async function handleBrandingUpload(type){
+  const input = type === 'logo' ? $('clubLogoFile') : $('clubCoverFile');
+  const btn = type === 'logo' ? $('logoUploadBtn') : $('coverUploadBtn');
+  const msg = $('brandingMsg');
+  const file = input.files && input.files[0];
+
+  msg.textContent = '';
+  msg.className = 'msg';
+
+  if(!file){
+    msg.textContent = `Choose a ${type === 'logo' ? 'logo' : 'cover image'} first.`;
+    msg.className = 'msg error';
+    return;
+  }
+
+  if(!file.type.startsWith('image/')){
+    msg.textContent = 'Please choose an image file.';
+    msg.className = 'msg error';
+    return;
+  }
+
+  btn.disabled = true;
+  msg.textContent = 'Uploading…';
+
+  const extension = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g,'');
+  const path = `${currentClub.id}/${type}_${Date.now()}_${Math.random().toString(36).slice(2,8)}.${extension}`;
+
+  const { error: uploadErr } = await supabaseClient.storage
+    .from(BRANDING_BUCKET)
+    .upload(path, file, { upsert: false });
+
+  if(uploadErr){
+    console.error('KAMPUS admin: could not upload branding', uploadErr);
+    msg.textContent = uploadErr.message || 'Could not upload image.';
+    msg.className = 'msg error';
+    btn.disabled = false;
+    return;
+  }
+
+  const { data: pub } = supabaseClient.storage.from(BRANDING_BUCKET).getPublicUrl(path);
+  const imageUrl = pub && pub.publicUrl;
+
+  const oldUrl = type === 'logo' ? currentClub.logo_url : currentClub.cover_url;
+  const payload = type === 'logo' ? { logo_url: imageUrl } : { cover_url: imageUrl };
+
+  const { data, error: updateErr } = await supabaseClient
+    .from(CLUBS_TABLE)
+    .update(payload)
+    .eq('id', currentClub.id)
+    .select()
+    .single();
+
+  if(updateErr){
+    console.error('KAMPUS admin: could not save branding URL', updateErr);
+    await supabaseClient.storage.from(BRANDING_BUCKET).remove([path]);
+    msg.textContent = updateErr.message || 'Could not save image.';
+    msg.className = 'msg error';
+    btn.disabled = false;
+    return;
+  }
+
+  // Remove old branding file when it belongs to our bucket/path.
+  if(oldUrl){
+    try{
+      const marker = `/storage/v1/object/public/${BRANDING_BUCKET}/`;
+      const idx = oldUrl.indexOf(marker);
+      if(idx !== -1){
+        const oldPath = decodeURIComponent(oldUrl.slice(idx + marker.length));
+        if(oldPath) await supabaseClient.storage.from(BRANDING_BUCKET).remove([oldPath]);
+      }
+    }catch(err){
+      console.warn('KAMPUS admin: old branding cleanup skipped', err);
+    }
+  }
+
+  currentClub = { ...currentClub, ...data };
+  populateBrandingPreviews(currentClub);
+  input.value = '';
+  msg.textContent = `${type === 'logo' ? 'Logo' : 'Cover image'} updated. Changes are now live on the public site.`;
+  msg.className = 'msg ok';
+  btn.disabled = false;
 }
 
 async function loadEvents(){
