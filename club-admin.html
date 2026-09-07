@@ -84,48 +84,7 @@ textarea{resize:vertical;min-height:80px}
         <button class="btn block" type="submit">Log in</button>
       </form>
       <div id="loginMsg" class="msg"></div>
-    </div>
-  </div>
 
-  <!-- LOADING VIEW -->
-  <div id="loadingView">
-    <p class="spinner-text">Checking your session…</p>
-  </div>
-
-  <!-- DASHBOARD VIEW -->
-  <div id="dashboardView" class="hidden">
-
-    <div id="noClubMsg" class="card hidden">
-      <h2>No club linked to this account</h2>
-      <p class="muted">Your login worked, but no club is linked to it yet in <code>club_leaders</code>. Ask your KAMPUS admin to link your account to a club.</p>
-    </div>
-
-    <div id="clubHeaderWrap" class="hidden">
-      <span class="club-tag">YOUR CLUB</span>
-      <h1 id="clubName"></h1>
-      <p class="muted" id="clubDesc"></p>
-    </div>
-
-    <div id="passwordSection" class="section hidden">
-      <div class="section-head">
-        <h2>Account password</h2>
-      </div>
-      <div class="card">
-        <form id="passwordForm" onsubmit="handlePasswordChange(event)">
-          <label for="newPassword">New password</label>
-          <input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
-          <label for="confirmPassword">Confirm new password</label>
-          <input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
-          <button class="btn" type="submit" id="passwordSaveBtn" style="margin-top:20px">Change Password</button>
-          <div id="passwordMsg" class="msg"></div>
-        </form>
-      </div>
-    </div>
-
-    <div id="clubInfoSection" class="section hidden">
-      <div class="section-head">
-        <h2>Club information</h2>
-      </div>
       <div class="card">
         <form id="clubInfoForm" onsubmit="handleClubInfoSubmit(event)">
           <label for="ciAbout">About the Club</label>
@@ -327,7 +286,6 @@ async function showDashboard(){
   show($('dashboardView'));
   hide($('noClubMsg'));
   hide($('clubHeaderWrap'));
-  hide($('passwordSection'));
   hide($('clubInfoSection'));
   hide($('eventsSection'));
   hide($('gallerySection'));
@@ -368,7 +326,6 @@ async function showDashboard(){
   show($('clubHeaderWrap'));
 
   populateClubInfoForm(club);
-  show($('passwordSection'));
   show($('clubInfoSection'));
 
   show($('eventsSection'));
@@ -376,52 +333,6 @@ async function showDashboard(){
 
   await loadEvents();
   await loadGallery();
-}
-
-// ---------- Account password ----------
-async function handlePasswordChange(evt){
-  evt.preventDefault();
-
-  const msg = $('passwordMsg');
-  const btn = $('passwordSaveBtn');
-  const newPassword = $('newPassword').value;
-  const confirmPassword = $('confirmPassword').value;
-
-  msg.textContent = '';
-  msg.className = 'msg';
-
-  if(newPassword.length < 8){
-    msg.textContent = 'Password must be at least 8 characters.';
-    msg.className = 'msg error';
-    return;
-  }
-
-  if(newPassword !== confirmPassword){
-    msg.textContent = 'The passwords do not match.';
-    msg.className = 'msg error';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Changing…';
-
-  const { error } = await supabaseClient.auth.updateUser({
-    password: newPassword
-  });
-
-  btn.disabled = false;
-  btn.textContent = 'Change Password';
-
-  if(error){
-    console.error('KAMPUS admin: could not change password', error);
-    msg.textContent = error.message || 'Could not change the password.';
-    msg.className = 'msg error';
-    return;
-  }
-
-  $('passwordForm').reset();
-  msg.textContent = 'Password changed successfully.';
-  msg.className = 'msg ok';
 }
 
 // ---------- Club information (about / heads / contacts) ----------
