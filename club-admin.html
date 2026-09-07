@@ -76,9 +76,8 @@ textarea{resize:vertical;min-height:80px}
       <h1>Club Leader Login</h1>
       <p class="muted">Sign in with your KAMPUS club username and password.</p>
       <form id="loginForm" onsubmit="handleLogin(event)">
-        <label for="loginEmail">Username or Email</label>
-        <input id="loginEmail" type="text" autocomplete="username" autocapitalize="none" required>
-        <p class="muted" style="font-size:12px;margin:7px 0 0">Club usernames will be provided by KAMPUS. Existing email login still works.</p>
+        <label for="loginEmail">Email</label>
+        <input id="loginEmail" type="email" autocomplete="username" required>
         <label for="loginPassword">Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" required>
         <button class="btn block" type="submit">Log in</button>
@@ -272,8 +271,7 @@ async function handleLogin(evt){
   const loginValue = $('loginEmail').value.trim();
   const password = $('loginPassword').value;
 
-  // KAMPUS club usernames map to internal Supabase Auth identities.
-  // Passwords remain handled by Supabase Auth and are not stored here.
+  // Club username -> internal Supabase Auth identity.
   const CLUB_LOGIN_IDENTITIES = {
     robotics: 'robotics@kampusclubs.internal'
   };
