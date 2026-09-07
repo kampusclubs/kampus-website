@@ -38,7 +38,7 @@ body.dark .club-page{background:linear-gradient(180deg,#121212,#181818)}body.dar
 @media(max-width:520px){.club-meta{grid-template-columns:1fr}.club-title{font-size:46px}.club-topbar{align-items:flex-start;flex-direction:column}.share-wrap{text-align:left}.share-btn{margin-top:0}.club-page-inner{padding-left:5%;padding-right:5%}}
 
 body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#303030;--accent-soft:#321f21;background:#141414;color:#f3f0ea}body.dark nav{background:#181818}body.dark .nav-links a{color:#eee}body.dark .card,body.dark .event{background:#1d1d1d}body.dark .filter{background:#1d1d1d;color:#eee;border-color:#333}body.dark .filter.active{background:#eee;color:#111}body.dark .theme-toggle,body.dark .menu-toggle{background:#262626;color:#fff;border-color:#444}body.dark #about .card{background:linear-gradient(135deg,#1d1d1d,#271b1c)}
-@media(max-width:760px){:root{--nav-h:64px}nav{min-height:64px;height:auto;padding:0 5%;flex-wrap:wrap}.logo{font-size:23px}.menu-toggle{display:inline-flex}.nav-actions{display:flex;align-items:center;gap:8px}.nav-links{display:none;order:3;width:100%;padding:2px 0 14px;gap:6px 16px;flex-wrap:wrap}.nav-links.open{display:flex}.nav-links a{height:34px;font-size:13px}.theme-toggle{width:36px;height:36px;font-size:17px}.hero{padding:55px 5% 48px}.hero h1{letter-spacing:-2px}.hero p{font-size:17px}.hero::after{width:260px;height:260px;right:-150px}.search button{padding:0 16px}.section-head{align-items:flex-start;flex-direction:column}.section-head #count{align-self:flex-end}.event{grid-template-columns:65px 65px 1fr;gap:14px}.event-poster-thumb,.event-poster-placeholder{width:65px;height:65px}
+@media(max-width:760px){:root{--nav-h:64px}nav{min-height:64px;height:auto;padding:0 5%;flex-wrap:wrap}.logo{font-size:23px}.menu-toggle{display:inline-flex}.nav-actions{display:flex;align-items:center;gap:8px}.nav-links{display:none;order:3;width:100%;padding:2px 0 14px;gap:6px 16px;flex-wrap:wrap}.nav-links.open{display:flex}.nav-links a{height:34px;font-size:13px}.theme-toggle{width:36px;height:36px;font-size:17px}.hero{padding:55px 5% 48px}.hero h1{letter-spacing:-2px}.hero p{font-size:17px}.hero::after{width:260px;height:260px;right:-150px}.search button{padding:0 16px}.section-head{align-items:flex-start;flex-direction:column}.section-head #count{align-self:flex-end}.event{grid-template-columns:65px 65px minmax(0,1fr);gap:12px}.event-poster-thumb,.event-poster-placeholder{width:65px;height:65px}
 .event .btn{grid-column:auto;margin-top:0;justify-self:auto}
  .event-actions{grid-column:3;display:flex;flex-wrap:nowrap;gap:6px;justify-content:flex-start;align-items:center;min-width:0;overflow:visible}
  .event-actions .btn{padding:9px 10px;font-size:12px}.event-actions .btn + .btn{margin-left:0}.event-actions .save-icon-btn{margin-left:0;width:38px;height:38px}
@@ -50,13 +50,21 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 .event-clickable:hover{transform:translateY(-2px)}
 .event-description-modal{display:none;position:fixed;inset:0;z-index:100;background:#0009;padding:24px;overflow:auto}
 .event-description-modal.show{display:flex;align-items:center;justify-content:center}
-.event-description-box{width:min(620px,100%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:20px;padding:28px;box-shadow:0 20px 60px #0004;position:relative}
-.event-description-box .close-event{position:absolute;right:16px;top:16px;width:36px;height:36px;border:0;border-radius:50%;background:var(--paper);color:var(--ink);font-size:22px;cursor:pointer}
-.event-description-box .event-popup-label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase}
-.event-description-box h2{font-size:30px;line-height:1.1;margin:10px 42px 10px 0}
-.event-description-box .event-popup-meta{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:22px}
+.event-description-box{width:min(980px,100%);max-height:92vh;overflow:auto;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:22px;padding:30px;box-shadow:0 20px 60px #0004;position:relative}
+.event-description-box .close-event{position:absolute;right:16px;top:16px;z-index:3;width:38px;height:38px;border:1px solid var(--line);border-radius:50%;background:var(--paper);color:var(--ink);font-size:22px;cursor:pointer}
+.event-popup-layout{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:30px;align-items:start}
+.event-popup-copy{min-width:0;padding:4px 4px 0 0}
+.event-description-box .event-popup-label{color:var(--accent);font-size:11px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase}
+.event-description-box h2{font-size:38px;line-height:1.08;letter-spacing:-.8px;margin:10px 48px 12px 0;overflow-wrap:anywhere}
+.event-description-box .event-popup-meta{color:var(--muted);font-size:14px;line-height:1.6;margin-bottom:26px}
 .event-description-box .event-popup-description{font-size:16px;line-height:1.7;color:var(--ink);white-space:pre-wrap}
-@media(max-width:520px){.event-description-modal{padding:14px}.event-description-box{padding:24px 20px}.event-description-box h2{font-size:25px}}
+.event-popup-poster-wrap{display:flex;align-items:center;justify-content:center;background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:10px;min-height:300px}
+.event-popup-poster{width:100%;max-height:620px;object-fit:contain;border-radius:10px;display:block}
+.event-popup-poster-placeholder{color:var(--muted);font-size:13px;text-align:center;padding:30px}
+.event-popup-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:28px;padding-top:20px;border-top:1px solid var(--line)}
+.event-popup-actions .btn{margin-top:0}
+@media(max-width:760px){.event-description-modal{padding:14px}.event-description-box{padding:24px 20px;max-height:94vh}.event-popup-layout{grid-template-columns:1fr;gap:22px}.event-popup-copy{padding:0}.event-description-box h2{font-size:30px}.event-popup-poster-wrap{order:-1;max-height:520px}.event-popup-poster{max-height:500px}}
+@media(max-width:520px){.event-description-box{padding:22px 18px}.event-description-box h2{font-size:27px}}
 
 .club-gallery img{cursor:zoom-in}
 .lightbox-modal{display:none;position:fixed;inset:0;z-index:110;background:#000d;padding:24px;align-items:center;justify-content:center}
@@ -129,12 +137,18 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
 <div class="event-description-modal" id="eventDescriptionModal" aria-hidden="true" onclick="closeEventDescription(event)">
   <div class="event-description-box" onclick="event.stopPropagation()">
     <button class="close-event" type="button" aria-label="Close" onclick="closeEventDescription()">×</button>
-    <div class="event-popup-label">Event details</div>
-    <h2 id="eventPopupTitle"></h2>
-    <div class="event-popup-meta" id="eventPopupMeta"></div>
-    <img id="eventPopupPoster" class="event-popup-poster" alt="Event poster" style="display:none">
-    <div class="event-popup-description" id="eventPopupDescription"></div>
-    <div id="eventPopupActions"></div>
+    <div class="event-popup-layout">
+      <div class="event-popup-copy">
+        <div class="event-popup-label">Event details</div>
+        <h2 id="eventPopupTitle"></h2>
+        <div class="event-popup-meta" id="eventPopupMeta"></div>
+        <div class="event-popup-description" id="eventPopupDescription"></div>
+        <div id="eventPopupActions" class="event-popup-actions"></div>
+      </div>
+      <div class="event-popup-poster-wrap" id="eventPopupPosterWrap">
+        <div class="event-popup-poster-placeholder">No poster available</div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -386,15 +400,11 @@ function openEventDescription(eventId){
   document.getElementById('eventPopupTitle').textContent = e.name || 'Event';
   document.getElementById('eventPopupMeta').textContent =
     `${e.club || 'Club'} · ${e.place || 'Venue'} · ${e.time || ''}${e.day && e.month ? ` · ${e.day} ${e.month}` : ''}`;
-  const popupPoster = document.getElementById('eventPopupPoster');
-  if(popupPoster){
-    if(e.poster_url){
-      popupPoster.src = e.poster_url;
-      popupPoster.style.display = 'block';
-    }else{
-      popupPoster.removeAttribute('src');
-      popupPoster.style.display = 'none';
-    }
+  const posterWrap=document.getElementById('eventPopupPosterWrap');
+  if(posterWrap){
+    posterWrap.innerHTML=e.poster_url
+      ? `<img class="event-popup-poster" src="${escapeHtml(e.poster_url)}" alt="${escapeHtml(e.name || 'Event poster')}">`
+      : '<div class="event-popup-poster-placeholder">No poster available</div>';
   }
   document.getElementById('eventPopupDescription').textContent =
     e.desc || 'No description has been added for this event yet.';
