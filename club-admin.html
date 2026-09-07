@@ -76,8 +76,9 @@ textarea{resize:vertical;min-height:80px}
       <h1>Club Leader Login</h1>
       <p class="muted">Sign in with your KAMPUS club username and password.</p>
       <form id="loginForm" onsubmit="handleLogin(event)">
-        <label for="loginEmail">Email</label>
-        <input id="loginEmail" type="email" autocomplete="username" required>
+        <label for="loginEmail">Username or Email</label>
+        <input id="loginEmail" type="text" autocomplete="username" autocapitalize="none" required>
+        <p class="muted" style="font-size:12px;margin:7px 0 0">Use your club username, or an existing email login.</p>
         <label for="loginPassword">Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" required>
         <button class="btn block" type="submit">Log in</button>
