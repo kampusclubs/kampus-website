@@ -95,7 +95,7 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
   <div class="eyebrow">BUILT FOR CHRIST UNIVERSITY STUDENTS · BANGALORE CENTRAL CAMPUS</div>
   <h1>Find your people.<br><span class="hero-accent">Find your club.</span></h1>
   <p>One lively home for clubs, communities and campus experiences. Discover what excites you, meet your people and make your time on campus count.</p>
-  <div class="search"><label class="sr-only" for="search">Search clubs, categories or interests</label><input id="search" type="search" aria-label="Search clubs, categories or interests" placeholder="Search clubs, categories or interests..." oninput="renderClubs()" onkeydown="handleSearchKey(event)"><button type="button" onclick="searchAndScroll()">Search</button></div>
+  <div class="search"><label class="sr-only" for="search">Search clubs, events or interests</label><input id="search" type="search" aria-label="Search clubs, events or interests" placeholder="Search clubs, events or interests..." oninput="renderSearchResults()" onkeydown="handleSearchKey(event)"><button type="button" onclick="searchAndScroll()">Search</button></div>
  </div>
 </section>
 
@@ -276,16 +276,44 @@ async function loadKampusData(){
   }
 }
 
-// No `category` column exists on `clubs`, so there is nothing to
-// populate the category filter bar with — it stays empty and the
-// search box (name + description) is the only filter.
-function renderClubs(){
- const q=document.getElementById('search').value.toLowerCase().trim();
- const data=clubs.filter(c=>(`${c.name} ${c.desc||''}`).toLowerCase().includes(q));
- document.getElementById('count').textContent=`${data.length} clubs`;
- document.getElementById('clubGrid').innerHTML=data.map(c=>`<article class="card"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.desc||'')}</p><a class="btn" href="#club/${c.slug}">View club →</a></article>`).join('') || `<div class="card"><h3>No clubs found</h3><p>Try another search.</p></div>`;
+// One search bar filters both clubs and upcoming events.
+function getSearchQuery(){
+ const input=document.getElementById('search');
+ return input ? input.value.toLowerCase().trim() : '';
 }
-function searchAndScroll(){renderClubs();document.getElementById('clubs').scrollIntoView({behavior:'smooth',block:'start'})}
+function clubMatchesSearch(c,q){
+ if(!q) return true;
+ return (`${c.name||''} ${c.desc||''} ${c.about||''}`).toLowerCase().includes(q);
+}
+function eventMatchesSearch(e,q){
+ if(!q) return true;
+ return (`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''} ${e.time||''} ${e.day||''} ${e.month||''}`).toLowerCase().includes(q);
+}
+function getFilteredClubs(){
+ const q=getSearchQuery();
+ return clubs.filter(c=>clubMatchesSearch(c,q));
+}
+function getFilteredEvents(){
+ const q=getSearchQuery();
+ return events.filter(e=>eventMatchesSearch(e,q));
+}
+function renderClubs(){
+ const q=getSearchQuery();
+ const data=getFilteredClubs();
+ document.getElementById('count').textContent=q ? `${data.length} club${data.length===1?'':'s'} found` : `${data.length} clubs`;
+ document.getElementById('clubGrid').innerHTML=data.map(c=>`<article class="card"><h3>${escapeHtml(c.name)}</h3><p>${escapeHtml(c.desc||'')}</p><a class="btn" href="#club/${c.slug}">View club →</a></article>`).join('') || `<div class="card"><h3>No matching clubs</h3><p>There may still be matching events below.</p></div>`;
+}
+function renderSearchResults(){
+ renderClubs();
+ renderEvents();
+}
+function searchAndScroll(){
+ renderSearchResults();
+ const clubMatches=getFilteredClubs();
+ const eventMatches=getFilteredEvents();
+ const target=clubMatches.length ? document.getElementById('clubs') : (eventMatches.length ? document.getElementById('events') : document.getElementById('clubs'));
+ target.scrollIntoView({behavior:'smooth',block:'start'});
+}
 function handleSearchKey(event){if(event.key==='Enter'){event.preventDefault();searchAndScroll()}}
 const SAVED_EVENTS_KEY='kampusSavedEvents';
 let currentEventId=null;
@@ -353,7 +381,11 @@ function renderEventCard(e,{includeClubLink=true}={}){
 }
 function renderEvents(){
   cleanupSavedEvents(events);
-  document.getElementById('eventList').innerHTML=events.map(e=>renderEventCard(e)).join('') || '<p class="muted">No upcoming events yet.</p>';
+  const q=getSearchQuery();
+  const data=getFilteredEvents();
+  document.getElementById('eventList').innerHTML=data.map(e=>renderEventCard(e)).join('') || (q
+    ? '<p class="muted">No matching upcoming events.</p>'
+    : '<p class="muted">No upcoming events yet.</p>');
 }
 function renderSavedEvents(){
   const target=document.getElementById('savedEventList');
