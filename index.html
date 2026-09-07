@@ -358,12 +358,19 @@ function looseSearchMatch(text,q){
  const queryTokens=String(q||'').toLowerCase().match(/[a-z0-9]+/g)||[];
  const stems=textTokens.map(searchStem).filter(Boolean);
 
- // Every word the user typed must have at least one reasonable match,
- // but each word may match through stemming, partial text, typo tolerance, or synonyms.
+ // Keep the user's own word relaxed (stemming, partial matching and one small typo),
+ // but keep synonym expansion strict. This prevents broad synonym words such as
+ // "acting" -> "act" from accidentally matching unrelated words like "activity".
  return queryTokens.every(raw=>{
-   const alternatives=queryAlternatives(raw);
-   if(!alternatives.length) return true;
-   return alternatives.some(needle=>stems.some(token=>tokenMatches(token,needle)));
+   const primary=searchStem(raw);
+   if(!primary) return true;
+
+   // First try the actual word the student typed with relaxed matching.
+   if(stems.some(token=>tokenMatches(token,primary))) return true;
+
+   // Then try synonyms as exact normalized words only.
+   const alternatives=queryAlternatives(raw).filter(needle=>needle!==primary);
+   return alternatives.some(needle=>stems.includes(needle));
  });
 }
 function clubMatchesSearch(c,q){
