@@ -17,9 +17,11 @@ main{max-width:1100px;margin:auto;padding:55px 6%}.section-head{display:flex;jus
 .events{margin-top:65px;padding-top:10px}.event{display:grid;grid-template-columns:85px 1fr auto;gap:20px;align-items:center;background:#fff;border:1px solid var(--line);padding:20px;border-radius:14px;margin:12px 0;transition:.2s}.event:hover{transform:translateX(4px);box-shadow:0 8px 24px #0000000b}
 .event-actions{display:flex;align-items:center;justify-content:flex-end;min-width:max-content}
 .event-actions .btn{margin-top:0;white-space:nowrap}
-.event-actions .btn + .btn{margin-left:14px}
+.event-actions .btn + .btn{margin-left:10px}.save-icon-btn{width:40px;height:40px;margin-left:10px;border-radius:9px;border:1px solid var(--line);background:#fff;color:#171717;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s;flex:none}.save-icon-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}.save-icon-btn:hover{transform:translateY(-2px);background:#f5eee9;border-color:#d8c6bd}.save-icon-btn.saved{background:#171717;color:#fff;border-color:#171717}.save-icon-btn.saved svg{fill:currentColor}.saved-empty{padding:22px;border:1px dashed var(--line);border-radius:14px;color:var(--muted);background:var(--card);font-size:14px;line-height:1.55}body.dark .save-icon-btn{background:#242424;color:#eee;border-color:#444}body.dark .save-icon-btn.saved{background:#eee;color:#111;border-color:#eee}
+.saved-preview-backdrop{display:none;position:fixed;inset:0;z-index:115;background:#0004}.saved-preview-backdrop.show{display:block}.saved-preview{position:absolute;top:86px;right:5%;width:min(430px,90vw);max-height:72vh;overflow:hidden;background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:20px;box-shadow:0 24px 70px #0004;animation:savedPreviewIn .18s ease-out}.saved-preview-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:20px 20px 16px;border-bottom:1px solid var(--line)}.saved-preview-head h3{margin:2px 0 4px;font-size:22px;letter-spacing:-.4px}.saved-preview-head p{margin:0;color:var(--muted);font-size:12px;line-height:1.45}.saved-preview-close{width:34px;height:34px;border:1px solid var(--line);border-radius:50%;background:var(--paper);color:var(--ink);font-size:20px;cursor:pointer;flex:none}.saved-preview-list{padding:10px 12px 14px;max-height:calc(72vh - 82px);overflow:auto}.saved-preview-item{display:grid;grid-template-columns:54px 1fr auto;gap:12px;align-items:center;padding:12px 8px;border-bottom:1px solid var(--line)}.saved-preview-item:last-child{border-bottom:0}.saved-preview-date{width:50px;height:50px;border-radius:50%;background:var(--paper);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1;border:1px solid var(--line)}.saved-preview-date b{font-size:18px}.saved-preview-date small{margin-top:4px;color:var(--accent);font-size:10px;font-weight:800}.saved-preview-copy h4{margin:0 0 4px;font-size:15px}.saved-preview-copy p{margin:0;color:var(--muted);font-size:12px;line-height:1.4}.saved-preview-actions{display:flex;align-items:center;gap:6px}.saved-preview-open{border:0;background:transparent;color:var(--accent);font-size:12px;font-weight:800;cursor:pointer;padding:8px 4px}.saved-preview-remove{width:34px;height:34px;margin:0;border-radius:8px}.saved-preview-list .saved-empty{margin:8px}.saved-preview-backdrop.show .saved-preview{transform-origin:top right}@keyframes savedPreviewIn{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}body.dark .saved-preview{background:#1c1c1c}body.dark .saved-preview-date{background:#262626}
+@media(max-width:620px){.saved-preview{top:auto;right:12px;left:12px;bottom:12px;width:auto;max-height:68vh;border-radius:18px}.saved-preview-list{max-height:calc(68vh - 82px)}.saved-preview-item{grid-template-columns:48px 1fr auto}.saved-preview-date{width:44px;height:44px}.saved-preview-backdrop.show .saved-preview{transform-origin:bottom center}}
 .date{text-align:center;border-right:1px solid var(--line);padding-right:18px}.date b{font-size:28px;display:block}.date small{color:var(--accent);font-weight:800}.event h3{margin:0 0 6px}.event p{margin:0;color:var(--muted);font-size:14px}
-.main-gallery{margin-top:70px;overflow:hidden;padding:48px 0 18px}.main-gallery::before{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin-bottom:28px}.main-gallery-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.gallery-track,.club-gallery{display:flex;gap:16px;width:max-content;animation:kampusSlide 42s linear infinite}.gallery-track:hover,.club-gallery:hover{animation-play-state:paused}.gallery-track img,.club-gallery img{width:230px;height:150px;object-fit:cover;border-radius:18px;box-shadow:0 10px 28px #0002;display:block;flex:none}.gallery-track img:nth-child(3n){transform:translateY(8px)}@keyframes kampusSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.main-gallery{margin-top:70px;overflow:hidden;padding:48px 0 18px}.main-gallery::before{content:"";display:block;height:1px;background:linear-gradient(90deg,transparent,var(--line),transparent);margin-bottom:28px}.main-gallery-head{display:flex;justify-content:space-between;align-items:end;margin-bottom:20px}.gallery-track,.club-gallery{display:flex;gap:16px;width:max-content;animation:kampusSlide 42s linear infinite;padding:12px 4px 18px}.gallery-track:hover,.club-gallery:hover{animation-play-state:paused}.gallery-track img,.club-gallery img{width:230px;height:150px;object-fit:cover;border-radius:18px;box-shadow:0 10px 28px #0002;display:block;flex:none;cursor:zoom-in;position:relative;transition:transform .22s ease,box-shadow .22s ease,filter .22s ease;transform-origin:center}.gallery-track img:nth-child(3n){transform:translateY(8px)}.gallery-track img:hover,.club-gallery img:hover{transform:scale(1.08) translateY(-4px)!important;box-shadow:0 18px 42px #0004;filter:saturate(1.06);z-index:4}@keyframes kampusSlide{from{transform:translateX(0)}to{transform:translateX(-50%)}}
 #about{margin-top:40px}#about .card{padding:34px 36px;background:linear-gradient(135deg,var(--card),var(--accent-soft));border-left:4px solid var(--accent)}#about .card p{max-width:850px;line-height:1.75;font-size:15px}
 footer{background:#171717;color:#aaa;padding:30px 6%;margin-top:40px;border-top:3px solid var(--accent)}.footer-contact{max-width:1100px;margin:auto;display:grid;grid-template-columns:1fr 1fr 1fr;align-items:center;gap:20px;font-size:14px}.footer-contact .left{text-align:left}.footer-contact .middle{text-align:center}.footer-contact .right{text-align:right}.footer-label{color:#fff;font-weight:800;letter-spacing:.4px}.contact-link{color:#ddd;text-decoration:none;font-weight:700;display:inline-flex;align-items:center;gap:8px}.contact-link:hover{color:#fff;text-decoration:underline}.contact-icon svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}.footer-notes{max-width:1100px;margin:18px auto 0;padding-top:16px;border-top:1px solid #ffffff12;color:#777;font-size:12px;line-height:1.55}.footer-notes a{color:#999}.footer-notes a:hover{color:#ddd}
 
@@ -34,7 +36,7 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 @media(max-width:760px){:root{--nav-h:64px}nav{min-height:64px;height:auto;padding:0 5%;flex-wrap:wrap}.logo{font-size:23px}.menu-toggle{display:inline-flex}.nav-actions{display:flex;align-items:center;gap:8px}.nav-links{display:none;order:3;width:100%;padding:2px 0 14px;gap:6px 16px;flex-wrap:wrap}.nav-links.open{display:flex}.nav-links a{height:34px;font-size:13px}.theme-toggle{width:36px;height:36px;font-size:17px}.hero{padding:55px 5% 48px}.hero h1{letter-spacing:-2px}.hero p{font-size:17px}.hero::after{width:260px;height:260px;right:-150px}.search button{padding:0 16px}.section-head{align-items:flex-start;flex-direction:column}.section-head #count{align-self:flex-end}.event{grid-template-columns:65px 1fr;gap:14px}
 .event .btn{grid-column:auto;margin-top:0;justify-self:auto}
 .event-actions{grid-column:2;display:flex;flex-wrap:wrap;gap:0;justify-content:flex-start;min-width:0}
-.event-actions .btn + .btn{margin-left:8px}
+.event-actions .btn + .btn{margin-left:8px}.event-actions .save-icon-btn{margin-left:8px}
 .date{padding-right:12px}.gallery-track img,.club-gallery img{width:190px;height:130px}.footer-contact{grid-template-columns:1fr;text-align:center!important;gap:12px}.footer-contact .left,.footer-contact .middle,.footer-contact .right{text-align:center}.footer-notes{text-align:center}.card{padding:22px}}
 @media(max-width:420px){main{padding-left:5%;padding-right:5%}.hero h1{font-size:46px}.search input{font-size:15px;padding:16px 14px}.search button{padding:0 13px}.grid{grid-template-columns:1fr}.nav-links{gap:4px 14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.gallery-track,.club-gallery{animation:none;width:auto;overflow-x:auto;scroll-snap-type:x proximity}.gallery-track img,.club-gallery img{transform:none!important;scroll-snap-align:start}*{transition-duration:.01ms!important}}
@@ -54,25 +56,25 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 .club-gallery img{cursor:zoom-in}
 .lightbox-modal{display:none;position:fixed;inset:0;z-index:110;background:#000d;padding:24px;align-items:center;justify-content:center}
 .lightbox-modal.show{display:flex}
-.lightbox-modal img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px #0008;object-fit:contain}
+.lightbox-modal img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px #0008;object-fit:contain;animation:lightboxPop .2s ease-out;cursor:zoom-out}@keyframes lightboxPop{from{opacity:.25;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 .lightbox-close{position:fixed;right:20px;top:20px;background:#fff;color:#111}
 
 .club-branding{margin:0 0 38px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 35px #0000000b}
 .club-cover{height:260px;background:linear-gradient(135deg,#241719,#6b2a30);position:relative;overflow:hidden}
 .club-cover img{width:100%;height:100%;object-fit:cover;display:block}
 .club-branding-body{position:relative;padding:0 28px 26px}
-.club-logo{width:108px;height:108px;border-radius:22px;border:5px solid #fff;background:#f3eee7;object-fit:cover;margin-top:-54px;position:relative;z-index:2;box-shadow:0 10px 28px #0002}
+.club-logo{width:112px;height:112px;border-radius:50%;border:5px solid #fff;background:#f3eee7;object-fit:contain;padding:7px;margin-top:-56px;position:relative;z-index:2;box-shadow:0 10px 28px #0002}
 .club-branding-placeholder{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:38px;letter-spacing:-2px}
 body.dark .club-branding{background:#1c1c1c}
 body.dark .club-logo{border-color:#1c1c1c;background:#292929}
-@media(max-width:760px){.club-cover{height:190px}.club-branding-body{padding:0 20px 22px}.club-logo{width:88px;height:88px;margin-top:-44px;border-radius:18px}}
+@media(max-width:760px){.club-cover{height:190px}.club-branding-body{padding:0 20px 22px}.club-logo{width:90px;height:90px;margin-top:-45px;border-radius:50%;padding:6px}}
 </style>
 </head>
 <body>
 <nav>
   <a class="logo" href="#top" aria-label="KAMPUS home">KAMPUS<span>✦</span></a>
   <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-controls="navLinks" aria-expanded="false" onclick="toggleMenu()">☰</button>
-  <div class="nav-links" id="navLinks"><a href="#clubs" onclick="closeMenu()">Clubs</a><a href="#events" onclick="closeMenu()">Events</a><a href="#gallery" onclick="closeMenu()">Gallery</a><a href="#about" onclick="closeMenu()">About</a><button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode"><span id="themeIcon">☾</span></button></div>
+  <div class="nav-links" id="navLinks"><a href="#clubs" onclick="closeMenu()">Clubs</a><a href="#events" onclick="closeMenu()">Events</a><a href="#" onclick="event.preventDefault();closeMenu();openSavedPreview()">Saved</a><a href="#gallery" onclick="closeMenu()">Gallery</a><a href="#about" onclick="closeMenu()">About</a><button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode"><span id="themeIcon">☾</span></button></div>
 </nav>
 
 <section class="hero" id="top">
@@ -96,6 +98,7 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
  <div id="eventList"></div>
 </section>
 
+
 <section class="main-gallery" id="gallery">
  <div class="main-gallery-head"><div><div class="eyebrow" style="color:var(--accent);margin-bottom:8px">Bangalore Central Campus</div><h2>Campus Gallery</h2></div></div>
  <div class="gallery-track"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Christ_University%2C_Bangalore%2C_main_campus.jpg" alt="Tree-lined walkway at CHRIST University Bangalore Central Campus" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Christ_University_Bangalore.jpg" alt="Central block at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Christ_University_buildings%2C_Bangalore_11.jpg" alt="Green campus grounds at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Christ_University_buildings%2C_Bangalore_12.jpg" alt="Campus garden and walkway at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Christ_University_buildings%2C_Bangalore_01.jpg" alt="CHRIST University campus sign in Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Christ_University%2C_Bangalore%2C_main_campus.jpg" alt="Tree-lined walkway at CHRIST University Bangalore Central Campus" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/4/4e/Christ_University_Bangalore.jpg" alt="Central block at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Christ_University_buildings%2C_Bangalore_11.jpg" alt="Green campus grounds at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/2/28/Christ_University_buildings%2C_Bangalore_12.jpg" alt="Campus garden and walkway at CHRIST University Bangalore" loading="lazy" decoding="async"><img src="https://upload.wikimedia.org/wikipedia/commons/b/bf/Christ_University_buildings%2C_Bangalore_01.jpg" alt="CHRIST University campus sign in Bangalore" loading="lazy" decoding="async"></div>
@@ -107,6 +110,16 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
 </main>
 
 
+
+<div class="saved-preview-backdrop" id="savedPreviewBackdrop" aria-hidden="true" onclick="closeSavedPreview(event)">
+  <aside class="saved-preview" role="dialog" aria-modal="true" aria-labelledby="savedPreviewTitle" onclick="event.stopPropagation()">
+    <div class="saved-preview-head">
+      <div><div class="eyebrow section-kicker">YOUR PICKS</div><h3 id="savedPreviewTitle">Saved events</h3><p>Quick access to the events you bookmarked.</p></div>
+      <button class="saved-preview-close" type="button" aria-label="Close saved events" onclick="closeSavedPreview()">×</button>
+    </div>
+    <div class="saved-preview-list" id="savedEventList"></div>
+  </aside>
+</div>
 
 <div class="event-description-modal" id="eventDescriptionModal" aria-hidden="true" onclick="closeEventDescription(event)">
   <div class="event-description-box" onclick="event.stopPropagation()">
@@ -121,7 +134,7 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
 
 <div class="lightbox-modal" id="lightboxModal" aria-hidden="true" onclick="closeLightbox()">
   <button class="close-event lightbox-close" type="button" aria-label="Close" onclick="closeLightbox()">×</button>
-  <img id="lightboxImg" src="" alt="Enlarged gallery photo">
+  <img id="lightboxImg" src="" alt="Enlarged gallery photo" onclick="event.stopPropagation()">
 </div>
 
 <div class="club-page" id="clubPage" aria-hidden="true">
@@ -205,6 +218,7 @@ function mapEventRow(row, clubNameById){
     desc: row.description,
     club: clubNameById[row.club_id] || 'Club',
     place: row.venue,
+    event_date: row.event_date || '',
     day: d ? String(d.getDate()) : '--',
     month: d ? d.toLocaleString('en-US',{month:'short'}).toUpperCase() : '',
     time: formatEventTime(row.event_time),
@@ -232,7 +246,9 @@ async function loadKampusData(){
 
     const { data: eventRows, error: eventErr } = await supabaseClient.from('events').select('*').order('event_date',{ascending:true});
     if(eventErr) throw eventErr;
-    events = (eventRows||[]).map(row=>mapEventRow(row, clubNameById));
+    const allEvents = (eventRows||[]).map(row=>mapEventRow(row, clubNameById));
+    events = allEvents.filter(e=>!isEventExpired(e));
+    cleanupSavedEvents(allEvents);
     return true;
   }catch(err){
     console.error('KAMPUS: failed to load data from Supabase', err);
@@ -252,30 +268,119 @@ function renderClubs(){
 }
 function searchAndScroll(){renderClubs();document.getElementById('clubs').scrollIntoView({behavior:'smooth',block:'start'})}
 function handleSearchKey(event){if(event.key==='Enter'){event.preventDefault();searchAndScroll()}}
+const SAVED_EVENTS_KEY='kampusSavedEvents';
+let currentEventId=null;
+
+function todayLocalISO(){
+  const now=new Date();
+  const y=now.getFullYear();
+  const m=String(now.getMonth()+1).padStart(2,'0');
+  const d=String(now.getDate()).padStart(2,'0');
+  return `${y}-${m}-${d}`;
+}
+function isEventExpired(e){
+  return Boolean(e && e.event_date && e.event_date < todayLocalISO());
+}
+function getSavedEventIds(){
+  try{
+    const raw=JSON.parse(localStorage.getItem(SAVED_EVENTS_KEY)||'[]');
+    return Array.isArray(raw)?raw.map(String):[];
+  }catch(_){ return []; }
+}
+function setSavedEventIds(ids){
+  localStorage.setItem(SAVED_EVENTS_KEY,JSON.stringify([...new Set(ids.map(String))]));
+}
+function cleanupSavedEvents(sourceEvents=events){
+  const available=new Map((sourceEvents||[]).map(e=>[String(e.id),e]));
+  const cleaned=getSavedEventIds().filter(id=>{
+    const e=available.get(String(id));
+    return e && !isEventExpired(e);
+  });
+  setSavedEventIds(cleaned);
+  return cleaned;
+}
+function isEventSaved(eventId){
+  return getSavedEventIds().includes(String(eventId));
+}
+function toggleSavedEvent(eventId){
+  const id=String(eventId);
+  const ids=getSavedEventIds();
+  const index=ids.indexOf(id);
+  if(index>=0) ids.splice(index,1); else ids.push(id);
+  setSavedEventIds(ids);
+  renderEvents();
+  renderSavedEvents();
+  if(currentClub && document.getElementById('clubPage').classList.contains('show')) showClub(currentClub.slug);
+  if(currentEventId && String(currentEventId)===id){
+    const e=events.find(x=>String(x.id)===id);
+    if(e) renderEventPopupActions(e);
+  }
+}
+function saveButtonMarkup(e){
+  const saved=isEventSaved(e.id);
+  return `<button class="save-icon-btn ${saved?'saved':''}" type="button" data-event-id="${escapeHtml(String(e.id))}" aria-label="${saved?'Remove event from saved':'Save event'}" title="${saved?'Saved':'Save event'}" aria-pressed="${saved?'true':'false'}" onclick="event.stopPropagation();toggleSavedEvent(this.dataset.eventId)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.7L6 21V4.75Z"/></svg></button>`;
+}
+function renderEventCard(e,{includeClubLink=true}={}){
+  const c=clubs.find(x=>x.name===e.club);
+  const clubLink=includeClubLink && c?`<a class="btn" href="#club/${c.slug}" onclick="event.stopPropagation()">View club →</a>`:'';
+  const registerLink=e.registration_link
+    ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Register →</a>`
+    : '';
+  const actions=`<div class="event-actions">${clubLink}${registerLink}${saveButtonMarkup(e)}</div>`;
+  return `<div class="event event-clickable" role="button" tabindex="0" data-event-id="${escapeHtml(String(e.id))}" onclick="openEventDescription(this.dataset.eventId)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(this.dataset.eventId)}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${escapeHtml(e.time||'')}</p></div>${actions}</div>`;
+}
 function renderEvents(){
-  document.getElementById('eventList').innerHTML=events.map(e=>{
-    const c=clubs.find(x=>x.name===e.club);
-    const clubLink=c?`<a class="btn" href="#club/${c.slug}">View club →</a>`:'';
-    const registerLink=e.registration_link
-      ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Register →</a>`
-      : '';
-    const actions=`<div class="event-actions">${clubLink}${registerLink}</div>`;
-    return `<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${actions}</div>`;
-  }).join('') || '<p class="muted">No upcoming events yet.</p>';
+  cleanupSavedEvents(events);
+  document.getElementById('eventList').innerHTML=events.map(e=>renderEventCard(e)).join('') || '<p class="muted">No upcoming events yet.</p>';
+}
+function renderSavedEvents(){
+  const target=document.getElementById('savedEventList');
+  if(!target) return;
+  const ids=cleanupSavedEvents(events);
+  const saved=ids.map(id=>events.find(e=>String(e.id)===String(id))).filter(Boolean);
+  target.innerHTML=saved.length?saved.map(e=>`
+    <div class="saved-preview-item">
+      <div class="saved-preview-date"><b>${escapeHtml(e.day)}</b><small>${escapeHtml(e.month)}</small></div>
+      <div class="saved-preview-copy"><h4>${escapeHtml(e.name)}</h4><p>${escapeHtml(e.club)} · ${escapeHtml(e.time||'')}</p></div>
+      <div class="saved-preview-actions">
+        <button class="saved-preview-open" type="button" data-event-id="${escapeHtml(String(e.id))}" onclick="closeSavedPreview();openEventDescription(this.dataset.eventId)">View</button>
+        <button class="save-icon-btn saved saved-preview-remove" type="button" data-event-id="${escapeHtml(String(e.id))}" aria-label="Remove event from saved" title="Remove" onclick="toggleSavedEvent(this.dataset.eventId)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.7L6 21V4.75Z"/></svg></button>
+      </div>
+    </div>`).join(''):'<div class="saved-empty">No saved events yet. Use the bookmark icon beside <strong>View Club</strong> and <strong>Register</strong> to save one.</div>';
+}
+
+function openSavedPreview(){
+  renderSavedEvents();
+  const backdrop=document.getElementById('savedPreviewBackdrop');
+  backdrop.classList.add('show');
+  backdrop.setAttribute('aria-hidden','false');
+}
+function closeSavedPreview(event){
+  if(event && event.target!==event.currentTarget) return;
+  const backdrop=document.getElementById('savedPreviewBackdrop');
+  if(!backdrop) return;
+  backdrop.classList.remove('show');
+  backdrop.setAttribute('aria-hidden','true');
 }
 
 
+function renderEventPopupActions(e){
+  const target=document.getElementById('eventPopupActions');
+  if(!target || !e) return;
+  target.innerHTML = `${e.registration_link
+    ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer">Register →</a>`
+    : ''}${saveButtonMarkup(e)}`;
+}
 function openEventDescription(eventId){
   const e = events.find(x => String(x.id) === String(eventId));
   if(!e) return;
+  currentEventId=String(e.id);
   document.getElementById('eventPopupTitle').textContent = e.name || 'Event';
   document.getElementById('eventPopupMeta').textContent =
     `${e.club || 'Club'} · ${e.place || 'Venue'} · ${e.time || ''}${e.day && e.month ? ` · ${e.day} ${e.month}` : ''}`;
   document.getElementById('eventPopupDescription').textContent =
     e.desc || 'No description has been added for this event yet.';
-  document.getElementById('eventPopupActions').innerHTML = e.registration_link
-    ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer">Register →</a>`
-    : '';
+  renderEventPopupActions(e);
   const modal = document.getElementById('eventDescriptionModal');
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
@@ -298,6 +403,7 @@ function closeEventDescription(event){
   const modal = document.getElementById('eventDescriptionModal');
   modal.classList.remove('show');
   modal.setAttribute('aria-hidden','true');
+  currentEventId=null;
   if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow='';
   // Clean the #event/<id> share link out of the URL once the visitor
   // closes the popup, so refreshing/back doesn't just reopen it oddly.
@@ -309,12 +415,15 @@ document.addEventListener('keydown', event => {
   if(event.key === 'Escape'){
     closeEventDescription();
     closeLightbox();
+    closeSavedPreview();
   }
 });
 
-function openLightbox(src){
+function openLightbox(src,alt='Gallery photo'){
   const modal = document.getElementById('lightboxModal');
-  document.getElementById('lightboxImg').src = src;
+  const img=document.getElementById('lightboxImg');
+  img.src = src;
+  img.alt = alt;
   modal.classList.add('show');
   modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
@@ -325,6 +434,21 @@ function closeLightbox(){
   modal.classList.remove('show');
   modal.setAttribute('aria-hidden', 'true');
   if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow = '';
+}
+
+function enableMainGalleryInteractions(){
+  document.querySelectorAll('.gallery-track img').forEach(img=>{
+    img.setAttribute('role','button');
+    img.setAttribute('tabindex','0');
+    img.setAttribute('aria-label',`${img.alt || 'Gallery photo'} — open larger`);
+    img.addEventListener('click',()=>openLightbox(img.src,img.alt));
+    img.addEventListener('keydown',event=>{
+      if(event.key==='Enter'||event.key===' '){
+        event.preventDefault();
+        openLightbox(img.src,img.alt);
+      }
+    });
+  });
 }
 
 let currentClub=null;
@@ -387,7 +511,7 @@ async function showClub(slug){
       </div>
     </div>
    <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap" id="clubGalleryWrap"><p class="muted">Loading photos…</p></div></section>
-   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>`<div class="event event-clickable" role="button" tabindex="0" onclick="openEventDescription(${e.id})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openEventDescription(${e.id})}"><div class="date"><b>${e.day}</b><small>${e.month}</small></div><div><h3>${escapeHtml(e.name)}</h3><p>${escapeHtml(e.club)} · ${escapeHtml(e.place||'')} · ${e.time}</p></div>${e.registration_link?`<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Register →</a>`:''}</div>`).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
+   <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>renderEventCard(e,{includeClubLink:false})).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
  const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
 
  const photos = await fetchClubGallery(c.id);
@@ -463,7 +587,10 @@ function closeMenu(){
   await loadKampusData();
   renderClubs();
   renderEvents();
+  renderSavedEvents();
+  enableMainGalleryInteractions();
   handleRoute();
+  setInterval(()=>{renderEvents();renderSavedEvents();},60*60*1000);
 })();
 </script>
 </body>
