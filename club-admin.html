@@ -84,7 +84,32 @@ textarea{resize:vertical;min-height:80px}
         <button class="btn block" type="submit">Log in</button>
       </form>
       <div id="loginMsg" class="msg"></div>
+    </div>
+  </div>
 
+  <!-- LOADING VIEW -->
+  <div id="loadingView">
+    <p class="spinner-text">Checking your session…</p>
+  </div>
+
+  <!-- DASHBOARD VIEW -->
+  <div id="dashboardView" class="hidden">
+
+    <div id="noClubMsg" class="card hidden">
+      <h2>No club linked to this account</h2>
+      <p class="muted">Your login worked, but no club is linked to it yet in <code>club_leaders</code>. Ask your KAMPUS admin to link your account to a club.</p>
+    </div>
+
+    <div id="clubHeaderWrap" class="hidden">
+      <span class="club-tag">YOUR CLUB</span>
+      <h1 id="clubName"></h1>
+      <p class="muted" id="clubDesc"></p>
+    </div>
+
+    <div id="clubInfoSection" class="section hidden">
+      <div class="section-head">
+        <h2>Club information</h2>
+      </div>
       <div class="card">
         <form id="clubInfoForm" onsubmit="handleClubInfoSubmit(event)">
           <label for="ciAbout">About the Club</label>
