@@ -281,13 +281,102 @@ function getSearchQuery(){
  const input=document.getElementById('search');
  return input ? input.value.toLowerCase().trim() : '';
 }
+
+// Controlled synonym groups make discovery more natural without needing an exact keyword.
+// Add/remove words here as KAMPUS grows. The logic is universal for every club/event.
+const SEARCH_SYNONYM_GROUPS=[
+ ['finance','financial','money','stock','stocks','trading','trade','investing','investment','investments','market','markets','banking'],
+ ['photography','photo','photos','camera','cameras','picture','pictures','photographer','photographers'],
+ ['robotics','robotic','robot','robots','robo','automation','automated'],
+ ['technology','tech','coding','code','programming','software','computer','computers','developer','developers'],
+ ['entrepreneurship','entrepreneur','entrepreneurs','startup','startups','founder','founders'],
+ ['theatre','theater','drama','acting','actor','actors','stage','play','plays'],
+ ['esports','esport','gaming','game','games','gamer','gamers'],
+ ['environment','environmental','nature','green','sustainability','sustainable','eco','climate'],
+ ['quiz','quizzes','trivia','question','questions'],
+ ['music','musical','singing','singer','singers','song','songs','band','bands'],
+ ['dance','dancing','choreography','choreographer'],
+ ['workshop','workshops','training','session','sessions','handson'],
+ ['art','arts','creative','creativity','design','drawing','painting'],
+ ['marketing','advertising','branding','brand','promotion','promotions'],
+ ['sports','sport','athletics','athletic','fitness'],
+ ['community','communities','volunteer','volunteering','service','social']
+];
+
+function searchStem(word){
+ let w=String(word||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+ if(w.length>5 && w.endsWith('ics')) w=w.slice(0,-3);
+ else if(w.length>5 && w.endsWith('ies')) w=w.slice(0,-3)+'y';
+ else if(w.length>5 && w.endsWith('ing')) w=w.slice(0,-3);
+ else if(w.length>4 && w.endsWith('ed')) w=w.slice(0,-2);
+ else if(w.length>4 && w.endsWith('es')) w=w.slice(0,-2);
+ else if(w.length>3 && w.endsWith('s')) w=w.slice(0,-1);
+ return w;
+}
+
+const SEARCH_SYNONYM_LOOKUP=(()=>{
+ const map=new Map();
+ SEARCH_SYNONYM_GROUPS.forEach(group=>{
+   const normalized=[...new Set(group.map(searchStem).filter(Boolean))];
+   normalized.forEach(term=>map.set(term,normalized));
+ });
+ return map;
+})();
+
+function queryAlternatives(raw){
+ const stem=searchStem(raw);
+ if(!stem) return [];
+ return SEARCH_SYNONYM_LOOKUP.get(stem) || [stem];
+}
+
+// Tiny typo tolerance for normal-length words, e.g. "robotcs" can still find "robotics".
+function oneEditOrLess(a,b){
+ if(a===b) return true;
+ if(Math.abs(a.length-b.length)>1) return false;
+ if(a.length>b.length) [a,b]=[b,a];
+ let i=0,j=0,edits=0;
+ while(i<a.length && j<b.length){
+   if(a[i]===b[j]){ i++; j++; continue; }
+   if(++edits>1) return false;
+   if(a.length===b.length){ i++; j++; } else { j++; }
+ }
+ return true;
+}
+
+function tokenMatches(textStem,queryStem){
+ if(!textStem || !queryStem) return false;
+ if(textStem===queryStem) return true;
+ // Partial matching is intentionally conservative for very short words.
+ if(queryStem.length>=3 && (textStem.startsWith(queryStem) || queryStem.startsWith(textStem))) return true;
+ if(queryStem.length>=5 && textStem.length>=5 && oneEditOrLess(textStem,queryStem)) return true;
+ return false;
+}
+
+function looseSearchMatch(text,q){
+ if(!q) return true;
+ const textTokens=String(text||'').toLowerCase().match(/[a-z0-9]+/g)||[];
+ const queryTokens=String(q||'').toLowerCase().match(/[a-z0-9]+/g)||[];
+ const stems=textTokens.map(searchStem).filter(Boolean);
+
+ // Every word the user typed must have at least one reasonable match,
+ // but each word may match through stemming, partial text, typo tolerance, or synonyms.
+ return queryTokens.every(raw=>{
+   const alternatives=queryAlternatives(raw);
+   if(!alternatives.length) return true;
+   return alternatives.some(needle=>stems.some(token=>tokenMatches(token,needle)));
+ });
+}
 function clubMatchesSearch(c,q){
  if(!q) return true;
- return (`${c.name||''} ${c.desc||''} ${c.about||''}`).toLowerCase().includes(q);
+ return looseSearchMatch(`${c.name||''} ${c.desc||''} ${c.about||''}`,q);
 }
 function eventMatchesSearch(e,q){
  if(!q) return true;
- return (`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''} ${e.time||''} ${e.day||''} ${e.month||''}`).toLowerCase().includes(q);
+ const eventText=`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''} ${e.time||''} ${e.day||''} ${e.month||''}`;
+ if(looseSearchMatch(eventText,q)) return true;
+ // If the search matches a club, show that club's upcoming events too.
+ const eventClub=clubs.find(c=>c.name===e.club);
+ return Boolean(eventClub && clubMatchesSearch(eventClub,q));
 }
 function getFilteredClubs(){
  const q=getSearchQuery();
