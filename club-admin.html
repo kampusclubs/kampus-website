@@ -74,10 +74,11 @@ textarea{resize:vertical;min-height:80px}
   <div id="loginView" class="hidden">
     <div class="center-wrap card">
       <h1>Club Leader Login</h1>
-      <p class="muted">Sign in with the account your club was set up with.</p>
+      <p class="muted">Sign in with your KAMPUS club username and password.</p>
       <form id="loginForm" onsubmit="handleLogin(event)">
-        <label for="loginEmail">Email</label>
-        <input id="loginEmail" type="email" autocomplete="username" required>
+        <label for="loginEmail">Username or Email</label>
+        <input id="loginEmail" type="text" autocomplete="username" autocapitalize="none" required>
+        <p class="muted" style="font-size:12px;margin:7px 0 0">Club usernames will be provided by KAMPUS. Existing email login still works.</p>
         <label for="loginPassword">Password</label>
         <input id="loginPassword" type="password" autocomplete="current-password" required>
         <button class="btn block" type="submit">Log in</button>
@@ -268,8 +269,25 @@ function showLoginView(){
 async function handleLogin(evt){
   evt.preventDefault();
   const msg = $('loginMsg'); msg.textContent=''; msg.className='msg';
-  const email = $('loginEmail').value.trim();
+  const loginValue = $('loginEmail').value.trim();
   const password = $('loginPassword').value;
+
+  // KAMPUS club usernames map to internal Supabase Auth identities.
+  // Passwords remain handled by Supabase Auth and are not stored here.
+  const CLUB_LOGIN_IDENTITIES = {
+    robotics: 'robotics@kampusclubs.internal'
+  };
+
+  const email = loginValue.includes('@')
+    ? loginValue
+    : CLUB_LOGIN_IDENTITIES[loginValue.toLowerCase()];
+
+  if(!email){
+    msg.textContent = 'Unknown club username. Check the username and try again.';
+    msg.className = 'msg error';
+    return;
+  }
+
   const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
   if(error){
     msg.textContent = error.message || 'Login failed. Check your email and password.';
