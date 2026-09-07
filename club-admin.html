@@ -227,6 +227,11 @@ textarea{resize:vertical;min-height:80px}
           <label for="evRegistrationLink">Registration Link <span class="muted" style="font-weight:400">(optional)</span></label>
           <input id="evRegistrationLink" type="url" placeholder="https://forms.google.com/..." maxlength="1000">
 
+          <label for="evPosterFile">Event Poster <span class="muted" style="font-weight:400">(optional)</span></label>
+          <input id="evPosterFile" type="file" accept="image/*">
+          <p class="muted" style="font-size:12px;margin:7px 0 0">Upload a poster to display with this event on the student site.</p>
+          <div id="evPosterPreview" style="margin-top:12px"></div>
+
           <div class="row" style="margin-top:20px">
             <button class="btn" type="submit" id="eventSubmitBtn">Save event</button>
             <button class="btn secondary" type="button" onclick="closeEventForm()">Cancel</button>
@@ -280,12 +285,14 @@ const EVENTS_TABLE = 'events';
 const GALLERY_TABLE = 'club_gallery';
 const GALLERY_BUCKET = 'club-gallery';
 const BRANDING_BUCKET = 'club-branding';
+  const EVENT_POSTERS_BUCKET = 'event-posters';
 
 let currentUser = null;
 let currentClub = null;      // { id, name, description, student_head, faculty_coordinator, instagram, whatsapp }
 let currentEvents = [];      // raw rows from `events`
 let editingEventId = null;   // null = adding, otherwise the event id being edited
 let currentGallery = [];     // raw rows from `club_gallery`
+  let currentEventPosterUrl = ''; // poster URL for the event being edited
 
 function show(el){ el.classList.remove('hidden'); }
 function hide(el){ el.classList.add('hidden'); }
@@ -698,10 +705,14 @@ function openEventForm(eventId){
     $('evTime').value = (ev.event_time||'').slice(0,5);
     $('evVenue').value = ev.venue || '';
     $('evRegistrationLink').value = ev.registration_link || '';
+    currentEventPosterUrl = ev.event_poster_url || '';
+    renderEventPosterPreview();
   }else{
     $('eventFormTitle').textContent = 'Add event';
     $('eventSubmitBtn').textContent = 'Save event';
     $('eventFormEl').reset();
+    currentEventPosterUrl = '';
+    renderEventPosterPreview();
   }
   show($('eventForm'));
   $('eventForm').scrollIntoView({ behavior:'smooth', block:'center' });
@@ -709,13 +720,19 @@ function openEventForm(eventId){
 
 function closeEventForm(){
   editingEventId = null;
+  currentEventPosterUrl = '';
   hide($('eventForm'));
   $('eventFormEl').reset();
+  renderEventPosterPreview();
 }
 
 async function handleEventSubmit(evt){
   evt.preventDefault();
   const msg = $('eventFormMsg'); msg.textContent=''; msg.className='msg';
+  const submitBtn = $('eventSubmitBtn');
+  const posterInput = $('evPosterFile');
+  const posterFile = posterInput.files && posterInput.files[0];
+  const oldPosterUrl = currentEventPosterUrl || '';
 
   const payload = {
     title: $('evName').value.trim(),
@@ -727,24 +744,139 @@ async function handleEventSubmit(evt){
     club_id: currentClub.id
   };
 
-  let error;
+  submitBtn.disabled = true;
+  submitBtn.textContent = editingEventId ? 'Saving…' : 'Saving…';
+
+  // Save the event first so a new event gets its database id.
+  let savedEvent = null;
+  let error = null;
+
   if(editingEventId){
-    ({ error } = await supabaseClient.from(EVENTS_TABLE).update(payload).eq('id', editingEventId));
+    const result = await supabaseClient
+      .from(EVENTS_TABLE)
+      .update(payload)
+      .eq('id', editingEventId)
+      .select()
+      .single();
+    savedEvent = result.data;
+    error = result.error;
   }else{
-    ({ error } = await supabaseClient.from(EVENTS_TABLE).insert(payload));
+    const result = await supabaseClient
+      .from(EVENTS_TABLE)
+      .insert(payload)
+      .select()
+      .single();
+    savedEvent = result.data;
+    error = result.error;
   }
 
-  if(error){
+  if(error || !savedEvent){
     console.error('KAMPUS admin: could not save event', error);
-    msg.textContent = error.message || 'Could not save this event.';
+    submitBtn.disabled = false;
+    submitBtn.textContent = editingEventId ? 'Save changes' : 'Save event';
+    msg.textContent = (error && error.message) || 'Could not save this event.';
     msg.className = 'msg error';
     return;
   }
 
-  msg.textContent = 'Saved.';
+  // If the admin selected a new poster, upload it into this club's folder.
+  // For new events we use the newly created event id in the filename.
+  let newPosterUrl = oldPosterUrl;
+
+  if(posterFile){
+    if(!posterFile.type.startsWith('image/')){
+      submitBtn.disabled = false;
+      submitBtn.textContent = editingEventId ? 'Save changes' : 'Save event';
+      msg.textContent = 'Please choose an image file for the poster.';
+      msg.className = 'msg error';
+      return;
+    }
+
+    const safeName = posterFile.name.replace(/[^a-zA-Z0-9.\-_]/g, '_');
+    const path = `${currentClub.id}/${savedEvent.id}_${Date.now()}_${Math.random().toString(36).slice(2,8)}_${safeName}`;
+
+    const { error: uploadErr } = await supabaseClient.storage
+      .from(EVENT_POSTERS_BUCKET)
+      .upload(path, posterFile);
+
+    if(uploadErr){
+      console.error('KAMPUS admin: could not upload event poster', uploadErr);
+      submitBtn.disabled = false;
+      submitBtn.textContent = editingEventId ? 'Save changes' : 'Save event';
+      msg.textContent = uploadErr.message || 'Could not upload the event poster.';
+      msg.className = 'msg error';
+      return;
+    }
+
+    const { data: pub } = supabaseClient.storage
+      .from(EVENT_POSTERS_BUCKET)
+      .getPublicUrl(path);
+
+    newPosterUrl = pub && pub.publicUrl;
+
+    if(!newPosterUrl){
+      await supabaseClient.storage.from(EVENT_POSTERS_BUCKET).remove([path]);
+      submitBtn.disabled = false;
+      submitBtn.textContent = editingEventId ? 'Save changes' : 'Save event';
+      msg.textContent = 'Could not create a public URL for the event poster.';
+      msg.className = 'msg error';
+      return;
+    }
+
+    const { error: posterDbErr } = await supabaseClient
+      .from(EVENTS_TABLE)
+      .update({ event_poster_url: newPosterUrl })
+      .eq('id', savedEvent.id);
+
+    if(posterDbErr){
+      console.error('KAMPUS admin: could not save event poster URL', posterDbErr);
+      await supabaseClient.storage.from(EVENT_POSTERS_BUCKET).remove([path]);
+      submitBtn.disabled = false;
+      submitBtn.textContent = editingEventId ? 'Save changes' : 'Save event';
+      msg.textContent = posterDbErr.message || 'Could not save the event poster.';
+      msg.className = 'msg error';
+      return;
+    }
+
+    // Best-effort cleanup of the previous poster if it belongs to this bucket.
+    const oldPath = extractEventPosterStoragePath(oldPosterUrl);
+    if(oldPath && oldPath !== path){
+      await supabaseClient.storage.from(EVENT_POSTERS_BUCKET).remove([oldPath]);
+    }
+
+    currentEventPosterUrl = newPosterUrl;
+  }
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = editingEventId ? 'Save changes' : 'Save event';
+  msg.textContent = posterFile ? 'Event and poster saved.' : 'Saved.';
   msg.className = 'msg ok';
   await loadEvents();
   closeEventForm();
+}
+
+function renderEventPosterPreview(){
+  const wrap = $('evPosterPreview');
+  if(!wrap) return;
+
+  if(currentEventPosterUrl){
+    wrap.innerHTML = `
+      <div style="border:1px solid var(--line);border-radius:10px;overflow:hidden;max-width:320px;background:#fff">
+        <img src="${escapeHtml(currentEventPosterUrl)}" alt="Event poster preview"
+             style="width:100%;max-height:360px;object-fit:contain;display:block">
+        <p class="muted" style="font-size:12px;padding:8px 10px;margin:0">Current poster. Choose a new image above to replace it.</p>
+      </div>`;
+  }else{
+    wrap.innerHTML = '<p class="muted" style="font-size:12px;margin:0">No poster uploaded yet.</p>';
+  }
+}
+
+function extractEventPosterStoragePath(url){
+  if(!url) return null;
+  const marker = `/storage/v1/object/public/${EVENT_POSTERS_BUCKET}/`;
+  const idx = String(url).indexOf(marker);
+  if(idx === -1) return null;
+  return decodeURIComponent(String(url).slice(idx + marker.length));
 }
 
 async function deleteEvent(eventId){
