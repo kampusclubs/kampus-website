@@ -10,7 +10,7 @@
 :root{--ink:#151515;--muted:#666;--paper:#f7f5f1;--card:#fff;--line:#e7e2da;--accent:#b21f24;--accent-soft:#fff0f1;--gold:#f2b84b;--blue:#5b8def;--green:#52b788;--nav-h:72px}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:Inter,Arial,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased}a{color:inherit}.sr-only{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
 nav{min-height:var(--nav-h);background:#fff;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;padding:0 6%;position:sticky;top:0;z-index:50}.logo{font-weight:900;letter-spacing:-1px;font-size:26px;text-decoration:none}.logo span{font-size:13px;margin-left:5px;color:var(--gold);vertical-align:top}.nav-links{display:flex;align-items:center;gap:28px}.nav-links a{text-decoration:none;color:#222;font-size:14px;font-weight:700;line-height:1;display:inline-flex;align-items:center;height:40px}.nav-links a:hover{color:var(--accent)}.theme-toggle,.menu-toggle{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;font-size:19px;display:inline-flex;align-items:center;justify-content:center;transition:.2s}.theme-toggle:hover,.menu-toggle:hover{transform:translateY(-1px)}.menu-toggle{display:none}.nav-links a:focus-visible,.theme-toggle:focus-visible,.menu-toggle:focus-visible,.btn:focus-visible,.filter:focus-visible,.search input:focus-visible,.search button:focus-visible{outline:3px solid #5b8def66;outline-offset:3px}
-.hero{padding:80px 6% 60px;position:relative;overflow:visible;background:radial-gradient(circle at 82% 18%,#4d2025 0,#171717 32%),#171717;color:white;z-index:2}.hero::after{content:"";position:absolute;width:420px;height:420px;border:1px solid #ffffff14;border-radius:50%;right:-150px;bottom:-250px;box-shadow:0 0 0 55px #ffffff05,0 0 0 110px #ffffff03;clip-path:inset(0 0 250px 0);pointer-events:none}.hero-inner{max-width:1050px;margin:auto;position:relative;z-index:3}.eyebrow{text-transform:uppercase;letter-spacing:2px;color:#e5b9ba;font-size:12px;font-weight:800}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.98;letter-spacing:-4px;margin:16px 0}.hero-accent{color:#f0b8bb}.hero p{font-size:19px;max-width:700px;color:#d7d7d7;line-height:1.6}.search{margin-top:32px;display:flex;max-width:720px;position:relative}.search input{min-width:0;flex:1;padding:18px 20px;border:0;border-radius:10px 0 0 10px;font-size:16px}.search>button{border:0;background:var(--accent);color:#fff;padding:0 26px;border-radius:0 10px 10px 0;font-weight:800;cursor:pointer}.search-suggestions{display:none;position:absolute;left:0;right:0;top:calc(100% + 9px);z-index:120;background:#fff;color:#171717;border:1px solid #e7e2da;border-radius:14px;box-shadow:0 18px 50px #0006;max-height:min(430px,60vh);overflow-y:auto;overscroll-behavior:contain;text-align:left}.search-suggestions.show{display:block}.search-suggestion-section+.search-suggestion-section{border-top:1px solid #eee9e2}.search-suggestion-label{padding:10px 14px 7px;color:#777;font-size:10px;font-weight:900;letter-spacing:1.25px;text-transform:uppercase}.search-suggestion{width:100%;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:11px;align-items:center;padding:11px 14px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:.14s}.search-suggestion:hover,.search-suggestion.active{background:#f7f2ed}.search-suggestion-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#f0ece5;color:#8f1d23;font-size:12px;font-weight:900}.search-suggestion.event-option .search-suggestion-icon{background:#fff0f1;color:#a51d34}.search-suggestion.term-option{grid-template-columns:38px minmax(0,1fr) auto;background:#fffaf7}.search-suggestion.term-option .search-suggestion-icon{background:#171717;color:#fff;font-size:16px}.search-suggestion.term-option strong{font-size:15px}.search-suggestion.term-option .search-suggestion-type{color:#a51d34}body.dark .search-suggestion.term-option{background:#24211f}body.dark .search-suggestion.term-option .search-suggestion-icon{background:#f3f0ea;color:#171717}.search-suggestion-copy{min-width:0}.search-suggestion-copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}.search-suggestion-copy small{display:block;margin-top:3px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.search-suggestion-type{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.7px}.search-suggestion-empty{padding:14px;color:#777;font-size:13px}.search-hint{padding:9px 14px 10px;border-top:1px solid #eee9e2;color:#888;font-size:10px}.search-hint kbd{font:inherit;font-weight:800;color:#555}body.dark .search-suggestions{background:#1e1e1e;color:#f3f0ea;border-color:#3a3a3a}body.dark .search-suggestion-section+.search-suggestion-section,body.dark .search-hint{border-color:#333}body.dark .search-suggestion:hover,body.dark .search-suggestion.active{background:#2a2a2a}body.dark .search-suggestion-icon{background:#2b2926;color:#f0b8bb}body.dark .search-suggestion.event-option .search-suggestion-icon{background:#332326;color:#f0b8bb}body.dark .search-suggestion-copy small,body.dark .search-suggestion-label,body.dark .search-suggestion-type,body.dark .search-suggestion-empty,body.dark .search-hint{color:#aaa}
+.hero{padding:80px 6% 60px;position:relative;overflow:visible;background:radial-gradient(circle at 82% 18%,#4d2025 0,#171717 32%),#171717;color:white;z-index:2}.hero::after{content:"";position:absolute;width:420px;height:420px;border:1px solid #ffffff14;border-radius:50%;right:-150px;bottom:-250px;box-shadow:0 0 0 55px #ffffff05,0 0 0 110px #ffffff03;clip-path:inset(0 0 250px 0);pointer-events:none}.hero-inner{max-width:1050px;margin:auto;position:relative;z-index:3}.eyebrow{text-transform:uppercase;letter-spacing:2px;color:#e5b9ba;font-size:12px;font-weight:800}.hero h1{font-size:clamp(42px,7vw,78px);line-height:.98;letter-spacing:-4px;margin:16px 0}.hero-accent{color:#f0b8bb}.hero p{font-size:19px;max-width:700px;color:#d7d7d7;line-height:1.6}.search{margin-top:32px;display:flex;max-width:720px;position:relative}.search input{min-width:0;flex:1;padding:18px 20px;border:0;border-radius:10px 0 0 10px;font-size:16px}.search>button{border:0;background:var(--accent);color:#fff;padding:0 26px;border-radius:0 10px 10px 0;font-weight:800;cursor:pointer}.search-suggestions{display:none;position:absolute;left:0;right:0;top:calc(100% + 9px);z-index:120;background:#fff;color:#171717;border:1px solid #e7e2da;border-radius:14px;box-shadow:0 18px 50px #0006;max-height:min(430px,60vh);overflow-y:auto;overscroll-behavior:contain;text-align:left}.search-suggestions.show{display:block}.search-suggestion-section+.search-suggestion-section{border-top:1px solid #eee9e2}.search-suggestion-label{padding:10px 14px 7px;color:#777;font-size:10px;font-weight:900;letter-spacing:1.25px;text-transform:uppercase}.search-suggestion{width:100%;display:grid;grid-template-columns:38px minmax(0,1fr) auto;gap:11px;align-items:center;padding:11px 14px;border:0;background:transparent;color:inherit;text-align:left;cursor:pointer;transition:.14s}.search-suggestion:hover,.search-suggestion.active{background:#f7f2ed}.search-suggestion-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;background:#f0ece5;color:#8f1d23;font-size:12px;font-weight:900}.search-suggestion.event-option .search-suggestion-icon{background:#fff0f1;color:#a51d34}.search-suggestion-copy{min-width:0}.search-suggestion-copy strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:14px}.search-suggestion-copy small{display:block;margin-top:3px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.search-suggestion-type{font-size:10px;font-weight:800;color:#888;text-transform:uppercase;letter-spacing:.7px}.search-suggestion-empty{padding:14px;color:#777;font-size:13px}.search-hint{padding:9px 14px 10px;border-top:1px solid #eee9e2;color:#888;font-size:10px}.search-hint kbd{font:inherit;font-weight:800;color:#555}body.dark .search-suggestions{background:#1e1e1e;color:#f3f0ea;border-color:#3a3a3a}body.dark .search-suggestion-section+.search-suggestion-section,body.dark .search-hint{border-color:#333}body.dark .search-suggestion:hover,body.dark .search-suggestion.active{background:#2a2a2a}body.dark .search-suggestion-icon{background:#2b2926;color:#f0b8bb}body.dark .search-suggestion.event-option .search-suggestion-icon{background:#332326;color:#f0b8bb}body.dark .search-suggestion-copy small,body.dark .search-suggestion-label,body.dark .search-suggestion-type,body.dark .search-suggestion-empty,body.dark .search-hint{color:#aaa}
 main{max-width:1100px;margin:auto;padding:55px 6%}.section-head{display:flex;justify-content:space-between;align-items:end;gap:20px}.section-head h2,.main-gallery h2{font-size:32px;margin:0 0 8px}.section-kicker{color:var(--accent)!important;letter-spacing:1.6px;margin-bottom:6px}.muted{color:var(--muted)}section[id]{scroll-margin-top:calc(var(--nav-h) + 18px)}
 .filters{display:flex;gap:10px;flex-wrap:wrap;margin:28px 0 24px}.filter{border:1px solid var(--line);background:#fff;padding:9px 14px;border-radius:999px;cursor:pointer;font-weight:700;transition:.18s;color:var(--ink)}.filter:hover{transform:translateY(-2px);border-color:#d7b2b5}.filter.active{background:#171717;color:#fff;box-shadow:0 6px 16px #0002}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px}.card{position:relative;overflow:hidden;background:linear-gradient(145deg,#fff 0%,#fff 72%,#fff9f7 100%);border:1px solid var(--line);border-radius:16px;padding:25px;transition:.2s}.card::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#d9485f,#f2b84b,#5b8def,#52b788)}.card::after{content:"";position:absolute;width:100px;height:100px;border-radius:50%;right:-48px;bottom:-48px;background:#b21f2408}.card:hover{transform:translateY(-3px);box-shadow:0 10px 30px #0000000d}.tag{display:inline-block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;background:#f0ece5;padding:6px 9px;border-radius:999px}.card:nth-child(3n+1) .tag{background:#fff0f2;color:#a51d34}.card:nth-child(3n+2) .tag{background:#fff6df;color:#8a6200}.card:nth-child(3n) .tag{background:#edf3ff;color:#315ea8}.card:nth-child(4n) .tag{background:#edf9f2;color:#28764d}.card h3{margin:15px 0 8px;font-size:23px;letter-spacing:-.3px}.card p{color:var(--muted);line-height:1.5;font-size:14px}.btn{position:relative;z-index:1;display:inline-flex;align-items:center;justify-content:center;margin-top:12px;background:#171717;color:#fff;padding:10px 14px;border-radius:8px;text-decoration:none;font-size:13px;font-weight:800;border:0;cursor:pointer;transition:.18s}.btn:hover{transform:translateY(-2px);background:var(--accent)}
@@ -282,108 +282,169 @@ function getSearchQuery(){
  return input ? input.value.toLowerCase().trim() : '';
 }
 
-// Controlled synonym groups make discovery more natural without needing an exact keyword.
-// Add/remove words here as KAMPUS grows. The logic is universal for every club/event.
-const SEARCH_SYNONYM_GROUPS=[
- ['finance','financial','money','stock','stocks','trading','trade','investing','investment','investments','market','markets','banking'],
- ['photography','photo','photos','camera','cameras','picture','pictures','photographer','photographers'],
- ['robotics','robotic','robot','robots','robo','automation','automated'],
- ['technology','tech','coding','code','programming','software','computer','computers','developer','developers'],
- ['entrepreneurship','entrepreneur','entrepreneurs','startup','startups','founder','founders'],
- ['theatre','theater','drama','acting','actor','actors','stage','play','plays'],
- ['esports','esport','gaming','game','games','gamer','gamers'],
- ['environment','environmental','nature','green','sustainability','sustainable','eco','climate'],
- ['quiz','quizzes','trivia','question','questions'],
- ['music','musical','singing','singer','singers','song','songs','band','bands'],
- ['dance','dancing','choreography','choreographer'],
- ['workshop','workshops','training','session','sessions','handson'],
- ['art','arts','creative','creativity','design','drawing','painting'],
- ['marketing','advertising','branding','brand','promotion','promotions'],
- ['sports','sport','athletics','athletic','fitness'],
- ['community','communities','volunteer','volunteering','service','social']
+// Controlled search concepts for KAMPUS discovery.
+// Search is intentionally conservative: only high-confidence aliases are expanded.
+// Ambiguous words stay "weak" and are matched literally only. This keeps synonyms
+// useful without allowing unrelated clubs to leak into results.
+const SEARCH_CONCEPTS=[
+ {name:'finance',strong:['finance','financial','money','stock','stocks','trading','investing','investment','investments','banking'],weak:['trade','market','markets']},
+ {name:'photography',strong:['photography','photo','photos','camera','cameras','photographer','photographers','picture','pictures'],weak:['visual']},
+ {name:'robotics',strong:['robotics','robotic','robot','robots','robo'],weak:['automation','automated']},
+ {name:'technology',strong:['technology','tech','coding','programming','software','computer','computers','developer','developers'],weak:['code']},
+ {name:'entrepreneurship',strong:['entrepreneurship','entrepreneur','entrepreneurs','startup','startups','founder','founders'],weak:['business','venture']},
+ {name:'theatre',strong:['theatre','theater','drama','acting','actor','actors'],weak:['stage','play','plays','storytelling']},
+ {name:'esports',strong:['esports','esport','gaming','gamer','gamers'],weak:['game','games']},
+ {name:'environment',strong:['environment','environmental','sustainability','sustainable','eco','climate'],weak:['nature','green']},
+ {name:'quiz',strong:['quiz','quizzes','trivia'],weak:['question','questions']},
+ {name:'music',strong:['music','musical','singing','singer','singers','song','songs','band','bands'],weak:[]},
+ {name:'dance',strong:['dance','dancing','choreography','choreographer'],weak:[]},
+ {name:'workshop',strong:['workshop','workshops'],weak:['training','session','sessions','handson']},
+ {name:'art',strong:['art','arts','drawing','painting'],weak:['creative','creativity','design']},
+ {name:'marketing',strong:['marketing','advertising','branding','promotion','promotions'],weak:['brand']},
+ {name:'sports',strong:['sports','sport','athletics','fitness'],weak:['athletic']}
 ];
 
-function searchStem(word){
- let w=String(word||'').toLowerCase().replace(/[^a-z0-9]/g,'');
- if(w.length>5 && w.endsWith('ics')) w=w.slice(0,-3);
- else if(w.length>5 && w.endsWith('ies')) w=w.slice(0,-3)+'y';
- else if(w.length>5 && w.endsWith('ing')) w=w.slice(0,-3);
- else if(w.length>4 && w.endsWith('ed')) w=w.slice(0,-2);
- else if(w.length>4 && w.endsWith('es')) w=w.slice(0,-2);
- else if(w.length>3 && w.endsWith('s')) w=w.slice(0,-1);
- return w;
+// Autocomplete uses strong aliases only. Weak words are deliberately excluded
+// because completing an ambiguous word into a synonym can create noisy results.
+const SEARCH_SYNONYM_GROUPS=SEARCH_CONCEPTS.map(c=>[...c.strong]);
+
+function normalizeSearchWord(word){
+ return String(word||'').toLowerCase().replace(/[^a-z0-9]/g,'');
+}
+function searchTextTokens(text){
+ return String(text||'').toLowerCase().match(/[a-z0-9]+/g)||[];
 }
 
-const SEARCH_SYNONYM_LOOKUP=(()=>{
+const SEARCH_WEAK_WORDS=new Set(SEARCH_CONCEPTS.flatMap(c=>c.weak.map(normalizeSearchWord)).filter(Boolean));
+
+const SEARCH_STRONG_WORD_TO_GROUPS=(()=>{
  const map=new Map();
- SEARCH_SYNONYM_GROUPS.forEach(group=>{
-   const normalized=[...new Set(group.map(searchStem).filter(Boolean))];
-   normalized.forEach(term=>map.set(term,normalized));
+ SEARCH_CONCEPTS.forEach((concept,groupIndex)=>{
+   concept.strong.forEach(term=>{
+     const word=normalizeSearchWord(term);
+     if(!word) return;
+     if(!map.has(word)) map.set(word,new Set());
+     map.get(word).add(groupIndex);
+   });
  });
  return map;
 })();
 
-function queryAlternatives(raw){
- const stem=searchStem(raw);
- if(!stem) return [];
- return SEARCH_SYNONYM_LOOKUP.get(stem) || [stem];
+function exactConceptGroups(word){
+ const q=normalizeSearchWord(word);
+ return q && SEARCH_STRONG_WORD_TO_GROUPS.has(q) ? [...SEARCH_STRONG_WORD_TO_GROUPS.get(q)] : [];
 }
 
-// Tiny typo tolerance for normal-length words, e.g. "robotcs" can still find "robotics".
+// One-character typo tolerance for normal-length words. It is purposely strict:
+// same first three letters, length >= 5, and just one insertion/deletion/substitution.
 function oneEditOrLess(a,b){
+ a=normalizeSearchWord(a); b=normalizeSearchWord(b);
  if(a===b) return true;
- if(Math.abs(a.length-b.length)>1) return false;
- if(a.length>b.length) [a,b]=[b,a];
+ if(a.length<5 || b.length<5 || a.slice(0,3)!==b.slice(0,3) || Math.abs(a.length-b.length)>1) return false;
  let i=0,j=0,edits=0;
  while(i<a.length && j<b.length){
-   if(a[i]===b[j]){ i++; j++; continue; }
+   if(a[i]===b[j]){i++;j++;continue;}
    if(++edits>1) return false;
-   if(a.length===b.length){ i++; j++; } else { j++; }
+   if(a.length===b.length){i++;j++;}
+   else if(a.length>b.length){i++;}
+   else{j++;}
  }
- return true;
+ if(i<a.length || j<b.length) edits++;
+ return edits<=1;
 }
 
-function tokenMatches(textStem,queryStem){
- if(!textStem || !queryStem) return false;
- if(textStem===queryStem) return true;
- // Partial matching is intentionally conservative for very short words.
- if(queryStem.length>=3 && (textStem.startsWith(queryStem) || queryStem.startsWith(textStem))) return true;
- if(queryStem.length>=5 && textStem.length>=5 && oneEditOrLess(textStem,queryStem)) return true;
+// Resolve one typed word into a concept only when the interpretation is safe.
+// Priority: exact alias -> unique one-character typo -> unique unfinished prefix.
+// The prefix rule is what lets "dra" understand drama/theatre and "rob" robotics.
+function queryConceptGroups(word){
+ const q=normalizeSearchWord(word);
+ if(!q) return [];
+ const exact=exactConceptGroups(q);
+ if(exact.length) return exact;
+
+ // If this is an explicitly ambiguous/weak word, keep it literal. Do not
+ // reinterpret it as a prefix or typo of a stronger synonym (e.g. game->gamer,
+ // brand->branding, market->marketing).
+ if(SEARCH_WEAK_WORDS.has(q)) return [];
+
+ if(q.length>=5){
+   const typoGroups=new Set();
+   SEARCH_CONCEPTS.forEach((concept,groupIndex)=>{
+     if(concept.strong.some(term=>oneEditOrLess(normalizeSearchWord(term),q))) typoGroups.add(groupIndex);
+   });
+   if(typoGroups.size===1) return [...typoGroups];
+ }
+
+ if(q.length>=3){
+   const prefixGroups=new Set();
+   SEARCH_CONCEPTS.forEach((concept,groupIndex)=>{
+     if(concept.strong.some(term=>normalizeSearchWord(term).startsWith(q))) prefixGroups.add(groupIndex);
+   });
+   if(prefixGroups.size===1) return [...prefixGroups];
+ }
+ return [];
+}
+
+function strongWordsForGroups(groups){
+ const words=new Set();
+ groups.forEach(groupIndex=>{
+   const concept=SEARCH_CONCEPTS[groupIndex];
+   if(concept) concept.strong.forEach(term=>words.add(normalizeSearchWord(term)));
+ });
+ return words;
+}
+
+function queryWordMatchesTokens(rawWord,primaryTokens,allTokens){
+ const q=normalizeSearchWord(rawWord);
+ if(!q) return true;
+
+ // 1) Exact typed word anywhere, including long About/meta fields.
+ if(allTokens.includes(q)) return true;
+
+ // 2) Safe concept/synonym match. Expansion only uses high-confidence aliases
+ // and only checks compact primary fields (club name + description, or event info).
+ const groups=queryConceptGroups(q);
+ if(groups.length){
+   const strongWords=strongWordsForGroups(groups);
+   if(primaryTokens.some(token=>strongWords.has(token))) return true;
+ }
+
+ // 3) Ordinary unfinished word prefix, only when it did not resolve to a concept.
+ // This keeps general searches like "valo" -> Valorant useful without broad synonym drift.
+ if(!groups.length && q.length>=4 && primaryTokens.some(token=>token.startsWith(q))) return true;
+
+ // 4) One small typo against an actual primary-field word. Never fuzzy-match synonyms.
+ if(!groups.length && q.length>=5 && primaryTokens.some(token=>oneEditOrLess(token,q))) return true;
  return false;
 }
 
-function looseSearchMatch(text,q){
+function looseSearchMatch(primaryText,q,extraText=''){
  if(!q) return true;
- const textTokens=String(text||'').toLowerCase().match(/[a-z0-9]+/g)||[];
- const queryTokens=String(q||'').toLowerCase().match(/[a-z0-9]+/g)||[];
- const stems=textTokens.map(searchStem).filter(Boolean);
-
- // Keep the user's own word relaxed (stemming, partial matching and one small typo),
- // but keep synonym expansion strict. This prevents broad synonym words such as
- // "acting" -> "act" from accidentally matching unrelated words like "activity".
- return queryTokens.every(raw=>{
-   const primary=searchStem(raw);
-   if(!primary) return true;
-
-   // First try the actual word the student typed with relaxed matching.
-   if(stems.some(token=>tokenMatches(token,primary))) return true;
-
-   // Then try synonyms as exact normalized words only.
-   const alternatives=queryAlternatives(raw).filter(needle=>needle!==primary);
-   return alternatives.some(needle=>stems.includes(needle));
- });
+ const primaryTokens=searchTextTokens(primaryText).map(normalizeSearchWord).filter(Boolean);
+ const extraTokens=searchTextTokens(extraText).map(normalizeSearchWord).filter(Boolean);
+ const allTokens=[...primaryTokens,...extraTokens];
+ const queryTokens=searchTextTokens(q);
+ if(!queryTokens.length) return true;
+ // AND logic: every word typed by the student must make sense for this result.
+ return queryTokens.every(rawWord=>queryWordMatchesTokens(rawWord,primaryTokens,allTokens));
 }
+
 function clubMatchesSearch(c,q){
  if(!q) return true;
- return looseSearchMatch(`${c.name||''} ${c.desc||''} ${c.about||''}`,q);
+ // About stays searchable for exact words, while synonym/prefix/typo matching is
+ // limited to name + short description so long About text cannot cause false matches.
+ return looseSearchMatch(`${c.name||''} ${c.desc||''}`,q,`${c.about||''}`);
 }
 function eventMatchesSearch(e,q){
  if(!q) return true;
- const eventText=`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''} ${e.time||''} ${e.day||''} ${e.month||''}`;
- if(looseSearchMatch(eventText,q)) return true;
- // If the search matches a club, show that club's upcoming events too.
- const eventClub=clubs.find(c=>c.name===e.club);
- return Boolean(eventClub && clubMatchesSearch(eventClub,q));
+ const eventClub=clubs.find(c=>String(c.id)===String(e.club_id)) || clubs.find(c=>c.name===e.club);
+ // Treat the event and its organizer as one searchable record. This means a
+ // multi-word search can combine both sides naturally: "acting auditorium"
+ // can match the theatre club for "acting" and the event venue for "auditorium".
+ // It also preserves the key rule that matching a club surfaces its events.
+ const primary=`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''} ${eventClub?.name||''} ${eventClub?.desc||''}`;
+ const extra=`${e.time||''} ${e.day||''} ${e.month||''} ${eventClub?.about||''}`;
+ return looseSearchMatch(primary,q,extra);
 }
 function getFilteredClubs(){
  const q=getSearchQuery();
@@ -405,57 +466,72 @@ function renderSearchResults(){
 }
 
 // --- Search autocomplete -------------------------------------------------
-// Autocomplete is deliberately a little smarter than the final result list:
-// it can finish a word the student has only started typing ("dra" -> "drama")
-// and then use the same synonym-aware search to surface relevant clubs/events.
+// Autocomplete and the final results now use the SAME matching engine.
 let activeSearchSuggestion=-1;
 let currentSearchSuggestions=[];
 
 function autocompletePrefixMatch(text,q){
- const needle=String(q||'').toLowerCase().trim();
+ const needle=normalizeSearchWord(q);
  if(needle.length<2) return false;
- const tokens=String(text||'').toLowerCase().match(/[a-z0-9]+/g)||[];
- return tokens.some(token=>token.startsWith(needle));
+ return searchTextTokens(text).some(token=>normalizeSearchWord(token).startsWith(needle));
 }
 
 function autocompleteWordCompletions(q){
- const needle=String(q||'').toLowerCase().trim();
- if(needle.length<2 || /\s/.test(needle)) return [];
+ const raw=String(q||'').toLowerCase();
+ const tokens=raw.match(/[a-z0-9]+/g)||[];
+ if(!tokens.length || /\s$/.test(raw)) return [];
+ const last=tokens[tokens.length-1];
+ if(last.length<2) return [];
+ // If the student has already typed a complete known alias, do not silently
+ // rewrite it into another word. Strong aliases already search correctly; weak
+ // aliases are intentionally literal/ambiguous.
+ if(exactConceptGroups(last).length || SEARCH_WEAK_WORDS.has(last)) return [];
+ const before=tokens.slice(0,-1);
  const ranked=[];
  const seen=new Set();
  const add=(word,score)=>{
-   const w=String(word||'').toLowerCase().replace(/[^a-z0-9]/g,'');
-   if(!w || w===needle || !w.startsWith(needle) || seen.has(w)) return;
-   seen.add(w); ranked.push({word:w,score});
+   const w=normalizeSearchWord(word);
+   if(!w || w===last || !w.startsWith(last) || seen.has(w)) return;
+   const full=[...before,w].join(' ');
+   // Never suggest a completion that produces zero actual results.
+   if(!clubs.some(c=>clubMatchesSearch(c,full)) && !events.some(e=>eventMatchesSearch(e,full))) return;
+   seen.add(w); ranked.push({word:w,full,score});
  };
 
- // Words that already exist in actual club/event names are the strongest completions.
- clubs.forEach(c=>(String(c.name||'').toLowerCase().match(/[a-z0-9]+/g)||[]).forEach(w=>add(w,120)));
- events.forEach(e=>(String(e.name||'').toLowerCase().match(/[a-z0-9]+/g)||[]).forEach(w=>add(w,112)));
+ // Actual club/event title words are strongest.
+ clubs.forEach(c=>searchTextTokens(c.name).forEach(w=>add(w,140)));
+ events.forEach(e=>searchTextTokens(e.name).forEach(w=>add(w,132)));
 
- // Then use the controlled synonym vocabulary, so "dra" can become "drama"
- // even when the club itself is described as theatre/acting.
- SEARCH_SYNONYM_GROUPS.forEach(group=>group.forEach((w,i)=>add(w,100-i)));
+ // Add at most one useful completion per concept group to avoid near-duplicate
+ // suggestions such as robot / robots / robotic / robotics all at once.
+ SEARCH_SYNONYM_GROUPS.forEach((group,groupIndex)=>{
+   const matching=group.map(normalizeSearchWord).filter(w=>w.startsWith(last));
+   if(!matching.length) return;
+   const canonical=normalizeSearchWord(group[0]);
+   // Preserve the curated alias order instead of picking the shortest word.
+   // e.g. "act" -> acting (not actor), "gam" -> gaming (not gamer).
+   const pick=canonical.startsWith(last) ? canonical : matching[0];
+   add(pick,115-groupIndex/100);
+ });
+
  return ranked
    .sort((a,b)=>b.score-a.score || a.word.length-b.word.length || a.word.localeCompare(b.word))
-   .map(x=>x.word)
-   .filter(word=>clubs.some(c=>clubMatchesSearch(c,word)) || events.some(e=>eventMatchesSearch(e,word)))
+   .map(x=>x.full)
    .slice(0,3);
 }
 
 function autocompleteQueryVariants(q){
  const clean=String(q||'').toLowerCase().trim();
  if(!clean) return [];
- return [clean,...autocompleteWordCompletions(clean)];
+ return [...new Set([clean,...autocompleteWordCompletions(clean)])];
 }
 
 function autocompleteScore(label,q,fullText=''){
  const needle=String(q||'').toLowerCase().trim();
  const name=String(label||'').toLowerCase();
- const tokens=name.match(/[a-z0-9]+/g)||[];
  if(name===needle) return 100;
  if(name.startsWith(needle)) return 92;
- if(tokens.some(token=>token.startsWith(needle))) return 86;
+ if(searchTextTokens(name).some(token=>token.startsWith(needle))) return 86;
  if(name.includes(needle)) return 80;
  if(autocompletePrefixMatch(fullText,needle)) return 70;
  return 55;
@@ -465,26 +541,21 @@ function buildSearchSuggestions(){
  const q=getSearchQuery();
  if(q.length<2) return [];
  const variants=autocompleteQueryVariants(q);
- const completions=autocompleteWordCompletions(q).slice(0,2);
-
- const termItems=completions.map((term,i)=>({
-   type:'term',id:`term-${term}`,label:term,meta:'Search suggestion',score:200-i
- }));
-
  const clubItems=clubs
-   .filter(c=>variants.some(v=>clubMatchesSearch(c,v) || autocompletePrefixMatch(`${c.name||''} ${c.desc||''} ${c.about||''}`,v)))
+   .filter(c=>variants.some(v=>clubMatchesSearch(c,v)))
    .map(c=>({type:'club',id:String(c.id),slug:c.slug,label:c.name,meta:c.desc||'Club',score:Math.max(...variants.map(v=>autocompleteScore(c.name,v,`${c.name||''} ${c.desc||''} ${c.about||''}`)))}))
    .sort((a,b)=>b.score-a.score || a.label.localeCompare(b.label))
    .slice(0,3);
 
  const eventItems=events
-   .filter(e=>variants.some(v=>eventMatchesSearch(e,v) || autocompletePrefixMatch(`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''}`,v)))
+   .filter(e=>variants.some(v=>eventMatchesSearch(e,v)))
    .map(e=>({type:'event',id:String(e.id),label:e.name,meta:[e.club,e.place].filter(Boolean).join(' · '),score:Math.max(...variants.map(v=>autocompleteScore(e.name,v,`${e.name||''} ${e.desc||''} ${e.club||''} ${e.place||''}`)))}))
    .sort((a,b)=>b.score-a.score || a.label.localeCompare(b.label))
    .slice(0,4);
 
- return [...termItems,...clubItems,...eventItems];
+ return [...clubItems,...eventItems];
 }
+
 function closeSearchSuggestions(){
  const box=document.getElementById('searchSuggestions');
  const input=document.getElementById('search');
@@ -502,19 +573,18 @@ function renderSearchSuggestions(){
 
  currentSearchSuggestions=buildSearchSuggestions();
  activeSearchSuggestion=-1;
- const termsFound=currentSearchSuggestions.filter(x=>x.type==='term');
  const clubsFound=currentSearchSuggestions.filter(x=>x.type==='club');
  const eventsFound=currentSearchSuggestions.filter(x=>x.type==='event');
 
  const renderGroup=(title,items)=>items.length?`<div class="search-suggestion-section"><div class="search-suggestion-label">${title}</div>${items.map(item=>{
    const index=currentSearchSuggestions.indexOf(item);
-   const icon=item.type==='club'?'C':item.type==='event'?'E':'↗';
-   const optionClass=item.type==='event'?'event-option':item.type==='term'?'term-option':'';
-   return `<button type="button" class="search-suggestion ${optionClass}" role="option" aria-selected="false" data-suggestion-index="${index}" onmousedown="event.preventDefault()" onclick="chooseSearchSuggestion(${index})"><span class="search-suggestion-icon">${icon}</span><span class="search-suggestion-copy"><strong>${escapeHtml(item.label)}</strong><small>${escapeHtml(item.meta||'')}</small></span><span class="search-suggestion-type">${item.type==='term'?'search':item.type}</span></button>`;
+   const icon=item.type==='club'?'C':'E';
+   const optionClass=item.type==='event'?'event-option':'';
+   return `<button type="button" class="search-suggestion ${optionClass}" role="option" aria-selected="false" data-suggestion-index="${index}" onmousedown="event.preventDefault()" onclick="chooseSearchSuggestion(${index})"><span class="search-suggestion-icon">${icon}</span><span class="search-suggestion-copy"><strong>${escapeHtml(item.label)}</strong><small>${escapeHtml(item.meta||'')}</small></span><span class="search-suggestion-type">${item.type}</span></button>`;
  }).join('')}</div>`:'';
 
  box.innerHTML=currentSearchSuggestions.length
-   ? `${renderGroup('Suggested searches',termsFound)}${renderGroup('Clubs',clubsFound)}${renderGroup('Events',eventsFound)}<div class="search-hint">Use <kbd>↑</kbd> <kbd>↓</kbd> to move · <kbd>Enter</kbd> to open</div>`
+   ? `${renderGroup('Clubs',clubsFound)}${renderGroup('Events',eventsFound)}<div class="search-hint">Use <kbd>↑</kbd> <kbd>↓</kbd> to move · <kbd>Enter</kbd> to open</div>`
    : '<div class="search-suggestion-empty">No close suggestions — press Search for full results.</div>';
  box.classList.add('show');
  input.setAttribute('aria-expanded','true');
@@ -532,13 +602,6 @@ function updateSearchSuggestionHighlight(){
 function chooseSearchSuggestion(index){
  const item=currentSearchSuggestions[index];
  if(!item) return;
- if(item.type==='term'){
-   const input=document.getElementById('search');
-   if(input) input.value=item.label;
-   closeSearchSuggestions();
-   searchAndScroll();
-   return;
- }
  closeSearchSuggestions();
  if(item.type==='club'){
    location.hash=`#club/${item.slug}`;
