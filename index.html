@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
 <meta name="description" content="KAMPUS helps CHRIST University students discover clubs, events and campus communities at Bangalore Central Campus.">
 <meta name="color-scheme" content="light dark">
 <title>KAMPUS — Clubs, Events & Campus Life</title>
@@ -34,7 +34,7 @@ footer{background:#171717;color:#aaa;padding:30px 6%;margin-top:40px;border-top:
 .club-page{display:none;position:fixed;inset:0;z-index:80;overflow:auto;background:linear-gradient(180deg,#fffdf9 0%,#f7f5f1 100%);color:var(--ink)}
 .club-page.show{display:block}.club-page-inner{max-width:980px;margin:auto;padding:34px 6% 70px}.club-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:34px}.back{display:inline-flex;align-items:center;gap:8px;padding:11px 17px;border-radius:10px;background:var(--accent);color:#fff;border:0;text-decoration:none;font-size:14px;font-weight:800;box-shadow:0 10px 24px rgba(178,31,36,.18);cursor:pointer}.back:hover{background:#8f181d;transform:translateX(-2px)}.share-wrap{text-align:right}.share-btn{margin:0;background:#fff;color:#222;border:1px solid var(--line);box-shadow:none}.share-btn:hover{background:#f7f5f1;color:#111}.share-status{font-size:12px;color:var(--muted);min-height:16px;margin-top:6px}.club-page .tag{background:var(--accent-soft);color:var(--accent);padding:8px 13px}.club-title{font-size:clamp(46px,7vw,76px);line-height:.96;letter-spacing:-3.5px;margin:16px 0 18px;max-width:760px}.club-hero-desc{font-size:18px;line-height:1.7;color:var(--muted);max-width:720px}.club-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:38px 0 52px}.club-meta div{border:1px solid var(--line);border-radius:14px;padding:18px;background:#fff}.club-meta div:nth-child(1){border-top:4px solid var(--accent);background:#fff7f7}.club-meta div:nth-child(2){border-top:4px solid var(--gold);background:#fffaf0}.club-meta div:nth-child(3){border-top:4px solid var(--blue);background:#f6f9ff}.club-meta div:nth-child(4){border-top:4px solid var(--green);background:#f4fbf7}.club-meta strong{display:block;text-transform:uppercase;font-size:11px;letter-spacing:1px;color:#777;margin-bottom:8px}.pending{color:var(--muted);font-size:14px}.club-section{margin-top:54px;overflow:hidden}.club-section h2{font-size:30px;letter-spacing:-.7px;margin:0 0 10px}.club-section.about-section{padding:28px 30px;background:#fff;border-left:5px solid var(--accent);border-radius:0 16px 16px 0}.club-section.gallery-section{padding:34px 0}.club-section.events-section{padding:28px 30px;background:#fff8ed;border:1px dashed #e9c87b;border-radius:18px}.club-gallery-wrap{overflow:hidden;margin-top:22px;padding:4px 0 12px}.club-gallery img:nth-child(1),.club-gallery img:nth-child(4){transform:translateY(8px)}
 body.dark .club-page{background:linear-gradient(180deg,#121212,#181818)}body.dark .club-meta div{background:#1d1d1d}body.dark .club-meta div:nth-child(1){background:#21191a}body.dark .club-meta div:nth-child(2){background:#211e18}body.dark .club-meta div:nth-child(3){background:#181d26}body.dark .club-meta div:nth-child(4){background:#17211c}body.dark .club-section.about-section{background:#1c1c1c}body.dark .club-section.events-section{background:#221e17;border-color:#6c5730}body.dark .share-btn{background:#262626;color:#eee;border-color:#444}
-@media(max-width:760px){.club-page-inner{padding-top:24px}.club-topbar{margin-bottom:28px}.club-meta{grid-template-columns:repeat(2,1fr)}.club-title{font-size:52px}.club-section.about-section,.club-section.events-section{padding:22px}.club-gallery img:nth-child(1),.club-gallery img:nth-child(4){transform:none}}
+@media(max-width:760px){html,body{width:100%;max-width:100%;overflow-x:hidden;touch-action:pan-x pan-y;-webkit-text-size-adjust:100%;} .club-page-inner{padding-top:24px}.club-topbar{margin-bottom:28px}.club-meta{grid-template-columns:repeat(2,1fr)}.club-title{font-size:52px}.club-section.about-section,.club-section.events-section{padding:22px}.club-gallery img:nth-child(1),.club-gallery img:nth-child(4){transform:none}}
 @media(max-width:520px){.club-meta{grid-template-columns:1fr}.club-title{font-size:46px}.club-topbar{align-items:flex-start;flex-direction:column}.share-wrap{text-align:left}.share-btn{margin-top:0}.club-page-inner{padding-left:5%;padding-right:5%}}
 
 body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#303030;--accent-soft:#321f21;background:#141414;color:#f3f0ea}body.dark nav{background:#181818}body.dark .nav-links a{color:#eee}body.dark .card,body.dark .event{background:#1d1d1d}body.dark .filter{background:#1d1d1d;color:#eee;border-color:#333}body.dark .filter.active{background:#eee;color:#111}body.dark .theme-toggle,body.dark .menu-toggle{background:#262626;color:#fff;border-color:#444}body.dark #about .card{background:linear-gradient(135deg,#1d1d1d,#271b1c)}
@@ -987,6 +987,30 @@ function closeMenu(){
  const btn=document.getElementById('menuToggle');
  if(links){links.classList.remove('open')} if(btn){btn.setAttribute('aria-expanded','false');btn.textContent='☰'}
 }
+
+
+// Lock page zoom on small-screen/mobile layouts while keeping normal one-finger scrolling.
+(function lockMobileZoom(){
+  const mobileLayout=()=>window.matchMedia('(max-width:760px)').matches;
+  const blockGesture=(event)=>{ if(mobileLayout()) event.preventDefault(); };
+
+  ['gesturestart','gesturechange','gestureend'].forEach(type=>{
+    document.addEventListener(type,blockGesture,{passive:false});
+  });
+
+  document.addEventListener('touchmove',event=>{
+    if(mobileLayout() && event.touches && event.touches.length>1) event.preventDefault();
+  },{passive:false});
+
+  let lastTouchEnd=0;
+  document.addEventListener('touchend',event=>{
+    if(!mobileLayout()) return;
+    const interactive=event.target.closest && event.target.closest('input,textarea,select,button,a');
+    const now=Date.now();
+    if(!interactive && now-lastTouchEnd<300) event.preventDefault();
+    lastTouchEnd=now;
+  },{passive:false});
+})();
 
 (async function initKampus(){
   await loadKampusData();
