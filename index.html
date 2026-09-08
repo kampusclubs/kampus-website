@@ -81,6 +81,87 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 body.dark .club-branding{background:#1c1c1c}
 body.dark .club-logo{border-color:#1c1c1c;background:#292929}
 @media(max-width:760px){.club-cover{height:190px}.club-branding-body{padding:0 20px 22px}.club-logo{width:90px;height:90px;margin-top:-45px;border-radius:50%;padding:6px}}
+
+
+/* Mobile polish: roomy layout + fixed Saved preview. Desktop styles remain unchanged. */
+@media(max-width:760px){
+  html,body{overflow-x:hidden}
+  body{font-size:16px}
+
+  nav{min-height:68px;padding-left:18px;padding-right:18px}
+  .logo{font-size:24px}
+  .menu-toggle{width:40px;height:40px}
+
+  .hero{padding:52px 18px 48px}
+  .hero h1{font-size:clamp(46px,13vw,56px);line-height:.98;letter-spacing:-2.2px}
+  .hero p{font-size:17px;line-height:1.6;margin-top:18px}
+  .search{width:100%;max-width:none;margin-top:28px}
+  .search input{min-height:56px;padding:17px 16px;font-size:16px}
+  .search>button{min-height:56px;padding:0 18px}
+
+  main{padding:46px 18px 64px}
+  .section-head{gap:10px}
+  .section-head h2,.main-gallery h2{font-size:32px;line-height:1.08}
+  .section-head .muted{font-size:15px;line-height:1.55}
+  .filters{margin:22px 0 22px}
+  .filter{padding:10px 14px}
+  .grid{gap:16px}
+  .card{padding:23px 20px;border-radius:17px}
+  .card h3{font-size:22px;line-height:1.15}
+  .card p{font-size:14px;line-height:1.55}
+
+  .events{margin-top:56px}
+  .event{grid-template-columns:88px minmax(0,1fr);column-gap:15px;row-gap:11px;padding:18px;border-radius:16px;align-items:start}
+  .event-poster-thumb,.event-poster-placeholder{grid-column:1;grid-row:1 / span 2;width:88px;height:88px;border-radius:14px}
+  .date{grid-column:2;grid-row:1;display:inline-flex;align-items:center;justify-content:flex-start;gap:7px;width:max-content;max-width:100%;border-right:0;padding:6px 9px;background:var(--paper);border:1px solid var(--line);border-radius:999px;line-height:1}
+  .date b{display:inline;font-size:17px}
+  .date small{font-size:10px}
+  .event>div:nth-child(3){grid-column:2;grid-row:2;min-width:0;align-self:start}
+  .event h3{font-size:18px;line-height:1.2;margin:0 0 7px;overflow-wrap:anywhere}
+  .event p{font-size:13px;line-height:1.45;overflow-wrap:anywhere}
+  .event-today-badge{font-size:9px;margin:0 0 8px;padding:5px 8px;letter-spacing:.65px}
+  .event-actions{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 42px;gap:8px;align-items:center;width:100%;min-width:0;padding-top:5px;overflow:visible}
+  .event-actions .btn{width:100%;min-width:0;min-height:42px;margin:0;padding:10px 8px;font-size:12px;white-space:nowrap}
+  .event-actions .btn + .btn{margin-left:0}
+  .event-actions .save-icon-btn{grid-column:3;margin:0;width:42px;height:42px;border-radius:10px;justify-self:end}
+
+  .gallery-track img,.club-gallery img{width:205px;height:140px}
+  #about .card{padding:26px 22px}
+
+  /* Saved events becomes a true viewport-fixed mobile panel. */
+  .saved-preview-backdrop{z-index:200;background:#0008;overscroll-behavior:contain}
+  .saved-preview{position:fixed;top:calc(var(--nav-h) + 12px);left:14px;right:14px;bottom:auto;width:auto;max-height:min(64vh,520px);max-height:min(64dvh,520px);display:flex;flex-direction:column;overflow:hidden;border-radius:18px;box-shadow:0 22px 60px #0007}
+  .saved-preview-head{flex:none;padding:17px 16px 14px;gap:12px}
+  .saved-preview-head h3{font-size:22px;margin-top:1px}
+  .saved-preview-head p{font-size:12px;line-height:1.4}
+  .saved-preview-close{width:36px;height:36px}
+  .saved-preview-list{flex:1;min-height:0;max-height:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 12px}
+  .saved-preview-item{grid-template-columns:48px minmax(0,1fr);gap:10px;align-items:center;padding:11px 6px}
+  .saved-preview-date{width:46px;height:46px}
+  .saved-preview-copy{min-width:0}
+  .saved-preview-copy h4{font-size:15px;line-height:1.25;overflow-wrap:anywhere}
+  .saved-preview-copy p{font-size:12px;line-height:1.35;overflow-wrap:anywhere}
+  .saved-preview-actions{grid-column:2;display:flex;justify-content:flex-start;gap:8px;margin-top:4px}
+  .saved-preview-open{padding:7px 8px;border-radius:8px;background:var(--paper)}
+  .saved-preview-remove{width:34px;height:34px}
+  .saved-preview-backdrop.show .saved-preview{transform-origin:top center}
+  body.saved-preview-open{overflow:hidden}
+}
+
+@media(max-width:380px){
+  nav{padding-left:16px;padding-right:16px}
+  .hero{padding-left:16px;padding-right:16px}
+  .hero h1{font-size:44px}
+  main{padding-left:16px;padding-right:16px}
+  .event{grid-template-columns:78px minmax(0,1fr);column-gap:13px;padding:16px}
+  .event-poster-thumb,.event-poster-placeholder{width:78px;height:78px}
+  .event h3{font-size:17px}
+  .event-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 40px;gap:7px}
+  .event-actions .btn{font-size:11.5px;padding-left:6px;padding-right:6px}
+  .event-actions .save-icon-btn{width:40px;height:40px}
+  .saved-preview{left:10px;right:10px}
+}
+
 </style>
 </head>
 <body>
@@ -745,8 +826,10 @@ function renderSavedEvents(){
 function openSavedPreview(){
   renderSavedEvents();
   const backdrop=document.getElementById('savedPreviewBackdrop');
+  if(!backdrop) return;
   backdrop.classList.add('show');
   backdrop.setAttribute('aria-hidden','false');
+  document.body.classList.add('saved-preview-open');
 }
 function closeSavedPreview(event){
   if(event && event.target!==event.currentTarget) return;
@@ -754,6 +837,7 @@ function closeSavedPreview(event){
   if(!backdrop) return;
   backdrop.classList.remove('show');
   backdrop.setAttribute('aria-hidden','true');
+  document.body.classList.remove('saved-preview-open');
 }
 
 
