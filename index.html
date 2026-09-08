@@ -95,7 +95,7 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
   .hero{padding:52px 18px 48px}
   .hero h1{font-size:clamp(46px,13vw,56px);line-height:.98;letter-spacing:-2.2px}
   .hero p{font-size:17px;line-height:1.6;margin-top:18px}
-  .search{width:100%;max-width:none;margin-top:28px}
+  .search{width:100%;max-width:none;margin-top:24px}
   .search input{min-height:56px;padding:17px 16px;font-size:16px}
   .search>button{min-height:56px;padding:0 18px}
 
@@ -184,7 +184,7 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
   .theme-toggle{width:38px;height:38px}
 
   /* Hero */
-  .hero{padding:54px var(--mobile-gutter) 50px}
+  .hero{padding:48px var(--mobile-gutter) 28px}
   .hero-inner{max-width:none}
   .hero .eyebrow{font-size:11px;line-height:1.5;letter-spacing:1.55px}
   .hero h1{font-size:clamp(45px,12vw,54px);line-height:1;letter-spacing:-2px;margin:14px 0 18px}
@@ -712,7 +712,8 @@ function getFilteredClubs(){
 }
 function getFilteredEvents(){
  const q=getSearchQuery();
- return events.filter(e=>eventMatchesSearch(e,q));
+ // Expired events are excluded every time the list renders, not only on first load.
+ return events.filter(e=>!isEventExpired(e) && eventMatchesSearch(e,q));
 }
 function renderClubs(){
  const q=getSearchQuery();
@@ -1275,6 +1276,70 @@ function closeMenu(){
   },{passive:false});
 })();
 
+// Lock the common laptop/desktop page-zoom gestures.
+// Note: a webpage cannot override zoom chosen from the browser's own menu/settings.
+(function lockDesktopPageZoom(){
+  const desktopLayout=()=>window.matchMedia('(min-width:761px)').matches;
+
+  document.addEventListener('wheel',event=>{
+    if(desktopLayout() && (event.ctrlKey || event.metaKey)) event.preventDefault();
+  },{passive:false,capture:true});
+
+  document.addEventListener('keydown',event=>{
+    if(!desktopLayout() || !(event.ctrlKey || event.metaKey)) return;
+    const key=String(event.key||'').toLowerCase();
+    if(['+','-','=','0'].includes(key)) event.preventDefault();
+  },{capture:true});
+
+  const blockDesktopGesture=event=>{ if(desktopLayout()) event.preventDefault(); };
+  ['gesturestart','gesturechange','gestureend'].forEach(type=>{
+    document.addEventListener(type,blockDesktopGesture,{passive:false,capture:true});
+  });
+})();
+
+// Keep expired/deleted events out of Upcoming and Saved without needing manual cleanup.
+function pruneExpiredEvents(){
+  const before=events.length;
+  events=events.filter(e=>!isEventExpired(e));
+  cleanupSavedEvents(events);
+  if(events.length!==before){
+    renderEvents();
+    renderSavedEvents();
+    if(currentClub && document.getElementById('clubPage')?.classList.contains('show')){
+      showClub(currentClub.slug);
+    }
+  }
+}
+
+function scheduleNextEventExpirySweep(){
+  const now=new Date();
+  const next=new Date(now.getFullYear(),now.getMonth(),now.getDate()+1,0,0,2,0);
+  setTimeout(()=>{
+    pruneExpiredEvents();
+    scheduleNextEventExpirySweep();
+  },Math.max(1000,next-now));
+}
+
+async function syncEventsSilently(){
+  try{
+    const clubNameById={};
+    clubs.forEach(c=>{ clubNameById[c.id]=c.name; });
+    const {data:eventRows,error}=await supabaseClient.from('events').select('*, event_poster_url').order('event_date',{ascending:true});
+    if(error) throw error;
+    const allEvents=(eventRows||[]).map(row=>mapEventRow(row,clubNameById));
+    events=allEvents.filter(e=>!isEventExpired(e));
+    cleanupSavedEvents(allEvents);
+    renderEvents();
+    renderSavedEvents();
+  }catch(err){
+    console.warn('KAMPUS: silent event refresh skipped',err);
+  }
+}
+
+document.addEventListener('visibilitychange',()=>{
+  if(document.visibilityState==='visible') syncEventsSilently();
+});
+
 (async function initKampus(){
   await loadKampusData();
   renderClubs();
@@ -1282,7 +1347,9 @@ function closeMenu(){
   renderSavedEvents();
   enableMainGalleryInteractions();
   handleRoute();
-  setInterval(()=>{renderEvents();renderSavedEvents();},60*60*1000);
+  scheduleNextEventExpirySweep();
+  // Low-frequency refresh also catches events removed from Supabase while the page stays open.
+  setInterval(syncEventsSilently,15*60*1000);
 })();
 </script>
 </body>
