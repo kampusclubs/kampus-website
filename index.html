@@ -162,6 +162,185 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
   .saved-preview{left:10px;right:10px}
 }
 
+
+
+/* ======================================================================
+   KAMPUS MOBILE REFINEMENT PASS
+   Mobile-only overrides. Desktop/laptop styles above are intentionally
+   untouched. The goal is a native-feeling phone layout, not a shrunken
+   desktop page.
+   ====================================================================== */
+@media (max-width:760px){
+  :root{--mobile-gutter:18px}
+  html,body{width:100%;max-width:100%;overflow-x:hidden;-webkit-text-size-adjust:100%}
+  body{font-size:16px;line-height:1.5}
+
+  /* Header / navigation */
+  nav{min-height:68px;padding-left:var(--mobile-gutter);padding-right:var(--mobile-gutter)}
+  .logo{font-size:25px;letter-spacing:-.8px}
+  .menu-toggle{width:42px;height:42px}
+  .nav-links{padding:8px 0 16px;gap:8px 18px}
+  .nav-links a{font-size:14px;min-height:38px}
+  .theme-toggle{width:38px;height:38px}
+
+  /* Hero */
+  .hero{padding:54px var(--mobile-gutter) 50px}
+  .hero-inner{max-width:none}
+  .hero .eyebrow{font-size:11px;line-height:1.5;letter-spacing:1.55px}
+  .hero h1{font-size:clamp(45px,12vw,54px);line-height:1;letter-spacing:-2px;margin:14px 0 18px}
+  .hero p{font-size:17px;line-height:1.62;margin:0;max-width:34rem}
+  .search{width:100%;max-width:none;margin-top:28px}
+  .search input{min-height:58px;padding:17px 17px;font-size:16px}
+  .search>button{min-height:58px;padding:0 19px;font-size:14px}
+  .search-suggestions{left:0;right:0;max-height:min(52dvh,390px);border-radius:14px}
+  .search-suggestion{padding:13px 14px}
+
+  /* Main rhythm */
+  main{padding:50px var(--mobile-gutter) 68px}
+  section[id]{scroll-margin-top:82px}
+  .section-head{gap:8px;margin-bottom:0}
+  .section-head h2,.main-gallery h2{font-size:31px;line-height:1.08;letter-spacing:-.55px}
+  .section-head .muted{font-size:15px;line-height:1.55}
+  .section-kicker{font-size:11px;letter-spacing:1.45px}
+  .section-head #count{align-self:flex-start;margin-top:2px;font-size:13px}
+
+  /* Filters are easier to scan as one horizontal row on a phone. */
+  .filters{flex-wrap:nowrap;overflow-x:auto;gap:9px;margin:22px calc(var(--mobile-gutter) * -1) 24px;padding:0 var(--mobile-gutter) 4px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .filters::-webkit-scrollbar{display:none}
+  .filter{flex:none;padding:10px 14px;font-size:13px}
+
+  /* Club cards */
+  .grid{grid-template-columns:1fr;gap:17px}
+  .card{padding:25px 22px;border-radius:18px}
+  .card h3{font-size:23px;line-height:1.15;margin:16px 0 9px}
+  .card p{font-size:14.5px;line-height:1.58}
+  .card .btn{min-height:42px;padding:10px 14px}
+  .card:hover{transform:none;box-shadow:none}
+
+  /* Events: roomy two-column top, full-width controls below. */
+  .events{margin-top:62px;padding-top:4px}
+  .event{grid-template-columns:96px minmax(0,1fr);column-gap:16px;row-gap:12px;padding:19px;border-radius:18px;align-items:start}
+  .event:hover,.event-clickable:hover{transform:none}
+  .event-poster-thumb,.event-poster-placeholder{grid-column:1;grid-row:1 / span 2;width:96px;height:96px;border-radius:15px}
+  .date{grid-column:2;grid-row:1;display:inline-flex;align-items:center;gap:7px;width:max-content;border-right:0;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:var(--paper)}
+  .date b{display:inline;font-size:17px;line-height:1}
+  .date small{font-size:10px;line-height:1}
+  .event>div:nth-child(3){grid-column:2;grid-row:2;min-width:0}
+  .event h3{font-size:18px;line-height:1.22;margin:0 0 7px;overflow-wrap:anywhere}
+  .event p{font-size:13.25px;line-height:1.48;overflow-wrap:anywhere}
+  .event-today-badge{font-size:9px;padding:5px 8px;margin-bottom:8px}
+  .event-actions{grid-column:1/-1;grid-row:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px;gap:9px;width:100%;padding-top:7px}
+  .event-actions .btn{width:100%;min-width:0;min-height:44px;margin:0;padding:10px 8px;font-size:12px;white-space:nowrap}
+  .event-actions .btn + .btn{margin-left:0}
+  .event-actions .save-icon-btn{grid-column:3;width:44px;height:44px;margin:0;border-radius:11px;justify-self:end}
+
+  /* Gallery */
+  .main-gallery{margin-top:64px;padding-top:40px}
+  .main-gallery-head{margin-bottom:16px}
+  .gallery-track,.club-gallery{gap:14px}
+  .gallery-track img,.club-gallery img{width:218px;height:148px;border-radius:17px}
+  .gallery-track img:hover,.club-gallery img:hover{transform:none!important}
+
+  /* About/footer */
+  #about{margin-top:46px}
+  #about .card{padding:27px 23px}
+  #about .card p{font-size:14.5px;line-height:1.68}
+  footer{padding:30px var(--mobile-gutter);margin-top:28px}
+  .footer-contact{gap:14px;font-size:13px}
+  .footer-notes{font-size:11.5px;line-height:1.6}
+
+  /* Saved Events: fixed to the viewport, independent of page scroll. */
+  .saved-preview-backdrop{position:fixed;inset:0;z-index:220;background:#0009;overscroll-behavior:contain}
+  .saved-preview{position:fixed;top:calc(env(safe-area-inset-top,0px) + 78px);left:14px;right:14px;bottom:auto;width:auto;max-height:min(66dvh,540px);display:flex;flex-direction:column;overflow:hidden;border-radius:20px;box-shadow:0 24px 70px #0008}
+  .saved-preview-head{flex:none;padding:18px 17px 15px;gap:12px}
+  .saved-preview-head h3{font-size:23px;line-height:1.1;margin:2px 0 5px}
+  .saved-preview-head p{font-size:12.5px;line-height:1.4}
+  .saved-preview-close{width:38px;height:38px}
+  .saved-preview-list{flex:1;min-height:0;max-height:none;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:8px 10px 13px}
+  .saved-preview-item{grid-template-columns:50px minmax(0,1fr);gap:11px;padding:12px 7px}
+  .saved-preview-date{width:48px;height:48px}
+  .saved-preview-copy h4{font-size:15.5px;line-height:1.25}
+  .saved-preview-copy p{font-size:12px;line-height:1.4}
+  .saved-preview-actions{grid-column:2;justify-content:flex-start;gap:8px;margin-top:5px}
+  .saved-preview-open{min-height:36px;padding:8px 10px;border-radius:9px;background:var(--paper)}
+  .saved-preview-remove{width:36px;height:36px}
+  body.saved-preview-open{overflow:hidden;touch-action:none}
+
+  /* Event detail popup */
+  .event-description-modal{padding:10px;align-items:flex-start}
+  .event-description-box{width:100%;max-height:calc(100dvh - 20px);padding:22px 18px 20px;border-radius:20px;margin:auto 0}
+  .event-popup-layout{grid-template-columns:1fr;gap:18px}
+  .event-popup-poster-wrap{order:-1}
+  .event-popup-poster{width:100%;max-height:44dvh;border-radius:15px}
+  .event-description-box h2{font-size:29px;line-height:1.08;margin-right:44px}
+  .event-popup-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 44px;gap:9px;margin-top:24px;padding-top:18px}
+  .event-popup-actions .btn{width:100%;min-height:44px;margin:0;padding:10px 8px;font-size:12px}
+  .event-popup-actions .save-icon-btn{width:44px;height:44px;margin:0}
+
+  /* Club profile: mobile layout gets its own proportions. */
+  .club-page-inner{padding:22px var(--mobile-gutter) 58px}
+  .club-topbar{align-items:center;flex-direction:row;gap:12px;margin-bottom:24px}
+  .back{min-height:42px;padding:10px 14px}
+  .share-wrap{margin-left:auto;text-align:right}
+  .share-btn{min-height:42px;margin:0;padding:10px 13px}
+  .share-status{font-size:11px;margin-top:4px}
+
+  .club-branding{margin:0 0 32px;border-radius:19px}
+
+  /* Do not crop club banners on phones. Show the entire supplied banner. */
+  .club-cover{height:auto;min-height:0;aspect-ratio:auto;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#1a1415,#3d2427)}
+  .club-cover:empty{min-height:160px}
+  .club-cover img{width:100%;height:auto;object-fit:contain;object-position:center;display:block}
+
+  .club-branding-body{padding:0 21px 24px}
+  .club-logo{width:96px;height:96px;margin-top:-42px;border-width:4px;padding:6px}
+  .club-page .tag{padding:7px 11px;font-size:10.5px}
+  .club-title{font-size:clamp(39px,11vw,46px);line-height:1;letter-spacing:-2px;margin:14px 0 14px}
+  .club-hero-desc{font-size:16px;line-height:1.62}
+
+  /* 2x2 information cards are cleaner than one long compressed stack. */
+  .club-meta{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:30px 0 40px}
+  .club-meta div{min-width:0;padding:15px 14px;border-radius:13px}
+  .club-meta strong{font-size:10px;margin-bottom:7px}
+  .club-meta div,.pending{font-size:13px;overflow-wrap:anywhere}
+
+  .club-section{margin-top:40px}
+  .club-section h2{font-size:27px;line-height:1.12;margin-bottom:10px}
+  .club-section.about-section,.club-section.events-section{padding:24px 21px;border-radius:15px}
+  .club-section.about-section{border-left-width:4px}
+  .club-section.gallery-section{padding:28px 0}
+  .club-gallery-wrap{margin-top:17px}
+}
+
+@media (max-width:380px){
+  :root{--mobile-gutter:16px}
+  .hero h1{font-size:43px}
+  .hero p{font-size:16.5px}
+  .search input{padding-left:14px;padding-right:12px}
+  .search>button{padding:0 14px}
+  .section-head h2,.main-gallery h2{font-size:29px}
+  .event{grid-template-columns:84px minmax(0,1fr);column-gap:13px;padding:16px}
+  .event-poster-thumb,.event-poster-placeholder{width:84px;height:84px}
+  .event-actions{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 42px;gap:7px}
+  .event-actions .btn{font-size:11.5px;padding-left:6px;padding-right:6px}
+  .event-actions .save-icon-btn{width:42px;height:42px}
+  .saved-preview{left:10px;right:10px;top:calc(env(safe-area-inset-top,0px) + 74px)}
+  .club-branding-body{padding-left:18px;padding-right:18px}
+  .club-meta{gap:9px}
+  .club-meta div{padding:14px 12px}
+}
+
+@media (max-width:340px){
+  .search{display:grid;grid-template-columns:1fr}
+  .search input{border-radius:10px 10px 0 0}
+  .search>button{border-radius:0 0 10px 10px;min-height:48px}
+  .event{grid-template-columns:76px minmax(0,1fr)}
+  .event-poster-thumb,.event-poster-placeholder{width:76px;height:76px}
+  .event-actions{grid-template-columns:1fr 1fr 40px}
+  .club-meta{grid-template-columns:1fr}
+  .club-title{font-size:38px}
+}
+
 </style>
 </head>
 <body>
