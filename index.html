@@ -72,13 +72,12 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 .lightbox-modal img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px #0008;object-fit:contain;animation:lightboxPop .2s ease-out;cursor:zoom-out}@keyframes lightboxPop{from{opacity:.25;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 .lightbox-close{position:fixed;right:20px;top:20px;background:#fff;color:#111}
 
-.club-page{position:fixed;inset:0;z-index:100;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;background:var(--bg);isolation:isolate}.club-page::before{content:"";position:fixed;inset:0;background-image:var(--club-bg-image);background-size:cover;background-position:center;filter:blur(10px);opacity:.07;transform:scale(1.04);pointer-events:none;z-index:-2}.club-page::after{content:"";position:fixed;inset:0;background:linear-gradient(180deg,rgba(255,255,255,.9),rgba(255,255,255,.96));pointer-events:none;z-index:-1}.club-page-inner{position:relative;z-index:1}.club-branding{margin:0 0 38px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 35px #0000000b}
+.club-branding{margin:0 0 38px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 35px #0000000b}
 .club-cover{height:260px;background:linear-gradient(135deg,#241719,#6b2a30);position:relative;overflow:hidden}
 .club-cover img{width:100%;height:100%;object-fit:cover;display:block}
 .club-branding-body{position:relative;padding:0 28px 26px}
 .club-logo{width:112px;height:112px;border-radius:50%;border:5px solid #fff;background:#f3eee7;object-fit:contain;padding:7px;margin-top:-56px;position:relative;z-index:2;box-shadow:0 10px 28px #0002}.club-logo.logo-clickable{cursor:zoom-in;transition:transform .2s ease,box-shadow .2s ease}.club-logo.logo-clickable:hover{transform:scale(1.07);box-shadow:0 15px 36px #0004}.club-logo.logo-clickable:focus-visible{outline:3px solid #5b8def88;outline-offset:4px}.lightbox-modal.logo-mode img{width:auto;max-width:min(520px,86vw);max-height:76vh;background:#fff;padding:28px;border-radius:26px;box-shadow:0 24px 70px #0009}.lightbox-modal.logo-mode::after{content:"Club logo · click anywhere outside to close";position:fixed;bottom:24px;left:50%;transform:translateX(-50%);color:#fff;font-size:12px;font-weight:700;letter-spacing:.2px;background:#0008;border:1px solid #ffffff22;border-radius:999px;padding:8px 12px;pointer-events:none}
 .club-branding-placeholder{display:flex;align-items:center;justify-content:center;color:#fff;font-weight:900;font-size:38px;letter-spacing:-2px}
-body.dark .club-page::after{background:linear-gradient(180deg,rgba(15,15,15,.9),rgba(15,15,15,.96))}
 body.dark .club-branding{background:#1c1c1c}
 body.dark .club-logo{border-color:#1c1c1c;background:#292929}
 @media(max-width:760px){.club-cover{height:190px}.club-branding-body{padding:0 20px 22px}.club-logo{width:90px;height:90px;margin-top:-45px;border-radius:50%;padding:6px}}
@@ -1155,7 +1154,6 @@ function enableMainGalleryInteractions(){
 }
 
 let currentClub=null;
-let clubBodyScrollY=0;
 
 // Club gallery photos now come from Supabase (table `club_gallery`,
 // storage bucket `club-gallery`) instead of a hardcoded demo list.
@@ -1189,8 +1187,6 @@ function renderClubGallery(photos, clubName){
 async function showClub(slug){
  const c=clubs.find(x=>x.slug===slug); if(!c){location.hash='#clubs';return}
  currentClub=c;
- const clubPage=document.getElementById('clubPage');
- clubPage.style.setProperty('--club-bg-image', c.cover_url ? `url(${JSON.stringify(c.cover_url)})` : 'none');
  const clubEvents=events.filter(e=>e.club===c.name);
  const logoMarkup = c.logo_url
    ? `<img class="club-logo logo-clickable" src="${escapeHtml(c.logo_url)}" alt="${escapeHtml(c.name)} logo" loading="eager" role="button" tabindex="0" aria-label="${escapeHtml(c.name)} logo — open larger" title="Click to view logo" onclick="openLogoLightbox(this.src,this.alt)" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openLogoLightbox(this.src,this.alt)}">`
@@ -1211,15 +1207,12 @@ async function showClub(slug){
    <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">${escapeHtml(c.about || 'No information has been added yet.')}</p></section>
     <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap" id="clubGalleryWrap"><p class="muted">Loading photos…</p></div></section>
    <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>renderEventCard(e,{includeClubLink:false})).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
- const page=document.getElementById('clubPage');
- clubBodyScrollY=window.scrollY||window.pageYOffset||0;
- document.body.style.position='fixed';document.body.style.top=`-${clubBodyScrollY}px`;document.body.style.left='0';document.body.style.right='0';document.body.style.width='100%';document.body.style.overflow='hidden';
- page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.title=`${c.name} — KAMPUS`;
+ const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
 
  const photos = await fetchClubGallery(c.id);
  if(currentClub && currentClub.id===c.id) renderClubGallery(photos, c.name);
 }
-function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.position='';document.body.style.top='';document.body.style.left='';document.body.style.right='';document.body.style.width='';document.body.style.overflow='';window.scrollTo(0,clubBodyScrollY);currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
+function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.overflow='';currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
 function handleRoute(){
   const clubMatch=location.hash.match(/^#club\/([^/?#]+)/);
   const eventMatch=location.hash.match(/^#event\/([^/?#]+)/);
