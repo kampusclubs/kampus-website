@@ -370,10 +370,19 @@ body.dark .club-logo{border-color:#1c1c1c;background:#292929}
 </style>
 </head>
 <body>
+<script>
+// KAMPUS starts in dark mode on first visit. A user's manual choice is remembered.
+try{
+  const savedTheme=localStorage.getItem('kampusTheme');
+  if(savedTheme!=='light') document.body.classList.add('dark');
+}catch(_){
+  document.body.classList.add('dark');
+}
+</script>
 <nav>
   <a class="logo" href="#top" aria-label="KAMPUS home">KAMPUS<span>✦</span></a>
   <button class="menu-toggle" id="menuToggle" type="button" aria-label="Open navigation" aria-controls="navLinks" aria-expanded="false" onclick="toggleMenu()">☰</button>
-  <div class="nav-links" id="navLinks"><a href="#clubs" onclick="closeMenu()">Clubs</a><a href="#events" onclick="closeMenu()">Events</a><a href="#" onclick="event.preventDefault();closeMenu();openSavedPreview()">Saved</a><a href="#gallery" onclick="closeMenu()">Gallery</a><a href="#about" onclick="closeMenu()">About</a><button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode"><span id="themeIcon">☾</span></button></div>
+  <div class="nav-links" id="navLinks"><a href="#clubs" onclick="closeMenu()">Clubs</a><a href="#events" onclick="closeMenu()">Events</a><a href="#" onclick="event.preventDefault();closeMenu();openSavedPreview()">Saved</a><a href="#gallery" onclick="closeMenu()">Gallery</a><a href="#about" onclick="closeMenu()">About</a><button class="theme-toggle" type="button" onclick="toggleTheme()" aria-label="Toggle dark mode"><span id="themeIcon">☀</span></button></div>
 </nav>
 
 <section class="hero" id="top">
@@ -1260,10 +1269,12 @@ function toggleTheme(){
  localStorage.setItem('kampusTheme',dark?'dark':'light');
 }
 (function(){
- if(localStorage.getItem('kampusTheme')==='dark'){
-   document.body.classList.add('dark');
-   const icon=document.getElementById('themeIcon'); if(icon) icon.textContent='☀';
- }
+ let savedTheme=null;
+ try{ savedTheme=localStorage.getItem('kampusTheme'); }catch(_){}
+ const dark=savedTheme!=='light';
+ document.body.classList.toggle('dark',dark);
+ const icon=document.getElementById('themeIcon');
+ if(icon) icon.textContent=dark?'☀':'☾';
 })();
 function toggleMenu(){
  const links=document.getElementById('navLinks');
