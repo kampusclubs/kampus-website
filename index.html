@@ -414,6 +414,25 @@ body.dark .share-toast{background:#f1eee8;color:#171717;border-color:#ffffff1a}
 body.dark .club-video-card{background:#1d1d1d}
 
 @media(max-width:760px){
+  /* Mobile tap feedback: keep the parent event card from flashing when an action icon is tapped. */
+  .event-clickable{-webkit-tap-highlight-color:transparent}
+  .share-event-btn{
+    -webkit-tap-highlight-color:transparent;
+    touch-action:manipulation;
+  }
+  .share-event-btn:active,.share-event-btn.sharing{
+    transform:scale(.92);
+    background:var(--accent);
+    color:#fff;
+    border-color:var(--accent);
+    box-shadow:0 0 0 3px rgba(178,31,36,.16);
+  }
+  body.dark .share-event-btn:active,body.dark .share-event-btn.sharing{
+    background:#f1eee8;
+    color:#171717;
+    border-color:#f1eee8;
+    box-shadow:0 0 0 3px rgba(241,238,232,.13);
+  }
   .event-actions{display:flex;grid-template-columns:none;gap:8px;align-items:center}
   .event-actions .btn{flex:1 1 0;width:auto;min-width:0}
   .event-actions .share-event-btn,.event-actions .save-icon-btn{width:44px;height:44px;margin:0;flex:0 0 44px}
@@ -1110,6 +1129,15 @@ function showShareToast(message){
 async function shareEventPublic(eventId,button){
   const e=events.find(x=>String(x.id)===String(eventId));
   if(!e) return;
+
+  // Give mobile users clear feedback on the share icon itself instead of the
+  // whole clickable event card appearing selected. This does not delay the
+  // native share sheet, so the browser still treats it as a direct user action.
+  if(button){
+    button.classList.add('sharing');
+    window.setTimeout(()=>button.classList.remove('sharing'),450);
+  }
+
   const url=eventShareUrl(e.id);
   const title=`${e.name || 'Event'} · KAMPUS`;
   const text=`${e.name || 'Event'}${e.club?` by ${e.club}`:''}`;
@@ -1258,6 +1286,14 @@ document.addEventListener('keydown', event => {
 let lightboxGallery=[];
 let lightboxIndex=0;
 let lightboxTouchStartX=null;
+const mobileLightboxMedia=window.matchMedia('(max-width:760px)');
+
+function addMobileLightboxHistoryEntry(){
+  if(!mobileLightboxMedia.matches) return;
+  if(history.state && history.state.kampusLightbox) return;
+  const currentState=(history.state && typeof history.state==='object') ? history.state : {};
+  history.pushState({...currentState,kampusLightbox:true},'',location.href);
+}
 
 function uniqueGalleryItems(items){
   const seen=new Set();
@@ -1298,6 +1334,7 @@ function openLightbox(src,alt='Gallery photo',galleryItems=null){
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
   document.body.style.overflow='hidden';
+  addMobileLightboxHistoryEntry();
 }
 function openGalleryLightboxFromDom(img,selector){
   const items=galleryItemsFromDom(selector);
@@ -1327,10 +1364,20 @@ function openLogoLightbox(src,alt='Club logo'){
   modal.classList.add('show');
   modal.setAttribute('aria-hidden','false');
   document.body.style.overflow='hidden';
+  addMobileLightboxHistoryEntry();
 }
-function closeLightbox(){
+function closeLightbox(fromHistory=false){
   const modal=document.getElementById('lightboxModal');
   if(!modal.classList.contains('show')) return;
+
+  // On mobile, opening a zoomed image creates one temporary history entry.
+  // Closing with the X/backdrop consumes that entry, while the phone's Back
+  // button naturally pops it and closes the image before leaving the club.
+  if(!fromHistory && mobileLightboxMedia.matches && history.state && history.state.kampusLightbox){
+    history.back();
+    return;
+  }
+
   modal.classList.remove('show','logo-mode','gallery-mode');
   modal.setAttribute('aria-hidden','true');
   lightboxGallery=[];
@@ -1338,6 +1385,13 @@ function closeLightbox(){
   lightboxTouchStartX=null;
   if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow='';
 }
+
+window.addEventListener('popstate',()=>{
+  const modal=document.getElementById('lightboxModal');
+  if(modal?.classList.contains('show') && !(history.state && history.state.kampusLightbox)){
+    closeLightbox(true);
+  }
+});
 
 function enableMainGalleryInteractions(){
   document.querySelectorAll('.gallery-track img').forEach(img=>{
