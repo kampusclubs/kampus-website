@@ -76,6 +76,15 @@ textarea{resize:vertical;min-height:80px}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-item .btn-remove{position:absolute;top:8px;right:8px;background:#fff;color:var(--accent);border:1px solid #f0c7c8;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer}
 .gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+.video-admin-form{display:grid;grid-template-columns:1fr;gap:0}
+.video-list{display:grid;gap:12px;margin-top:18px}
+.video-admin-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
+.video-admin-card h3{margin:0 0 6px;font-size:17px;line-height:1.3;overflow-wrap:anywhere}
+.video-admin-card p{margin:0;color:var(--muted);font-size:12.5px;line-height:1.45;overflow-wrap:anywhere}
+.video-admin-card .row{margin-top:12px}
+.video-admin-card .btn{padding:9px 12px;font-size:12px}
+.video-help{margin:0 0 2px;font-size:13px;line-height:1.5}
+.video-edit-note{font-size:12px;color:var(--muted);margin:8px 0 0}
 .password-wrap{position:relative}
 .password-wrap input{padding-right:50px}
 .password-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:8px;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:.18s}
@@ -110,6 +119,7 @@ html.dark .branding-preview,html.dark .gallery-item{background:#161616;border-co
 html.dark .branding-preview.logo-preview img{background:#f1eee8;border-radius:8px}
 html.dark .gallery-item .btn-remove{background:#242424;color:#ef8b8f;border-color:#63383a}
 html.dark .gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+html.dark .video-admin-card{background:var(--card);border-color:var(--line)}
 html.dark .password-toggle:hover{background:#303030;color:#fff}
 html.dark .theme-toggle{background:#262626;color:#f3f0ea;border-color:#444}
 html.dark .theme-toggle:hover{background:#303030;border-color:#555}
@@ -327,6 +337,33 @@ html.dark #evPosterPreview>div{background:#181818!important;border-color:var(--l
       </div>
     </div>
 
+    <div id="videosSection" class="section hidden">
+      <div class="section-head">
+        <h2>Club Videos</h2>
+      </div>
+      <div class="card">
+        <p class="muted video-help">Add a YouTube, Instagram or direct video link. KAMPUS will automatically show it in your club's Videos section.</p>
+        <form id="videoForm" class="video-admin-form" onsubmit="handleVideoSubmit(event)">
+          <label for="videoTitle">Video title</label>
+          <input id="videoTitle" type="text" maxlength="160" placeholder="e.g. Annual Stage Performance">
+
+          <label for="videoUrl">Video link</label>
+          <input id="videoUrl" type="url" required maxlength="1500" placeholder="https://youtu.be/... or https://instagram.com/...">
+
+          <div class="row" style="margin-top:18px">
+            <button class="btn" type="submit" id="videoSaveBtn">Add Video</button>
+            <button class="btn secondary hidden" type="button" id="videoCancelBtn" onclick="cancelVideoEdit()">Cancel</button>
+          </div>
+          <p id="videoEditNote" class="video-edit-note hidden">Editing an existing video.</p>
+          <div id="videoMsg" class="msg"></div>
+        </form>
+      </div>
+
+      <div id="videoListWrap">
+        <p class="empty">Loading videos…</p>
+      </div>
+    </div>
+
   </div>
 
 </main>
@@ -350,6 +387,7 @@ const CLUB_LEADERS_TABLE = 'club_leaders';
 const CLUBS_TABLE = 'clubs';
 const EVENTS_TABLE = 'events';
 const GALLERY_TABLE = 'club_gallery';
+const CLUB_VIDEOS_TABLE = 'club_videos';
 const GALLERY_BUCKET = 'club-gallery';
 const BRANDING_BUCKET = 'club-branding';
   const EVENT_POSTERS_BUCKET = 'event-posters';
@@ -359,6 +397,8 @@ let currentClub = null;      // { id, name, description, student_head, faculty_c
 let currentEvents = [];      // raw rows from `events`
 let editingEventId = null;   // null = adding, otherwise the event id being edited
 let currentGallery = [];     // raw rows from `club_gallery`
+let currentVideos = [];      // raw rows from `club_videos`
+let editingVideoId = null;   // null = adding, otherwise editing an existing video
   let currentEventPosterUrl = ''; // poster URL for the event being edited
 
 function show(el){ el.classList.remove('hidden'); }
@@ -399,7 +439,7 @@ async function boot(){
 
 supabaseClient.auth.onAuthStateChange((event, session)=>{
   if(event === 'SIGNED_OUT'){
-    currentUser = null; currentClub = null; currentEvents = [];
+    currentUser = null; currentClub = null; currentEvents = []; currentGallery = []; currentVideos = []; editingVideoId = null;
     showLoginView();
   }
 });
@@ -476,6 +516,7 @@ async function showDashboard(){
   hide($('brandingSection'));
   hide($('eventsSection'));
   hide($('gallerySection'));
+  hide($('videosSection'));
 
   // 1) Find which club this leader is linked to.
   const { data: leaderRow, error: leaderErr } = await supabaseClient
@@ -519,9 +560,9 @@ async function showDashboard(){
 
   show($('eventsSection'));
   show($('gallerySection'));
+  show($('videosSection'));
 
-  await loadEvents();
-  await loadGallery();
+  await Promise.all([loadEvents(), loadGallery(), loadVideos()]);
 }
 
 // ---------- Club branding (logo / banner) ----------
@@ -1109,6 +1150,148 @@ async function deleteGalleryImage(id, storagePath){
   }
 
   await loadGallery();
+}
+
+// ---------- Club Videos ----------
+async function loadVideos(){
+  const wrap = $('videoListWrap');
+  if(!wrap || !currentClub) return;
+  wrap.innerHTML = '<p class="empty">Loading videos…</p>';
+
+  const { data, error } = await supabaseClient
+    .from(CLUB_VIDEOS_TABLE)
+    .select('*')
+    .eq('club_id', currentClub.id)
+    .order('created_at', { ascending: false });
+
+  if(error){
+    console.error('KAMPUS admin: could not load videos', error);
+    wrap.innerHTML = '<p class="empty">Could not load videos. Please refresh.</p>';
+    return;
+  }
+
+  currentVideos = data || [];
+  renderVideoList();
+}
+
+function renderVideoList(){
+  const wrap = $('videoListWrap');
+  if(!wrap) return;
+  if(!currentVideos.length){
+    wrap.innerHTML = '<p class="empty">No videos added yet.</p>';
+    return;
+  }
+
+  wrap.innerHTML = `<div class="video-list">${currentVideos.map(video=>{
+    const title = video.title || 'Untitled video';
+    const url = video.video_url || '';
+    return `
+      <div class="video-admin-card">
+        <h3>${escapeHtml(title)}</h3>
+        <p>${escapeHtml(url)}</p>
+        <div class="row">
+          ${url ? `<a class="btn secondary" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">Open Video</a>` : ''}
+          <button class="btn secondary" type="button" onclick="startVideoEdit('${video.id}')">Edit</button>
+          <button class="btn danger" type="button" onclick="deleteVideo('${video.id}')">Delete</button>
+        </div>
+      </div>`;
+  }).join('')}</div>`;
+}
+
+function startVideoEdit(videoId){
+  const video = currentVideos.find(v=>String(v.id)===String(videoId));
+  if(!video) return;
+  editingVideoId = video.id;
+  $('videoTitle').value = video.title || '';
+  $('videoUrl').value = video.video_url || '';
+  $('videoSaveBtn').textContent = 'Save Changes';
+  show($('videoCancelBtn'));
+  show($('videoEditNote'));
+  const msg = $('videoMsg'); msg.textContent=''; msg.className='msg';
+  $('videoTitle').focus({ preventScroll:true });
+  $('videoForm').scrollIntoView({ behavior:'smooth', block:'center' });
+}
+
+function cancelVideoEdit(){
+  editingVideoId = null;
+  $('videoForm').reset();
+  $('videoSaveBtn').textContent = 'Add Video';
+  hide($('videoCancelBtn'));
+  hide($('videoEditNote'));
+  const msg = $('videoMsg'); msg.textContent=''; msg.className='msg';
+}
+
+async function handleVideoSubmit(evt){
+  evt.preventDefault();
+  if(!currentClub) return;
+
+  const title = $('videoTitle').value.trim();
+  const videoUrl = $('videoUrl').value.trim();
+  const msg = $('videoMsg');
+  const btn = $('videoSaveBtn');
+  msg.textContent=''; msg.className='msg';
+
+  if(!/^https?:\/\//i.test(videoUrl)){
+    msg.textContent = 'Enter a valid video link beginning with http:// or https://';
+    msg.className = 'msg error';
+    return;
+  }
+
+  const payload = {
+    club_id: currentClub.id,
+    title: title || `${currentClub.name || 'Club'} video`,
+    video_url: videoUrl
+  };
+
+  btn.disabled = true;
+  btn.textContent = editingVideoId ? 'Saving…' : 'Adding…';
+
+  let result;
+  if(editingVideoId){
+    result = await supabaseClient
+      .from(CLUB_VIDEOS_TABLE)
+      .update({ title: payload.title, video_url: payload.video_url })
+      .eq('id', editingVideoId)
+      .eq('club_id', currentClub.id);
+  }else{
+    result = await supabaseClient
+      .from(CLUB_VIDEOS_TABLE)
+      .insert(payload);
+  }
+
+  btn.disabled = false;
+
+  if(result.error){
+    console.error('KAMPUS admin: could not save video', result.error);
+    btn.textContent = editingVideoId ? 'Save Changes' : 'Add Video';
+    msg.textContent = result.error.message || 'Could not save this video.';
+    msg.className = 'msg error';
+    return;
+  }
+
+  const wasEditing = Boolean(editingVideoId);
+  cancelVideoEdit();
+  await loadVideos();
+  msg.textContent = wasEditing ? 'Video updated.' : 'Video added. It is now available on the public club page.';
+  msg.className = 'msg ok';
+}
+
+async function deleteVideo(videoId){
+  if(!confirm('Delete this video from your club page?')) return;
+  const { error } = await supabaseClient
+    .from(CLUB_VIDEOS_TABLE)
+    .delete()
+    .eq('id', videoId)
+    .eq('club_id', currentClub.id);
+
+  if(error){
+    console.error('KAMPUS admin: could not delete video', error);
+    alert(error.message || 'Could not delete this video.');
+    return;
+  }
+
+  if(String(editingVideoId)===String(videoId)) cancelVideoEdit();
+  await loadVideos();
 }
 
 boot();
