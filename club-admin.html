@@ -76,6 +76,8 @@ textarea{resize:vertical;min-height:80px}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-item .btn-remove{position:absolute;top:8px;right:8px;background:#fff;color:var(--accent);border:1px solid #f0c7c8;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer}
 .gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+.gallery-more-wrap{display:flex;justify-content:center;margin-top:16px}
+.gallery-more-btn{min-width:180px}
 .video-admin-form{display:grid;grid-template-columns:1fr;gap:0}
 .video-list{display:grid;gap:12px;margin-top:18px}
 .video-admin-card{border:1px solid var(--line);border-radius:14px;padding:16px 18px;background:#fff}
@@ -397,6 +399,7 @@ let currentClub = null;      // { id, name, description, student_head, faculty_c
 let currentEvents = [];      // raw rows from `events`
 let editingEventId = null;   // null = adding, otherwise the event id being edited
 let currentGallery = [];     // raw rows from `club_gallery`
+let galleryExpanded = false; // keep large galleries compact until the admin chooses View all
 let currentVideos = [];      // raw rows from `club_videos`
 let editingVideoId = null;   // null = adding, otherwise editing an existing video
   let currentEventPosterUrl = ''; // poster URL for the event being edited
@@ -1057,12 +1060,34 @@ function renderGallery(){
     wrap.innerHTML = '<p class="empty">No photos added yet.</p>';
     return;
   }
-  wrap.innerHTML = `<div class="gallery-grid">${currentGallery.map(g => `
+
+  const previewLimit = 6;
+  const visibleGallery = galleryExpanded ? currentGallery : currentGallery.slice(0, previewLimit);
+  const remaining = Math.max(0, currentGallery.length - previewLimit);
+
+  const photosHtml = visibleGallery.map(g => `
     <div class="gallery-item">
       <img src="${g.image_url}" alt="Club gallery photo" loading="lazy">
       <button class="btn-remove" type="button" onclick="deleteGalleryImage('${g.id}', '${String(g.storage_path).replace(/'/g, "\\'")}')">Delete</button>
     </div>
-  `).join('')}</div>`;
+  `).join('');
+
+  let moreButton = '';
+  if(currentGallery.length > previewLimit){
+    moreButton = galleryExpanded
+      ? `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleGalleryView()">Show less</button></div>`
+      : `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleGalleryView()">+${remaining} more photo${remaining === 1 ? '' : 's'} · View all</button></div>`;
+  }
+
+  wrap.innerHTML = `<div class="gallery-grid">${photosHtml}</div>${moreButton}`;
+}
+
+function toggleGalleryView(){
+  galleryExpanded = !galleryExpanded;
+  renderGallery();
+  if(!galleryExpanded){
+    $('gallerySection')?.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
 }
 
 async function handleGalleryUpload(){
