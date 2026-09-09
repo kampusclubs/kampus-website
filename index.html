@@ -435,6 +435,23 @@ body.dark .club-video-card{background:#1d1d1d}
   .club-video-card{width:min(84vw,292px)}
 }
 
+/* Club media rhythm: keep Gallery and Videos visually connected without crowding them. */
+.club-section.gallery-section{padding-bottom:12px}
+.club-section.videos-section{
+  margin-top:18px;
+  padding:24px 0 8px;
+  border-top:1px solid var(--line);
+}
+.videos-section>h2{margin-bottom:8px}
+.videos-section>.muted{margin:0}
+.club-videos-wrap{margin-top:16px;padding-bottom:8px}
+
+@media(max-width:760px){
+  .club-section.gallery-section{padding-bottom:8px}
+  .club-section.videos-section{margin-top:14px;padding:22px 0 6px}
+  .club-videos-wrap{margin-top:15px;padding-bottom:10px}
+}
+
 </style>
 </head>
 <body>
