@@ -53,6 +53,26 @@ textarea{resize:vertical;min-height:80px}
 .event-card p{margin:0 0 4px;color:var(--muted);font-size:14px}
 .event-card .row{margin-top:12px}
 .event-form{margin-top:18px;padding-top:18px;border-top:1px dashed var(--line)}
+.event-card-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:6px}
+.event-card-title-row h3{margin:0}
+.event-status-pill{display:inline-flex;align-items:center;flex:none;padding:5px 9px;border-radius:999px;font-size:10px;font-weight:900;letter-spacing:.65px;text-transform:uppercase;line-height:1;background:#ece8e1;color:#59534d;border:1px solid #ded7cd}
+.event-status-pill.today{background:var(--accent);color:#fff;border-color:var(--accent)}
+.event-status-pill.ended{background:#f1eeee;color:#817777;border-color:#e2dada}
+.event-preview-modal{display:none;position:fixed;inset:0;z-index:220;background:#000a;padding:22px;overflow:auto}
+.event-preview-modal.show{display:flex;align-items:center;justify-content:center}
+.event-preview-box{position:relative;width:min(920px,100%);max-height:92vh;overflow:auto;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 24px 70px #0006}
+.event-preview-close{position:absolute;right:15px;top:15px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
+.event-preview-kicker{font-size:11px;font-weight:900;letter-spacing:1.4px;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+.event-preview-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
+.event-preview-copy h2{font-size:34px;line-height:1.08;letter-spacing:-.7px;margin:0 46px 10px 0;overflow-wrap:anywhere}
+.event-preview-meta{color:var(--muted);font-size:14px;line-height:1.6;margin:0 0 22px}
+.event-preview-desc{font-size:15px;line-height:1.7;white-space:pre-wrap;margin:0;color:var(--ink)}
+.event-preview-poster{display:flex;align-items:center;justify-content:center;min-height:280px;padding:10px;background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.event-preview-poster img{display:block;width:100%;max-height:520px;object-fit:contain;border-radius:10px}
+.event-preview-poster-empty{color:var(--muted);font-size:13px;text-align:center;padding:28px}
+.event-preview-actions{display:flex;gap:10px;margin-top:24px;padding-top:18px;border-top:1px solid var(--line)}
+.event-preview-actions .btn{margin:0;pointer-events:none}
+@media(max-width:700px){.event-preview-modal{padding:12px}.event-preview-box{padding:24px 18px}.event-preview-layout{grid-template-columns:1fr;gap:18px}.event-preview-poster{order:-1;min-height:190px}.event-preview-copy h2{font-size:29px}.event-card-title-row{align-items:center}}
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 @media(max-width:520px){.two-col{grid-template-columns:1fr}}
 .grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
@@ -133,6 +153,12 @@ html.dark .theme-toggle{background:#262626;color:#f3f0ea;border-color:#444}
 html.dark .theme-toggle:hover{background:#303030;border-color:#555}
 html.dark code{color:#f0b8bb}
 html.dark #evPosterPreview>div{background:#181818!important;border-color:var(--line)!important}
+html.dark .event-status-pill{background:#292929;color:#c8c3bb;border-color:#414141}
+html.dark .event-status-pill.today{background:var(--accent);color:#fff;border-color:var(--accent)}
+html.dark .event-status-pill.ended{background:#211d1d;color:#9e9292;border-color:#403737}
+html.dark .event-preview-box{background:var(--card);border-color:var(--line)}
+html.dark .event-preview-poster{background:#151515;border-color:var(--line)}
+html.dark .event-preview-close{background:#262626;color:#eee;border-color:#444}
 
 @media(max-width:520px){
   nav{padding-left:5%;padding-right:5%}
@@ -318,6 +344,7 @@ html.dark #evPosterPreview>div{background:#181818!important;border-color:var(--l
           <div id="evPosterPreview" style="margin-top:12px"></div>
 
           <div class="row" style="margin-top:20px">
+            <button class="btn secondary" type="button" onclick="openEventPreview()">Preview event</button>
             <button class="btn" type="submit" id="eventSubmitBtn">Save event</button>
             <button class="btn secondary" type="button" onclick="closeEventForm()">Cancel</button>
           </div>
@@ -376,6 +403,24 @@ html.dark #evPosterPreview>div{background:#181818!important;border-color:var(--l
 
 </main>
 
+<div class="event-preview-modal" id="eventPreviewModal" aria-hidden="true" onclick="if(event.target===this) closeEventPreview()">
+  <div class="event-preview-box" role="dialog" aria-modal="true" aria-labelledby="eventPreviewTitle">
+    <button class="event-preview-close" type="button" aria-label="Close preview" onclick="closeEventPreview()">×</button>
+    <div class="event-preview-layout">
+      <div class="event-preview-copy">
+        <div class="event-preview-kicker" id="eventPreviewStatus">Upcoming</div>
+        <h2 id="eventPreviewTitle">Event preview</h2>
+        <p class="event-preview-meta" id="eventPreviewMeta"></p>
+        <p class="event-preview-desc" id="eventPreviewDesc"></p>
+        <div class="event-preview-actions" id="eventPreviewActions"></div>
+      </div>
+      <div class="event-preview-poster" id="eventPreviewPoster">
+        <div class="event-preview-poster-empty">No poster selected</div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script>
@@ -407,9 +452,9 @@ let editingEventId = null;   // null = adding, otherwise the event id being edit
 let currentGallery = [];     // raw rows from `club_gallery`
 let galleryExpanded = false; // keep large galleries compact until the admin chooses View all
 let currentVideos = [];      // raw rows from `club_videos`
-let videosExpanded = false;  // show only the first 5 videos until the admin chooses View all
 let editingVideoId = null;   // null = adding, otherwise editing an existing video
   let currentEventPosterUrl = ''; // poster URL for the event being edited
+let eventPreviewObjectUrl = ''; // temporary browser URL for an unsaved poster used only in Preview
 
 function show(el){ el.classList.remove('hidden'); }
 function hide(el){ el.classList.add('hidden'); }
@@ -769,9 +814,14 @@ function renderEventList(){
     wrap.innerHTML = '<p class="empty">No events yet — add your first one below.</p>';
     return;
   }
-  wrap.innerHTML = currentEvents.map(e=>`
+  wrap.innerHTML = currentEvents.map(e=>{
+    const status = getAdminEventStatus(e.event_date);
+    return `
     <div class="event-card">
-      <h3>${escapeHtml(e.title || '(untitled event)')}</h3>
+      <div class="event-card-title-row">
+        <h3>${escapeHtml(e.title || '(untitled event)')}</h3>
+        <span class="event-status-pill ${status.key}">${status.label}</span>
+      </div>
       <p>${formatDate(e.event_date)} · ${formatTime(e.event_time)} · ${escapeHtml(e.venue || '')}</p>
       ${e.description ? `<p>${escapeHtml(e.description)}</p>` : ''}
       <div class="row">
@@ -780,7 +830,8 @@ function renderEventList(){
         <button class="btn danger" type="button" onclick="deleteEvent('${e.id}')">Delete</button>
       </div>
     </div>
-  `).join('');
+  `;
+  }).join('');
 }
 
 // ---------- Share event ----------
@@ -837,6 +888,17 @@ function formatTime(t){
   const ap = h>=12 ? 'PM':'AM'; h = h%12; if(h===0) h=12;
   return `${h}:${m} ${ap}`;
 }
+function getAdminEventStatus(dateString){
+  if(!dateString) return { key:'upcoming', label:'Upcoming' };
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth()+1).padStart(2,'0');
+  const d = String(now.getDate()).padStart(2,'0');
+  const today = `${y}-${m}-${d}`;
+  if(dateString < today) return { key:'ended', label:'Ended' };
+  if(dateString === today) return { key:'today', label:'Happening today' };
+  return { key:'upcoming', label:'Upcoming' };
+}
 function escapeHtml(s){
   return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
@@ -877,6 +939,72 @@ function closeEventForm(){
   $('eventFormEl').reset();
   renderEventPosterPreview();
 }
+
+function openEventPreview(){
+  if(!currentClub) return;
+
+  const title = $('evName').value.trim() || 'Untitled event';
+  const description = $('evDesc').value.trim() || 'No description has been added yet.';
+  const date = $('evDate').value;
+  const time = $('evTime').value;
+  const venue = $('evVenue').value.trim() || 'Venue not added';
+  const registrationLink = $('evRegistrationLink').value.trim();
+  const posterInput = $('evPosterFile');
+  const posterFile = posterInput && posterInput.files ? posterInput.files[0] : null;
+  const status = getAdminEventStatus(date);
+
+  if(eventPreviewObjectUrl){
+    URL.revokeObjectURL(eventPreviewObjectUrl);
+    eventPreviewObjectUrl = '';
+  }
+
+  let posterUrl = currentEventPosterUrl || '';
+  if(posterFile && posterFile.type && posterFile.type.startsWith('image/')){
+    eventPreviewObjectUrl = URL.createObjectURL(posterFile);
+    posterUrl = eventPreviewObjectUrl;
+  }
+
+  $('eventPreviewStatus').textContent = status.label;
+  $('eventPreviewTitle').textContent = title;
+  const dateText = date ? formatDate(date) : 'Date not added';
+  const timeText = time ? formatTime(time) : 'Time not added';
+  $('eventPreviewMeta').textContent = `${currentClub.name || 'Club'} · ${venue} · ${timeText} · ${dateText}`;
+  $('eventPreviewDesc').textContent = description;
+
+  const posterWrap = $('eventPreviewPoster');
+  posterWrap.innerHTML = posterUrl
+    ? `<img src="${escapeHtml(posterUrl)}" alt="${escapeHtml(title)} poster preview">`
+    : '<div class="event-preview-poster-empty">No poster selected</div>';
+
+  const actions = $('eventPreviewActions');
+  actions.innerHTML = registrationLink
+    ? '<span class="btn">Register →</span>'
+    : '';
+
+  const modal = $('eventPreviewModal');
+  modal.classList.add('show');
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeEventPreview(){
+  const modal = $('eventPreviewModal');
+  if(modal){
+    modal.classList.remove('show');
+    modal.setAttribute('aria-hidden','true');
+  }
+  document.body.style.overflow = '';
+  if(eventPreviewObjectUrl){
+    URL.revokeObjectURL(eventPreviewObjectUrl);
+    eventPreviewObjectUrl = '';
+  }
+}
+
+document.addEventListener('keydown', evt=>{
+  if(evt.key === 'Escape' && $('eventPreviewModal')?.classList.contains('show')){
+    closeEventPreview();
+  }
+});
 
 async function handleEventSubmit(evt){
   evt.preventDefault();
@@ -1229,17 +1357,12 @@ async function loadVideos(){
 
 function renderVideoList(){
   const wrap = $('videoListWrap');
-  if(!wrap) return;
   if(!currentVideos.length){
     wrap.innerHTML = '<p class="empty">No videos added yet.</p>';
     return;
   }
 
-  const previewLimit = 5;
-  const visibleVideos = videosExpanded ? currentVideos : currentVideos.slice(0, previewLimit);
-  const remaining = Math.max(0, currentVideos.length - previewLimit);
-
-  const videosHtml = visibleVideos.map(video=>{
+  const videosHtml = currentVideos.map(video=>{
     const title = video.title || 'Untitled video';
     const url = video.video_url || '';
     return `
@@ -1254,22 +1377,7 @@ function renderVideoList(){
       </div>`;
   }).join('');
 
-  let moreButton = '';
-  if(currentVideos.length > previewLimit){
-    moreButton = videosExpanded
-      ? `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleVideoView()">Show less</button></div>`
-      : `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleVideoView()">+${remaining} more video${remaining === 1 ? '' : 's'} · View all</button></div>`;
-  }
-
-  wrap.innerHTML = `<div class="video-list">${videosHtml}</div>${moreButton}`;
-}
-
-function toggleVideoView(){
-  videosExpanded = !videosExpanded;
-  renderVideoList();
-  if(!videosExpanded){
-    $('videosSection')?.scrollIntoView({ behavior:'smooth', block:'start' });
-  }
+  wrap.innerHTML = `<div class="video-list">${videosHtml}</div>`;
 }
 
 function startVideoEdit(videoId){
