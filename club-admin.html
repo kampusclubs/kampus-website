@@ -76,6 +76,12 @@ textarea{resize:vertical;min-height:80px}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-item .btn-remove{position:absolute;top:8px;right:8px;background:#fff;color:var(--accent);border:1px solid #f0c7c8;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer}
 .gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+.gallery-more-tile{cursor:pointer;padding:0;font:inherit;appearance:none;-webkit-appearance:none}
+.gallery-more-tile::after{content:"";position:absolute;inset:0;background:rgba(0,0,0,.56);z-index:1}
+.gallery-more-overlay{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#fff;text-align:center;font-weight:900;letter-spacing:-.02em}
+.gallery-more-overlay strong{font-size:32px;line-height:1}
+.gallery-more-overlay span{font-size:13px;font-weight:700;opacity:.92}
+.gallery-more-tile:hover::after{background:rgba(0,0,0,.64)}
 .gallery-more-wrap{display:flex;justify-content:center;margin-top:16px}
 .gallery-more-btn{min-width:180px}
 .video-admin-form{display:grid;grid-template-columns:1fr;gap:0}
@@ -401,6 +407,7 @@ let editingEventId = null;   // null = adding, otherwise the event id being edit
 let currentGallery = [];     // raw rows from `club_gallery`
 let galleryExpanded = false; // keep large galleries compact until the admin chooses View all
 let currentVideos = [];      // raw rows from `club_videos`
+let videosExpanded = false;  // show only the first 5 videos until the admin chooses View all
 let editingVideoId = null;   // null = adding, otherwise editing an existing video
   let currentEventPosterUrl = ''; // poster URL for the event being edited
 
@@ -1062,22 +1069,43 @@ function renderGallery(){
   }
 
   const previewLimit = 6;
-  const visibleGallery = galleryExpanded ? currentGallery : currentGallery.slice(0, previewLimit);
   const remaining = Math.max(0, currentGallery.length - previewLimit);
 
-  const photosHtml = visibleGallery.map(g => `
-    <div class="gallery-item">
-      <img src="${g.image_url}" alt="Club gallery photo" loading="lazy">
-      <button class="btn-remove" type="button" onclick="deleteGalleryImage('${g.id}', '${String(g.storage_path).replace(/'/g, "\\'")}')">Delete</button>
-    </div>
-  `).join('');
+  let photosHtml = '';
 
-  let moreButton = '';
-  if(currentGallery.length > previewLimit){
-    moreButton = galleryExpanded
-      ? `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleGalleryView()">Show less</button></div>`
-      : `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleGalleryView()">+${remaining} more photo${remaining === 1 ? '' : 's'} · View all</button></div>`;
+  if(galleryExpanded || currentGallery.length <= previewLimit){
+    const visibleGallery = galleryExpanded ? currentGallery : currentGallery.slice(0, previewLimit);
+    photosHtml = visibleGallery.map(g => `
+      <div class="gallery-item">
+        <img src="${g.image_url}" alt="Club gallery photo" loading="lazy">
+        <button class="btn-remove" type="button" onclick="deleteGalleryImage('${g.id}', '${String(g.storage_path).replace(/'/g, "\\'")}')">Delete</button>
+      </div>
+    `).join('');
+  }else{
+    const firstFive = currentGallery.slice(0, previewLimit - 1);
+    const sixthPhoto = currentGallery[previewLimit - 1];
+
+    photosHtml = firstFive.map(g => `
+      <div class="gallery-item">
+        <img src="${g.image_url}" alt="Club gallery photo" loading="lazy">
+        <button class="btn-remove" type="button" onclick="deleteGalleryImage('${g.id}', '${String(g.storage_path).replace(/'/g, "\\'")}')">Delete</button>
+      </div>
+    `).join('');
+
+    photosHtml += `
+      <button class="gallery-item gallery-more-tile" type="button" onclick="toggleGalleryView()" aria-label="View ${remaining} more gallery photo${remaining === 1 ? '' : 's'}">
+        <img src="${sixthPhoto.image_url}" alt="Club gallery photo" loading="lazy">
+        <span class="gallery-more-overlay">
+          <strong>+${remaining}</strong>
+          <span>View all</span>
+        </span>
+      </button>
+    `;
   }
+
+  const moreButton = galleryExpanded && currentGallery.length > previewLimit
+    ? `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleGalleryView()">Show less</button></div>`
+    : '';
 
   wrap.innerHTML = `<div class="gallery-grid">${photosHtml}</div>${moreButton}`;
 }
@@ -1207,7 +1235,11 @@ function renderVideoList(){
     return;
   }
 
-  wrap.innerHTML = `<div class="video-list">${currentVideos.map(video=>{
+  const previewLimit = 5;
+  const visibleVideos = videosExpanded ? currentVideos : currentVideos.slice(0, previewLimit);
+  const remaining = Math.max(0, currentVideos.length - previewLimit);
+
+  const videosHtml = visibleVideos.map(video=>{
     const title = video.title || 'Untitled video';
     const url = video.video_url || '';
     return `
@@ -1220,7 +1252,24 @@ function renderVideoList(){
           <button class="btn danger" type="button" onclick="deleteVideo('${video.id}')">Delete</button>
         </div>
       </div>`;
-  }).join('')}</div>`;
+  }).join('');
+
+  let moreButton = '';
+  if(currentVideos.length > previewLimit){
+    moreButton = videosExpanded
+      ? `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleVideoView()">Show less</button></div>`
+      : `<div class="gallery-more-wrap"><button class="btn secondary gallery-more-btn" type="button" onclick="toggleVideoView()">+${remaining} more video${remaining === 1 ? '' : 's'} · View all</button></div>`;
+  }
+
+  wrap.innerHTML = `<div class="video-list">${videosHtml}</div>${moreButton}`;
+}
+
+function toggleVideoView(){
+  videosExpanded = !videosExpanded;
+  renderVideoList();
+  if(!videosExpanded){
+    $('videosSection')?.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
 }
 
 function startVideoEdit(videoId){
