@@ -5,6 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Club Admin — KAMPUS</title>
+<script>
+(function(){
+  try{
+    const savedTheme=localStorage.getItem('kampusAdminTheme');
+    document.documentElement.classList.toggle('dark', savedTheme !== 'light');
+  }catch(_){
+    document.documentElement.classList.add('dark');
+  }
+})();
+</script>
 <style>
 :root{--ink:#151515;--muted:#666;--paper:#f7f5f1;--card:#fff;--line:#e7e2da;--accent:#b21f24;--accent-soft:#fff0f1;--gold:#f2b84b;--blue:#5b8def;--green:#52b788;--nav-h:72px}
 *{box-sizing:border-box}
@@ -66,6 +76,54 @@ textarea{resize:vertical;min-height:80px}
 .gallery-item img{width:100%;height:100%;object-fit:cover;display:block}
 .gallery-item .btn-remove{position:absolute;top:8px;right:8px;background:#fff;color:var(--accent);border:1px solid #f0c7c8;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer}
 .gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+.password-wrap{position:relative}
+.password-wrap input{padding-right:50px}
+.password-toggle{position:absolute;right:7px;top:50%;transform:translateY(-50%);width:38px;height:38px;border:0;border-radius:8px;background:transparent;color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0;transition:.18s}
+.password-toggle:hover{background:var(--paper);color:var(--ink)}
+.password-toggle:focus-visible{outline:3px solid #5b8def66;outline-offset:2px}
+.password-toggle svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.password-toggle .eye-hide{display:none}
+.password-toggle.showing .eye-show{display:none}
+.password-toggle.showing .eye-hide{display:block}
+.nav-actions{display:flex;align-items:center;gap:10px}
+.theme-toggle{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:19px;line-height:1;transition:.18s;flex:none}
+.theme-toggle:hover{transform:translateY(-1px);border-color:#c9b9b0}
+.theme-toggle:focus-visible{outline:3px solid #5b8def66;outline-offset:3px}
+.theme-toggle span{display:block;transform:translateY(-1px)}
+
+/* Admin dark theme — default for new visitors. */
+html.dark{color-scheme:dark}
+html.dark body{--ink:#f3f0ea;--muted:#aaa59d;--paper:#121212;--card:#1c1c1c;--line:#343434;--accent-soft:#321f21;--green:#6cc79a;background:var(--paper);color:var(--ink)}
+html.dark nav{background:#181818;border-color:var(--line)}
+html.dark .logo-sub{border-color:var(--line)}
+html.dark input,html.dark textarea{background:#242424;color:var(--ink);border-color:#3a3a3a}
+html.dark input::placeholder,html.dark textarea::placeholder{color:#858585}
+html.dark input:focus,html.dark textarea:focus{outline:none;border-color:#666;box-shadow:0 0 0 3px #ffffff0a}
+html.dark .card,html.dark .event-card,html.dark .branding-card{background:var(--card);border-color:var(--line)}
+html.dark .btn{background:#ece9e3;color:#171717}
+html.dark .btn:hover{background:var(--accent);color:#fff}
+html.dark .btn.secondary{background:#262626;color:#eee;border-color:#444}
+html.dark .btn.secondary:hover{background:#303030;color:#fff;border-color:#555}
+html.dark .btn.danger{background:#24191a;color:#ef8b8f;border-color:#63383a}
+html.dark .btn.danger:hover{background:var(--accent);color:#fff;border-color:var(--accent)}
+html.dark .branding-preview,html.dark .gallery-item{background:#161616;border-color:var(--line)}
+html.dark .branding-preview.logo-preview img{background:#f1eee8;border-radius:8px}
+html.dark .gallery-item .btn-remove{background:#242424;color:#ef8b8f;border-color:#63383a}
+html.dark .gallery-item .btn-remove:hover{background:var(--accent);color:#fff}
+html.dark .password-toggle:hover{background:#303030;color:#fff}
+html.dark .theme-toggle{background:#262626;color:#f3f0ea;border-color:#444}
+html.dark .theme-toggle:hover{background:#303030;border-color:#555}
+html.dark code{color:#f0b8bb}
+html.dark #evPosterPreview>div{background:#181818!important;border-color:var(--line)!important}
+
+@media(max-width:520px){
+  nav{padding-left:5%;padding-right:5%}
+  .logo{font-size:22px}
+  .logo-sub{font-size:10px;margin-left:8px;padding-left:8px}
+  .nav-actions{gap:7px}
+  .theme-toggle{width:39px;height:39px}
+  #logoutBtn{padding:10px 12px;font-size:12px}
+}
 </style>
 </head>
 <body>
@@ -75,7 +133,10 @@ textarea{resize:vertical;min-height:80px}
     <a class="logo" href="club-admin.html">KAMPUS<span>✦</span></a>
     <span class="logo-sub">CLUB ADMIN</span>
   </div>
-  <button class="btn secondary hidden" id="logoutBtn" type="button" onclick="handleLogout()">Log out</button>
+  <div class="nav-actions">
+    <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch to light mode" title="Switch to light mode" onclick="toggleAdminTheme()"><span id="themeIcon" aria-hidden="true">☀</span></button>
+    <button class="btn secondary hidden" id="logoutBtn" type="button" onclick="handleLogout()">Log out</button>
+  </div>
 </nav>
 
 <main>
@@ -90,7 +151,13 @@ textarea{resize:vertical;min-height:80px}
         <input id="loginEmail" type="text" autocomplete="username" autocapitalize="none" required>
         <p class="muted" style="font-size:12px;margin:7px 0 0">Use your club username, or an existing email login.</p>
         <label for="loginPassword">Password</label>
-        <input id="loginPassword" type="password" autocomplete="current-password" required>
+        <div class="password-wrap">
+          <input id="loginPassword" type="password" autocomplete="current-password" required>
+          <button class="password-toggle" id="passwordToggle" type="button" aria-label="Show password" title="Show password" aria-pressed="false" onclick="togglePasswordVisibility()">
+            <svg class="eye-show" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12s3.5-6 9.5-6 9.5 6 9.5 6-3.5 6-9.5 6-9.5-6-9.5-6Z"/><circle cx="12" cy="12" r="2.8"/></svg>
+            <svg class="eye-hide" viewBox="0 0 24 24" aria-hidden="true"><path d="m3 3 18 18"/><path d="M10.6 6.2A9.4 9.4 0 0 1 12 6c6 0 9.5 6 9.5 6a16 16 0 0 1-2.1 2.8M6.1 6.1C3.8 7.7 2.5 12 2.5 12s3.5 6 9.5 6a9.8 9.8 0 0 0 4.1-.9"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+          </button>
+        </div>
         <button class="btn block" type="submit">Log in</button>
       </form>
       <div id="loginMsg" class="msg"></div>
@@ -298,8 +365,28 @@ function show(el){ el.classList.remove('hidden'); }
 function hide(el){ el.classList.add('hidden'); }
 const $ = id => document.getElementById(id);
 
+// ---------- Theme: dark by default, remember an intentional choice ----------
+function updateThemeToggle(){
+  const dark=document.documentElement.classList.contains('dark');
+  const btn=$('themeToggle');
+  const icon=$('themeIcon');
+  if(icon) icon.textContent=dark ? '☀' : '☾';
+  if(btn){
+    const label=dark ? 'Switch to light mode' : 'Switch to dark mode';
+    btn.setAttribute('aria-label',label);
+    btn.title=label;
+  }
+}
+
+function toggleAdminTheme(){
+  const dark=document.documentElement.classList.toggle('dark');
+  try{ localStorage.setItem('kampusAdminTheme', dark ? 'dark' : 'light'); }catch(_){}
+  updateThemeToggle();
+}
+
 // ---------- Boot: decide login vs dashboard ----------
 async function boot(){
+  updateThemeToggle();
   const { data:{ session } } = await supabaseClient.auth.getSession();
   hide($('loadingView'));
   if(!session){
@@ -324,6 +411,20 @@ function showLoginView(){
 }
 
 // ---------- Login ----------
+function togglePasswordVisibility(){
+  const input = $('loginPassword');
+  const btn = $('passwordToggle');
+  if(!input || !btn) return;
+
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.classList.toggle('showing', !showing);
+  btn.setAttribute('aria-pressed', String(!showing));
+  btn.setAttribute('aria-label', showing ? 'Show password' : 'Hide password');
+  btn.title = showing ? 'Show password' : 'Hide password';
+  input.focus({ preventScroll:true });
+}
+
 async function handleLogin(evt){
   evt.preventDefault();
   const msg = $('loginMsg'); msg.textContent=''; msg.className='msg';
