@@ -381,6 +381,60 @@ html,body{width:100%;max-width:100%;overflow-x:clip}
   .hero{padding-left:0;padding-right:0}
   .hero-inner{max-width:1100px;margin-left:auto;margin-right:auto;padding-left:6%;padding-right:6%}
 }
+
+
+/* ======================================================================
+   KAMPUS: EVENT SHARING + CLUB VIDEOS
+   ====================================================================== */
+.hidden{display:none!important}
+.share-event-btn{
+  width:40px;height:40px;margin-left:10px;border-radius:9px;border:1px solid var(--line);
+  background:#fff;color:#171717;display:inline-flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:.18s;flex:none
+}
+.share-event-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.share-event-btn:hover{transform:translateY(-2px);background:#f5eee9;border-color:#d8c6bd}
+body.dark .share-event-btn{background:#242424;color:#eee;border-color:#444}
+body.dark .share-event-btn:hover{background:#303030}
+.share-toast{position:fixed;left:50%;bottom:28px;z-index:260;transform:translate(-50%,14px);opacity:0;pointer-events:none;background:#171717;color:#fff;border:1px solid #ffffff24;border-radius:999px;padding:9px 14px;font-size:12px;font-weight:800;box-shadow:0 12px 34px #0006;transition:.2s}
+.share-toast.show{opacity:1;transform:translate(-50%,0)}
+body.dark .share-toast{background:#f1eee8;color:#171717;border-color:#ffffff1a}
+
+.videos-section{padding:30px 0 4px}
+.club-videos-wrap{margin-top:18px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scrollbar-width:thin;padding:2px 2px 12px}
+.club-videos-track{display:flex;gap:16px;width:max-content}
+.club-video-card{width:min(330px,72vw);scroll-snap-align:start;border:1px solid var(--line);border-radius:17px;overflow:hidden;background:var(--card);box-shadow:0 10px 28px #0000000d}
+.club-video-media{width:100%;aspect-ratio:16/9;background:#111;display:block;overflow:hidden}
+.club-video-media video,.club-video-media iframe{width:100%;height:100%;display:block;border:0;object-fit:cover;background:#111}
+.club-video-copy{padding:13px 14px 14px}
+.club-video-copy h3{margin:0;font-size:15px;line-height:1.35;letter-spacing:-.15px}
+.club-video-copy p{margin:5px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+.club-video-external{display:flex;align-items:center;justify-content:center;min-height:180px;padding:24px;text-align:center;text-decoration:none;background:linear-gradient(135deg,#201719,#3d2427);color:#fff;font-weight:800}
+.club-video-external span{display:block;font-size:12px;font-weight:600;color:#ddd;margin-top:6px}
+body.dark .club-video-card{background:#1d1d1d}
+
+@media(max-width:760px){
+  .event-actions{display:flex;grid-template-columns:none;gap:8px;align-items:center}
+  .event-actions .btn{flex:1 1 0;width:auto;min-width:0}
+  .event-actions .share-event-btn,.event-actions .save-icon-btn{width:44px;height:44px;margin:0;flex:0 0 44px}
+  .event-popup-actions{display:flex;grid-template-columns:none;gap:9px;align-items:center}
+  .event-popup-actions .btn{flex:1 1 0;width:auto;min-width:0}
+  .event-popup-actions .share-event-btn,.event-popup-actions .save-icon-btn{width:44px;height:44px;margin:0;flex:0 0 44px}
+  .share-toast{bottom:20px;max-width:calc(100vw - 28px);white-space:nowrap}
+  .videos-section{padding-top:26px}
+  .club-videos-wrap{margin:17px calc(var(--mobile-gutter) * -1) 0;padding:2px var(--mobile-gutter) 13px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .club-videos-wrap::-webkit-scrollbar{display:none}
+  .club-videos-track{gap:12px}
+  .club-video-card{width:min(82vw,310px);border-radius:16px}
+  .club-video-copy{padding:12px 13px 13px}
+}
+@media(max-width:380px){
+  .event-actions{gap:7px}
+  .event-actions .share-event-btn,.event-actions .save-icon-btn{width:42px;height:42px;flex-basis:42px}
+  .event-popup-actions .share-event-btn,.event-popup-actions .save-icon-btn{width:42px;height:42px;flex-basis:42px}
+  .club-video-card{width:min(84vw,292px)}
+}
+
 </style>
 </head>
 <body>
@@ -460,6 +514,8 @@ try{
     </div>
   </div>
 </div>
+
+<div class="share-toast" id="shareToast" role="status" aria-live="polite"></div>
 
 <div class="lightbox-modal" id="lightboxModal" aria-hidden="true" onclick="closeLightbox()">
   <button class="close-event lightbox-close" type="button" aria-label="Close" onclick="event.stopPropagation();closeLightbox()">×</button>
@@ -1017,13 +1073,55 @@ function saveButtonMarkup(e){
   const saved=isEventSaved(e.id);
   return `<button class="save-icon-btn ${saved?'saved':''}" type="button" data-event-id="${escapeHtml(String(e.id))}" aria-label="${saved?'Remove event from saved':'Save event'}" title="${saved?'Saved':'Save event'}" aria-pressed="${saved?'true':'false'}" onclick="event.stopPropagation();toggleSavedEvent(this.dataset.eventId)"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.7L6 21V4.75Z"/></svg></button>`;
 }
+function shareButtonMarkup(e){
+  return `<button class="share-event-btn" type="button" data-event-id="${escapeHtml(String(e.id))}" aria-label="Share event" title="Share event" onclick="event.stopPropagation();shareEventPublic(this.dataset.eventId,this)"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.5M8.2 13.2l7.6 4.5"/></svg></button>`;
+}
+function eventShareUrl(eventId){
+  const url=new URL(location.href);
+  url.hash=`event/${encodeURIComponent(String(eventId))}`;
+  return url.toString();
+}
+let shareToastTimer=null;
+function showShareToast(message){
+  const toast=document.getElementById('shareToast');
+  if(!toast) return;
+  toast.textContent=message;
+  toast.classList.add('show');
+  clearTimeout(shareToastTimer);
+  shareToastTimer=setTimeout(()=>toast.classList.remove('show'),1800);
+}
+async function shareEventPublic(eventId,button){
+  const e=events.find(x=>String(x.id)===String(eventId));
+  if(!e) return;
+  const url=eventShareUrl(e.id);
+  const title=`${e.name || 'Event'} · KAMPUS`;
+  const text=`${e.name || 'Event'}${e.club?` by ${e.club}`:''}`;
+  const preferNative=Boolean(navigator.share) && (window.matchMedia('(pointer:coarse)').matches || window.innerWidth<=760);
+  try{
+    if(preferNative){
+      await navigator.share({title,text,url});
+      return;
+    }
+    if(navigator.clipboard && window.isSecureContext){
+      await navigator.clipboard.writeText(url);
+      showShareToast('Event link copied');
+      return;
+    }
+    throw new Error('Clipboard unavailable');
+  }catch(err){
+    if(err && err.name==='AbortError') return;
+    try{
+      window.prompt('Copy this event link:',url);
+    }catch(_){ }
+  }
+}
 function renderEventCard(e,{includeClubLink=true}={}){
   const c=clubs.find(x=>x.name===e.club);
   const clubLink=includeClubLink && c?`<a class="btn" href="#club/${c.slug}" onclick="event.stopPropagation()">View club →</a>`:'';
   const registerLink=e.registration_link
     ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation()">Register →</a>`
     : '';
-  const actions=`<div class="event-actions">${clubLink}${registerLink}${saveButtonMarkup(e)}</div>`;
+  const actions=`<div class="event-actions">${clubLink}${registerLink}${shareButtonMarkup(e)}${saveButtonMarkup(e)}</div>`;
   const poster = e.poster_url
     ? `<div class="event-poster-thumb" aria-hidden="true"><img src="${escapeHtml(e.poster_url)}" alt=""></div>`
     : `<div class="event-poster-placeholder" aria-hidden="true">🤖</div>`;
@@ -1078,7 +1176,7 @@ function renderEventPopupActions(e){
   if(!target || !e) return;
   target.innerHTML = `${e.registration_link
     ? `<a class="btn" href="${escapeHtml(e.registration_link)}" target="_blank" rel="noopener noreferrer">Register →</a>`
-    : ''}${saveButtonMarkup(e)}`;
+    : ''}${shareButtonMarkup(e)}${saveButtonMarkup(e)}`;
 }
 function openEventDescription(eventId){
   const e = events.find(x => String(x.id) === String(eventId));
@@ -1285,6 +1383,76 @@ function renderClubGallery(photos, clubName){
   wrap.innerHTML = `<div class="club-gallery">${looped.map((src,n)=>`<img src="${src}" alt="${escapeHtml(clubName)} gallery image ${(n%urls.length)+1}" loading="lazy" decoding="async" onclick="openGalleryLightboxFromDom(this,'.club-gallery img')">`).join('')}</div>`;
 }
 
+
+// Optional club videos. When the `club_videos` table exists, KAMPUS shows
+// its rows beneath the club gallery. If a club has no videos, the section stays hidden.
+async function fetchClubVideos(clubId){
+  try{
+    const { data, error } = await supabaseClient
+      .from('club_videos')
+      .select('*')
+      .eq('club_id', clubId)
+      .order('created_at', { ascending:false });
+    if(error) throw error;
+    return data || [];
+  }catch(err){
+    // Keep the public club page clean even before the optional videos table is set up.
+    console.info('KAMPUS: club videos are not available yet', err && err.message ? err.message : err);
+    return [];
+  }
+}
+function youtubeEmbedUrl(rawUrl){
+  try{
+    const u=new URL(String(rawUrl));
+    let id='';
+    if(u.hostname.includes('youtu.be')) id=u.pathname.split('/').filter(Boolean)[0]||'';
+    else if(u.hostname.includes('youtube.com')){
+      id=u.searchParams.get('v')||'';
+      if(!id){
+        const parts=u.pathname.split('/').filter(Boolean);
+        const markerIndex=parts.findIndex(p=>['shorts','embed','live'].includes(p));
+        if(markerIndex>=0) id=parts[markerIndex+1]||'';
+      }
+    }
+    return id ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(id)}` : '';
+  }catch(_){ return ''; }
+}
+function renderClubVideoCard(video,clubName){
+  const rawUrl=String(video.video_url || video.url || '').trim();
+  if(!rawUrl) return '';
+  const title=String(video.title || video.caption || `${clubName} video`).trim();
+  const poster=String(video.poster_url || video.thumbnail_url || '').trim();
+  const yt=youtubeEmbedUrl(rawUrl);
+  const isInstagram=/instagram\.com/i.test(rawUrl);
+  let media='';
+  if(yt){
+    media=`<iframe src="${escapeHtml(yt)}" title="${escapeHtml(title)}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>`;
+  }else if(isInstagram){
+    media=`<a class="club-video-external" href="${escapeHtml(rawUrl)}" target="_blank" rel="noopener noreferrer">Watch video on Instagram ↗<span>Opens the club's video in a new tab</span></a>`;
+  }else{
+    media=`<video controls playsinline preload="metadata" ${poster?`poster="${escapeHtml(poster)}"`:''}><source src="${escapeHtml(rawUrl)}">Your browser does not support this video.</video>`;
+  }
+  return `<article class="club-video-card"><div class="club-video-media">${media}</div><div class="club-video-copy"><h3>${escapeHtml(title)}</h3></div></article>`;
+}
+function renderClubVideos(videos,clubName){
+  const section=document.getElementById('clubVideosSection');
+  const wrap=document.getElementById('clubVideosWrap');
+  if(!section || !wrap) return;
+  const cards=(videos||[]).map(v=>renderClubVideoCard(v,clubName)).filter(Boolean);
+  if(!cards.length){
+    section.classList.add('hidden');
+    wrap.innerHTML='';
+    return;
+  }
+  wrap.innerHTML=`<div class="club-videos-track">${cards.join('')}</div>`;
+  section.classList.remove('hidden');
+  wrap.querySelectorAll('video').forEach(video=>{
+    video.addEventListener('play',()=>{
+      wrap.querySelectorAll('video').forEach(other=>{ if(other!==video) other.pause(); });
+    });
+  });
+}
+
 async function showClub(slug){
  const c=clubs.find(x=>x.slug===slug); if(!c){location.hash='#clubs';return}
  currentClub=c;
@@ -1307,11 +1475,15 @@ async function showClub(slug){
    </div>
    <section class="club-section about-section"><h2>About the club</h2><p class="club-hero-desc">${escapeHtml(c.about || 'No information has been added yet.')}</p></section>
     <section class="club-section gallery-section"><h2>Gallery</h2><p class="muted">A glimpse into the energy, people and moments around campus.</p><div class="club-gallery-wrap" id="clubGalleryWrap"><p class="muted">Loading photos…</p></div></section>
+   <section class="club-section videos-section hidden" id="clubVideosSection"><h2>Videos</h2><p class="muted">Highlights, performances and moments from the club.</p><div class="club-videos-wrap" id="clubVideosWrap"></div></section>
    <section class="club-section events-section"><h2>Upcoming events</h2>${clubEvents.length?clubEvents.map(e=>renderEventCard(e,{includeClubLink:false})).join(''):'<p class="muted">No upcoming events listed yet.</p>'}</section>`;
  const page=document.getElementById('clubPage');page.classList.add('show');page.setAttribute('aria-hidden','false');page.scrollTop=0;document.body.style.overflow='hidden';document.title=`${c.name} — KAMPUS`;
 
- const photos = await fetchClubGallery(c.id);
- if(currentClub && currentClub.id===c.id) renderClubGallery(photos, c.name);
+ const [photos,videos] = await Promise.all([fetchClubGallery(c.id),fetchClubVideos(c.id)]);
+ if(currentClub && currentClub.id===c.id){
+   renderClubGallery(photos, c.name);
+   renderClubVideos(videos, c.name);
+ }
 }
 function hideClub(){const page=document.getElementById('clubPage');page.classList.remove('show');page.setAttribute('aria-hidden','true');document.body.style.overflow='';currentClub=null;document.title='KAMPUS — Clubs, Events & Campus Life';}
 function handleRoute(){
