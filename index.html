@@ -71,6 +71,8 @@ body.dark{--ink:#f3f0ea;--muted:#b9b4ac;--paper:#141414;--card:#1d1d1d;--line:#3
 .lightbox-modal.show{display:flex}
 .lightbox-modal img{max-width:92vw;max-height:88vh;border-radius:12px;box-shadow:0 20px 60px #0008;object-fit:contain;animation:lightboxPop .2s ease-out;cursor:zoom-out}@keyframes lightboxPop{from{opacity:.25;transform:scale(.92)}to{opacity:1;transform:scale(1)}}
 .lightbox-close{position:fixed;right:20px;top:20px;background:#fff;color:#111}
+.lightbox-nav{position:fixed;top:50%;transform:translateY(-50%);z-index:112;width:48px;height:48px;border-radius:50%;border:1px solid #ffffff45;background:#111c;color:#fff;display:none;align-items:center;justify-content:center;font-size:28px;line-height:1;cursor:pointer;box-shadow:0 10px 30px #0007;transition:.18s}.lightbox-nav:hover{background:#fff;color:#111;transform:translateY(-50%) scale(1.04)}.lightbox-prev{left:22px}.lightbox-next{right:22px}.lightbox-modal.gallery-mode .lightbox-nav{display:flex}.lightbox-counter{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:112;display:none;padding:7px 11px;border-radius:999px;background:#111c;color:#fff;border:1px solid #ffffff30;font-size:12px;font-weight:800;letter-spacing:.4px;pointer-events:none}.lightbox-modal.gallery-mode .lightbox-counter{display:block}
+@media(max-width:760px){.lightbox-modal{padding:16px}.lightbox-modal img{max-width:94vw;max-height:80vh}.lightbox-nav{width:42px;height:42px;font-size:25px;background:#111b}.lightbox-prev{left:10px}.lightbox-next{right:10px}.lightbox-counter{bottom:18px}.lightbox-close{right:12px;top:12px}.lightbox-modal.gallery-mode{touch-action:pan-y}}
 
 .club-branding{margin:0 0 38px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:#fff;box-shadow:0 12px 35px #0000000b}
 .club-cover{height:260px;background:linear-gradient(135deg,#241719,#6b2a30);position:relative;overflow:hidden}
@@ -448,8 +450,11 @@ try{
 </div>
 
 <div class="lightbox-modal" id="lightboxModal" aria-hidden="true" onclick="closeLightbox()">
-  <button class="close-event lightbox-close" type="button" aria-label="Close" onclick="closeLightbox()">×</button>
+  <button class="close-event lightbox-close" type="button" aria-label="Close" onclick="event.stopPropagation();closeLightbox()">×</button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous photo" onclick="event.stopPropagation();showPreviousLightboxImage()">‹</button>
   <img id="lightboxImg" src="" alt="Enlarged gallery photo" onclick="event.stopPropagation()">
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Next photo" onclick="event.stopPropagation();showNextLightboxImage()">›</button>
+  <div class="lightbox-counter" id="lightboxCounter" aria-live="polite"></div>
 </div>
 
 <div class="club-page" id="clubPage" aria-hidden="true">
@@ -1117,34 +1122,94 @@ document.addEventListener('keydown', event => {
     closeLightbox();
     closeSavedPreview();
   }
+  if(document.getElementById('lightboxModal')?.classList.contains('gallery-mode')){
+    if(event.key === 'ArrowLeft'){ event.preventDefault(); showPreviousLightboxImage(); }
+    if(event.key === 'ArrowRight'){ event.preventDefault(); showNextLightboxImage(); }
+  }
 });
 
-function openLightbox(src,alt='Gallery photo'){
-  const modal = document.getElementById('lightboxModal');
+let lightboxGallery=[];
+let lightboxIndex=0;
+let lightboxTouchStartX=null;
+
+function uniqueGalleryItems(items){
+  const seen=new Set();
+  return (items||[]).filter(item=>{
+    const src=String(item?.src||'');
+    if(!src || seen.has(src)) return false;
+    seen.add(src);
+    return true;
+  });
+}
+function galleryItemsFromDom(selector){
+  return uniqueGalleryItems([...document.querySelectorAll(selector)].map(img=>({src:img.src,alt:img.alt||'Gallery photo'})));
+}
+function updateLightboxGalleryUi(){
+  const modal=document.getElementById('lightboxModal');
+  const counter=document.getElementById('lightboxCounter');
+  const hasGallery=lightboxGallery.length>1 && !modal.classList.contains('logo-mode');
+  modal.classList.toggle('gallery-mode',hasGallery);
+  if(counter) counter.textContent=hasGallery?`${lightboxIndex+1} / ${lightboxGallery.length}`:'';
+}
+function showLightboxImageAt(index){
+  if(!lightboxGallery.length) return;
+  lightboxIndex=(index+lightboxGallery.length)%lightboxGallery.length;
+  const item=lightboxGallery[lightboxIndex];
   const img=document.getElementById('lightboxImg');
+  img.src=item.src;
+  img.alt=item.alt||'Gallery photo';
+  updateLightboxGalleryUi();
+}
+function openLightbox(src,alt='Gallery photo',galleryItems=null){
+  const modal=document.getElementById('lightboxModal');
   modal.classList.remove('logo-mode');
-  img.src = src;
-  img.alt = alt;
+  const supplied=Array.isArray(galleryItems)&&galleryItems.length?galleryItems:[{src,alt}];
+  lightboxGallery=uniqueGalleryItems(supplied);
+  lightboxIndex=Math.max(0,lightboxGallery.findIndex(item=>item.src===src));
+  if(lightboxIndex<0) lightboxIndex=0;
+  showLightboxImageAt(lightboxIndex);
   modal.classList.add('show');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+function openGalleryLightboxFromDom(img,selector){
+  const items=galleryItemsFromDom(selector);
+  openLightbox(img.src,img.alt||'Gallery photo',items);
+}
+function showPreviousLightboxImage(){
+  const modal=document.getElementById('lightboxModal');
+  if(!modal.classList.contains('show')||modal.classList.contains('logo-mode')||lightboxGallery.length<2) return;
+  showLightboxImageAt(lightboxIndex-1);
+}
+function showNextLightboxImage(){
+  const modal=document.getElementById('lightboxModal');
+  if(!modal.classList.contains('show')||modal.classList.contains('logo-mode')||lightboxGallery.length<2) return;
+  showLightboxImageAt(lightboxIndex+1);
 }
 function openLogoLightbox(src,alt='Club logo'){
-  const modal = document.getElementById('lightboxModal');
+  const modal=document.getElementById('lightboxModal');
   const img=document.getElementById('lightboxImg');
+  lightboxGallery=[];
+  lightboxIndex=0;
+  modal.classList.remove('gallery-mode');
   modal.classList.add('logo-mode');
-  img.src = src;
-  img.alt = alt;
+  img.src=src;
+  img.alt=alt;
+  const counter=document.getElementById('lightboxCounter');
+  if(counter) counter.textContent='';
   modal.classList.add('show');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
+  modal.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
 }
 function closeLightbox(){
-  const modal = document.getElementById('lightboxModal');
+  const modal=document.getElementById('lightboxModal');
   if(!modal.classList.contains('show')) return;
-  modal.classList.remove('show','logo-mode');
-  modal.setAttribute('aria-hidden', 'true');
-  if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow = '';
+  modal.classList.remove('show','logo-mode','gallery-mode');
+  modal.setAttribute('aria-hidden','true');
+  lightboxGallery=[];
+  lightboxIndex=0;
+  lightboxTouchStartX=null;
+  if(!document.getElementById('clubPage').classList.contains('show')) document.body.style.overflow='';
 }
 
 function enableMainGalleryInteractions(){
@@ -1152,15 +1217,30 @@ function enableMainGalleryInteractions(){
     img.setAttribute('role','button');
     img.setAttribute('tabindex','0');
     img.setAttribute('aria-label',`${img.alt || 'Gallery photo'} — open larger`);
-    img.addEventListener('click',()=>openLightbox(img.src,img.alt));
+    img.addEventListener('click',()=>openGalleryLightboxFromDom(img,'.gallery-track img'));
     img.addEventListener('keydown',event=>{
       if(event.key==='Enter'||event.key===' '){
         event.preventDefault();
-        openLightbox(img.src,img.alt);
+        openGalleryLightboxFromDom(img,'.gallery-track img');
       }
     });
   });
 }
+
+const lightboxModalEl=document.getElementById('lightboxModal');
+lightboxModalEl.addEventListener('touchstart',event=>{
+  if(!lightboxModalEl.classList.contains('gallery-mode')||event.touches.length!==1) return;
+  lightboxTouchStartX=event.touches[0].clientX;
+},{passive:true});
+lightboxModalEl.addEventListener('touchend',event=>{
+  if(lightboxTouchStartX===null||!lightboxModalEl.classList.contains('gallery-mode')) return;
+  const endX=event.changedTouches[0]?.clientX;
+  if(typeof endX!=='number'){lightboxTouchStartX=null;return;}
+  const dx=endX-lightboxTouchStartX;
+  lightboxTouchStartX=null;
+  if(Math.abs(dx)<45) return;
+  if(dx<0) showNextLightboxImage(); else showPreviousLightboxImage();
+},{passive:true});
 
 let currentClub=null;
 
@@ -1190,7 +1270,7 @@ function renderClubGallery(photos, clubName){
   }
   const urls = photos.map(p=>p.image_url);
   const looped = [...urls, ...urls]; // doubled so the marquee animation loops seamlessly
-  wrap.innerHTML = `<div class="club-gallery">${looped.map((src,n)=>`<img src="${src}" alt="${escapeHtml(clubName)} gallery image ${(n%urls.length)+1}" loading="lazy" decoding="async" onclick="openLightbox('${String(src).replace(/'/g,"\\'")}')">`).join('')}</div>`;
+  wrap.innerHTML = `<div class="club-gallery">${looped.map((src,n)=>`<img src="${src}" alt="${escapeHtml(clubName)} gallery image ${(n%urls.length)+1}" loading="lazy" decoding="async" onclick="openGalleryLightboxFromDom(this,'.club-gallery img')">`).join('')}</div>`;
 }
 
 async function showClub(slug){
