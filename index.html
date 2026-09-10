@@ -8,22 +8,17 @@
 <title>KAMPUS — Discover Campus</title>
 
 <link rel="icon" type="image/png" sizes="192x192" href="kampus-icon-192.png">
-<link rel="canonical" href="https://kampusclubs.github.io/kampus-website/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KAMPUS">
-<meta property="og:url" content="https://kampusclubs.github.io/kampus-website/">
 <meta property="og:title" content="KAMPUS — Clubs, Events & Campus Life">
 <meta property="og:description" content="Discover clubs, upcoming events and campus life at CHRIST University Bangalore Central Campus.">
-<meta property="og:image" content="https://kampusclubs.github.io/kampus-website/share-preview.jpg">
-<meta property="og:image:secure_url" content="https://kampusclubs.github.io/kampus-website/share-preview.jpg">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:alt" content="KAMPUS — Campus life, in one place.">
+<meta property="og:image" content="share-preview.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KAMPUS — Clubs, Events & Campus Life">
 <meta name="twitter:description" content="Discover clubs, upcoming events and campus life at CHRIST University Bangalore Central Campus.">
-<meta name="twitter:image" content="https://kampusclubs.github.io/kampus-website/share-preview.jpg">
+<meta name="twitter:image" content="share-preview.jpg">
 
 <style>
 :root{
@@ -1813,10 +1808,6 @@ button,a,.zoomable-logo,.gallery-track img,.club-gallery-track img{-webkit-tap-h
   .gallery-track,.club-gallery-track{transition:none!important;animation:none!important}
 }
 
-
-/* Website share button — intentionally minimal and isolated. */
-#websiteShareBtn.share-success{border-color:rgba(79,209,139,.60)!important;background:rgba(79,209,139,.12)!important;color:#4fd18b!important}
-body.light #websiteShareBtn.share-success{border-color:rgba(54,132,90,.38)!important;background:#eefaf3!important;color:#2f7b52!important}
 </style>
 </head>
 <body>
@@ -1832,7 +1823,6 @@ body.light #websiteShareBtn.share-success{border-color:rgba(54,132,90,.38)!impor
       <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-controls="navLinks">☰</button>
       <button class="icon-btn" id="searchBtn" type="button" aria-label="Search" aria-controls="searchPanel"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.2 4.2"/></svg></button>
       <button class="icon-btn" id="savedBtn" type="button" aria-label="Saved events" aria-controls="savedBackdrop" aria-expanded="false"><svg viewBox="0 0 24 24"><path d="M6 4.75A1.75 1.75 0 0 1 7.75 3h8.5A1.75 1.75 0 0 1 18 4.75V21l-6-3.7L6 21V4.75Z"/></svg></button>
-      <button class="icon-btn" id="websiteShareBtn" type="button" aria-label="Share KAMPUS" title="Share KAMPUS"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="18" cy="5" r="2.25"/><circle cx="6" cy="12" r="2.25"/><circle cx="18" cy="19" r="2.25"/><path d="m8 11 7.8-4.5M8 13l7.8 4.5"/></svg></button>
       <button class="icon-btn theme-btn" id="themeBtn" type="button" aria-label="Toggle theme">☀</button>
     </div>
   </div>
@@ -2070,7 +2060,7 @@ function renderMoreFromClub(e){const wrap=$('#modalMore');if(!wrap)return;const 
 function renderClubGallery(rows,name){const el=$('#clubGallery'),urls=(rows||[]).map(x=>x.image_url).filter(Boolean);if(!urls.length){el.innerHTML=emptyState('▧','No gallery photos yet','Photos from this club will appear here.');return}const doubled=[...urls,...urls];el.innerHTML=`<div class="club-gallery-track">${doubled.map((u,i)=>`<img src="${esc(u)}" alt="${esc(name)} gallery image ${(i%urls.length)+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=KAMPUS_IMAGE_FALLBACK" onclick="openLightboxFromUrls(${i%urls.length},${JSON.stringify(urls).replace(/"/g,'&quot;')})">`).join('')}</div>`}
 
 $('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').onclick=()=>{const open=$('#navLinks').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',String(open));$('#menuBtn').setAttribute('aria-label',open?'Close menu':'Open menu')};$$('#navLinks a').forEach(a=>a.onclick=()=>{$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false')});$('#mobileThemeBtn').onclick=()=>{toggleTheme();$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false')};
-$('#searchBtn').setAttribute('aria-expanded','false');$('#searchBtn').onclick=()=>$('#searchPanel').classList.contains('hidden')?openSearch():closeSearch();const websiteShareBtn=$('#websiteShareBtn');if(websiteShareBtn)websiteShareBtn.onclick=shareWebsite;let searchTimer=null;$('#searchInput').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderSearch,70)};$('#searchInput').addEventListener('keydown',handleSearchKey);$('#searchGo').onclick=runSearchSelection;
+$('#searchBtn').setAttribute('aria-expanded','false');$('#searchBtn').onclick=()=>$('#searchPanel').classList.contains('hidden')?openSearch():closeSearch();let searchTimer=null;$('#searchInput').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderSearch,70)};$('#searchInput').addEventListener('keydown',handleSearchKey);$('#searchGo').onclick=runSearchSelection;
 $('#savedBtn').onclick=openSaved;$('#savedClose').onclick=closeSaved;$('#savedBackdrop').onclick=e=>{if(e.target===e.currentTarget)closeSaved()};$('#themeBtn').onclick=toggleTheme;
 $('#eventClose').onclick=()=>closeEvent();$('#eventModal').onclick=()=>closeEvent();$('#lightboxClose').onclick=()=>closeLightbox();$('#lightbox').onclick=e=>{if(e.target===$('#lightbox'))closeLightbox()};$('#lightboxPrev').onclick=e=>{e.stopPropagation();moveLightbox(-1)};$('#lightboxNext').onclick=e=>{e.stopPropagation();moveLightbox(1)};
 $('#clubBack').onclick=()=>{if(history.length>1)history.back();else location.hash='#clubs'};$('#clubShare').onclick=shareClub;
@@ -2245,28 +2235,6 @@ function toggleSaved(id,sourceBtn){
   renderSaved();toast(willSave?'Saved for later ✦':'Removed from saved');
 }
 function shareButton(e){return`<button class="share-btn" type="button" aria-label="Share event" title="Share event" onclick="event.stopPropagation();shareEvent('${esc(e.id)}',this)">${ICONS.share}</button>`}
-
-
-function websiteShareUrl(){
-  return 'https://kampusclubs.github.io/kampus-website/kampus-share.html';
-}
-function flashWebsiteShareButton(){
-  const btn=$('#websiteShareBtn');if(!btn)return;
-  const original=btn.innerHTML;
-  btn.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.2 4.2L19 7"/></svg>';
-  btn.classList.add('share-success');
-  clearTimeout(btn._shareReset);
-  btn._shareReset=setTimeout(()=>{btn.innerHTML=original;btn.classList.remove('share-success')},1400);
-}
-async function shareWebsite(){
-  const url=websiteShareUrl();
-  try{
-    if(navigator.share){await navigator.share({url});flashWebsiteShareButton();toast('KAMPUS shared ✓');return}
-    if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url);flashWebsiteShareButton();toast('KAMPUS link copied ✓');return}
-    if(legacyCopyText(url)){flashWebsiteShareButton();toast('KAMPUS link copied ✓');return}
-    window.prompt('Copy the KAMPUS link:',url);
-  }catch(err){if(err?.name!=='AbortError'){try{window.prompt('Copy the KAMPUS link:',url)}catch{}}}
-}
 
 async function shareEvent(id,btn){
   const e=state.events.find(x=>String(x.id)===String(id));if(!e)return;
