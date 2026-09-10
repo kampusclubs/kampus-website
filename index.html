@@ -10,15 +10,20 @@
 <link rel="icon" type="image/png" sizes="192x192" href="kampus-icon-192.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="KAMPUS">
+<link rel="canonical" href="https://kampusclubs.github.io/kampus-website/">
+<meta property="og:url" content="https://kampusclubs.github.io/kampus-website/">
 <meta property="og:title" content="KAMPUS — Clubs, Events & Campus Life">
 <meta property="og:description" content="Discover clubs, upcoming events and campus life at CHRIST University Bangalore Central Campus.">
-<meta property="og:image" content="share-preview.jpg">
+<meta property="og:image" content="https://kampusclubs.github.io/kampus-website/share-preview.jpg?v=2">
+<meta property="og:image:secure_url" content="https://kampusclubs.github.io/kampus-website/share-preview.jpg?v=2">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="KAMPUS — Campus life, in one place at CHRIST University Bangalore Central Campus.">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="KAMPUS — Clubs, Events & Campus Life">
 <meta name="twitter:description" content="Discover clubs, upcoming events and campus life at CHRIST University Bangalore Central Campus.">
-<meta name="twitter:image" content="share-preview.jpg">
+<meta name="twitter:image" content="https://kampusclubs.github.io/kampus-website/share-preview.jpg?v=2">
 
 <style>
 :root{
@@ -2243,7 +2248,7 @@ function toggleSaved(id,sourceBtn){
 function shareButton(e){return`<button class="share-btn" type="button" aria-label="Share event" title="Share event" onclick="event.stopPropagation();shareEvent('${esc(e.id)}',this)">${ICONS.share}</button>`}
 
 function websiteShareUrl(){
-  try{const u=new URL(location.href);u.hash='';return u.toString()}catch{return String(location.href||'').split('#')[0]}
+  try{const u=new URL(location.href);u.hash='';u.searchParams.set('share','1');return u.toString()}catch{return String(location.href||'').split('#')[0]}
 }
 function flashWebsiteShareButton(){
   const btn=$('#websiteShareBtn');if(!btn)return;
