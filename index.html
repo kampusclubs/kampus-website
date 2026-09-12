@@ -1862,6 +1862,274 @@ footer{padding-top:32px!important;padding-bottom:max(34px,env(safe-area-inset-bo
   .view-all,.icon-btn,.menu-btn,.btn,.save-btn,.share-btn,.pill,.footer-item,.gallery-track img,.club-gallery-track img{transition:none!important;}
 }
 
+
+
+/* =====================================================================
+   KAMPUS TEST — compact homepage events + site-wide interaction lift
+   Keeps the CURRENT KAMPUS typography, color system and component styling.
+   The older recording is used only as a layout/interaction reference.
+   ===================================================================== */
+
+/* Homepage Upcoming Events — compact, current-KAMPUS interpretation */
+#homeEventsSection .home-event-list{
+  display:grid;
+  gap:13px;
+}
+#homeEventsSection .home-event-card{
+  display:grid;
+  grid-template-columns:70px 118px minmax(0,1fr) minmax(235px,auto);
+  align-items:stretch;
+  min-height:118px;
+  overflow:hidden;
+  border-radius:20px;
+  background:
+    linear-gradient(90deg,rgba(255,64,83,.055),transparent 34%),
+    var(--card);
+}
+#homeEventsSection .home-event-date-column{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  gap:5px;
+  border-right:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(255,64,83,.07),rgba(255,64,83,.025));
+  color:var(--text);
+  line-height:1;
+}
+#homeEventsSection .home-event-date-column strong{
+  font-size:26px;
+  font-weight:900;
+  letter-spacing:-.04em;
+}
+#homeEventsSection .home-event-date-column span{
+  color:var(--accent);
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.13em;
+  text-transform:uppercase;
+}
+#homeEventsSection .home-event-media-wrap{
+  position:relative;
+  min-height:118px;
+  overflow:hidden;
+  border-right:1px solid var(--line);
+  background:var(--surface-2);
+}
+#homeEventsSection .home-event-media{
+  width:100%;
+  height:100%;
+  min-height:118px;
+}
+#homeEventsSection .home-event-media-wrap .media-fallback small{display:none;}
+#homeEventsSection .home-event-media-wrap .media-fallback{font-size:30px;}
+#homeEventsSection .home-event-copy{
+  min-width:0;
+  padding:17px 20px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+}
+#homeEventsSection .home-event-heading-row{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:4px;
+}
+#homeEventsSection .home-event-heading-row .event-club{
+  margin:0;
+}
+#homeEventsSection .home-event-copy h3{
+  margin:2px 0 6px;
+  font-size:20px;
+  line-height:1.16;
+  color:var(--heading);
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#homeEventsSection .home-event-copy .event-meta{
+  margin-top:0;
+  gap:7px 14px;
+}
+#homeEventsSection .home-event-copy p{
+  margin:7px 0 0;
+  -webkit-line-clamp:1;
+  font-size:12.5px;
+}
+#homeEventsSection .home-event-actions{
+  margin:0;
+  padding:18px 18px 18px 8px;
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:14px;
+  flex-wrap:nowrap;
+  border-left:1px solid rgba(255,255,255,.045);
+}
+#homeEventsSection .home-event-primary-actions,
+#homeEventsSection .home-event-icon-actions{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  flex-wrap:nowrap;
+}
+#homeEventsSection .home-event-actions .btn{
+  min-height:40px;
+  padding-inline:15px;
+  white-space:nowrap;
+}
+#homeEventsSection .home-event-actions .share-btn,
+#homeEventsSection .home-event-actions .save-btn{
+  flex:0 0 40px;
+  width:40px;
+  height:40px;
+}
+body.light #homeEventsSection .home-event-card{
+  background:linear-gradient(90deg,rgba(255,64,83,.045),rgba(255,255,255,0) 34%),var(--card);
+}
+body.light #homeEventsSection .home-event-date-column{
+  background:linear-gradient(180deg,rgba(255,64,83,.075),rgba(255,64,83,.02));
+  border-right-color:#d5dfeb;
+}
+body.light #homeEventsSection .home-event-media-wrap,
+body.light #homeEventsSection .home-event-actions{
+  border-color:#d5dfeb;
+}
+
+/* Let the existing entrance animation finish without permanently owning transform. */
+@media(prefers-reduced-motion:no-preference){
+  .page-wrap.active .club-card,.page-wrap.active .event-card{animation-fill-mode:none;}
+}
+
+/* Site-wide hover language — only things that are actually interactive */
+@media(hover:hover) and (pointer:fine){
+  .nav-links a,
+  .icon-btn,.menu-btn,
+  .btn,.cta,.pill,.view-all,
+  .save-btn,.share-btn,.saved-close,
+  .club-card,.event-card,.home-event-card,
+  .search-result,.saved-item,
+  .gallery-track img,.club-gallery-track img,
+  .zoomable-logo,.more-event,.recent-card{
+    transition:
+      transform .18s cubic-bezier(.2,.8,.2,1),
+      box-shadow .18s ease,
+      border-color .18s ease,
+      background-color .18s ease,
+      color .18s ease,
+      filter .18s ease;
+  }
+  .nav-links a:hover{transform:translateY(-2px);}
+  .icon-btn:hover,.menu-btn:hover{transform:translateY(-2px) scale(1.045);}
+  .btn:hover,.cta:hover,.pill:hover,.view-all:hover{transform:translateY(-2px);}
+  .club-card:hover,.event-card:hover,.home-event-card:hover,.recent-card:hover,
+  .club-card.reveal-ready.reveal-in:hover,.event-card.reveal-ready.reveal-in:hover,.home-event-card.reveal-ready.reveal-in:hover{
+    transform:translateY(-5px) scale(1.006);
+    box-shadow:0 22px 48px rgba(0,0,0,.22);
+  }
+  body.light .club-card:hover,body.light .event-card:hover,body.light .home-event-card:hover,body.light .recent-card:hover{
+    box-shadow:0 20px 42px rgba(29,48,74,.15);
+  }
+  .gallery-track img:hover,.club-gallery-track img:hover,.zoomable-logo:hover{
+    transform:translateY(-4px) scale(1.025);
+    box-shadow:0 16px 34px rgba(0,0,0,.22);
+    z-index:9;
+  }
+  .search-result:hover,.saved-item:hover,.more-event:hover{
+    transform:translateY(-2px);
+  }
+  .save-btn:hover,.share-btn:hover{
+    transform:translateY(-2px) scale(1.045);
+  }
+}
+
+/* Touch devices: no fake hover, just a small press response. */
+@media(hover:none){
+  .btn:active,.cta:active,.pill:active,.icon-btn:active,.menu-btn:active,
+  .club-card:active,.event-card:active,.home-event-card:active,
+  .gallery-track img:active,.club-gallery-track img:active,
+  .search-result:active,.saved-item:active{
+    transform:scale(.985);
+  }
+}
+
+@media(max-width:1100px){
+  #homeEventsSection .home-event-card{
+    grid-template-columns:64px 104px minmax(0,1fr);
+  }
+  #homeEventsSection .home-event-actions{
+    grid-column:2 / -1;
+    justify-content:flex-start;
+    padding:0 16px 15px;
+    border-left:0;
+  }
+}
+
+@media(max-width:760px){
+  #homeEventsSection .home-event-card{
+    grid-template-columns:58px 92px minmax(0,1fr);
+    min-height:108px;
+  }
+  #homeEventsSection .home-event-date-column strong{font-size:22px;}
+  #homeEventsSection .home-event-media-wrap,
+  #homeEventsSection .home-event-media{min-height:108px;}
+  #homeEventsSection .home-event-copy{padding:14px 14px;}
+  #homeEventsSection .home-event-copy h3{
+    white-space:normal;
+    display:-webkit-box;
+    -webkit-line-clamp:2;
+    -webkit-box-orient:vertical;
+    font-size:17px;
+  }
+  #homeEventsSection .home-event-copy p{display:none;}
+  #homeEventsSection .home-event-heading-row{gap:6px;}
+  #homeEventsSection .home-event-actions{
+    grid-column:1 / -1;
+    padding:11px 12px 12px;
+    justify-content:space-between;
+    gap:10px;
+    border-top:1px solid var(--line);
+  }
+  #homeEventsSection .home-event-primary-actions{min-width:0;gap:7px;}
+  #homeEventsSection .home-event-icon-actions{gap:7px;}
+  #homeEventsSection .home-event-actions .btn{
+    min-height:38px;
+    padding-inline:12px;
+  }
+  #homeEventsSection .home-event-actions .share-btn,
+  #homeEventsSection .home-event-actions .save-btn{
+    width:38px;height:38px;flex-basis:38px;
+  }
+}
+
+@media(max-width:430px){
+  #homeEventsSection .home-event-card{
+    grid-template-columns:54px 82px minmax(0,1fr);
+  }
+  #homeEventsSection .home-event-copy{padding:12px 11px;}
+  #homeEventsSection .home-event-copy .event-meta span:nth-child(2){
+    max-width:130px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  }
+  #homeEventsSection .home-event-primary-actions{
+    flex:1 1 auto;
+  }
+  #homeEventsSection .home-event-primary-actions .btn{
+    flex:1 1 auto;
+    justify-content:center;
+  }
+}
+
+@media(prefers-reduced-motion:reduce){
+  .nav-links a,.icon-btn,.menu-btn,.btn,.cta,.pill,.view-all,.save-btn,.share-btn,
+  .club-card,.event-card,.home-event-card,.search-result,.saved-item,
+  .gallery-track img,.club-gallery-track img,.zoomable-logo,.more-event,.recent-card{
+    transition:none!important;
+    transform:none!important;
+  }
+}
+
 </style>
 
 </head>
@@ -2337,7 +2605,20 @@ function clubCard(c,priority='lazy'){
 }
 function homeEventCard(e,priority='lazy'){
   const c=state.clubs.find(x=>x.id===e.club_id),tone=eventToneName(e);
-  return`<article class="home-event-card clickable-card" data-tone="${tone}" data-event-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Open ${esc(e.name)} event details" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}"><div class="home-event-media-wrap">${eventMediaMarkup(e,'home-event-media',priority)}<div class="date-badge"><strong>${esc(e.day)}</strong><span>${esc(e.month)}</span></div></div><div class="home-event-copy">${eventBadges(e)}<div class="event-club">${esc(e.club)}</div><h3>${esc(e.name)}</h3><div class="event-meta"><span>${esc(e.time||'Time TBA')}</span><span>${esc(e.place||'Venue TBA')}</span></div><p>${esc(e.desc||'Open the event to see the details.')}</p><div class="home-event-actions">${c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}${shareButton(e)}${savedButton(e)}</div></div></article>`;
+  return`<article class="home-event-card clickable-card" data-tone="${tone}" data-event-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Open ${esc(e.name)} event details" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}">
+    <div class="home-event-date-column"><strong>${esc(e.day)}</strong><span>${esc(e.month)}</span></div>
+    <div class="home-event-media-wrap">${eventMediaMarkup(e,'home-event-media',priority)}</div>
+    <div class="home-event-copy">
+      <div class="home-event-heading-row"><div>${eventBadges(e)}</div><div class="event-club">${esc(e.club)}</div></div>
+      <h3>${esc(e.name)}</h3>
+      <div class="event-meta"><span>${esc(e.time||'Time TBA')}</span><span>${esc(e.place||'Venue TBA')}</span></div>
+      <p>${esc(e.desc||'Open the event to see the details.')}</p>
+    </div>
+    <div class="home-event-actions" aria-label="Event actions">
+      <div class="home-event-primary-actions">${c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}</div>
+      <div class="home-event-icon-actions">${shareButton(e)}${savedButton(e)}</div>
+    </div>
+  </article>`;
 }
 function eventCard(e){
   const c=state.clubs.find(x=>x.id===e.club_id),tone=eventToneName(e);
