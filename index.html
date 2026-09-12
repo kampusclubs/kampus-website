@@ -2131,6 +2131,307 @@ body.light #homeEventsSection .home-event-actions{
   }
 }
 
+
+
+/* =====================================================================
+   KAMPUS — MOBILE SOURCE OF TRUTH · 2026-09-13
+   Desktop is intentionally frozen. Future mobile layout edits belong here.
+   ===================================================================== */
+@media(max-width:760px){
+  html,body{max-width:100%;overflow-x:hidden;}
+
+  /* Mobile navigation / hamburger */
+  .nav-links{
+    left:8px!important;right:8px!important;
+    padding:8px!important;gap:6px!important;
+    border-radius:16px!important;
+    grid-template-columns:1fr 1fr!important;
+  }
+  .nav-links a{
+    min-height:44px!important;padding:11px 12px!important;
+    justify-content:center!important;text-align:center!important;
+    background:color-mix(in srgb,var(--surface-2) 58%,transparent)!important;
+    border:1px solid color-mix(in srgb,var(--line) 80%,transparent)!important;
+  }
+  .nav-links a:nth-of-type(5){grid-column:1/-1!important;}
+  .nav-links a.active{color:#172033!important;}
+  .nav-links a[data-route="home"].active{background:#fff0f3!important;border-color:#ffd0d8!important;}
+  .nav-links a[data-route="clubs"].active{background:#edf6ff!important;border-color:#cfe5ff!important;}
+  .nav-links a[data-route="events"].active{background:#fff0f3!important;border-color:#ffd0d8!important;}
+  .nav-links a[data-route="gallery"].active{background:#f3efff!important;border-color:#ded4ff!important;}
+  .nav-links a[data-route="about"].active{background:#eefaf4!important;border-color:#cfeedd!important;}
+  body.light .nav-links a{background:#f8f9fb!important;border-color:#e6e9ed!important;color:#566277!important;}
+  .mobile-theme-toggle{
+    position:relative;grid-column:1/-1!important;min-height:52px!important;
+    display:grid!important;grid-template-columns:auto 1fr!important;align-items:center!important;
+    gap:12px!important;padding:8px 9px 8px 12px!important;border-radius:12px!important;
+    text-align:left!important;
+  }
+  .mobile-theme-title{font-size:11px;font-weight:900;letter-spacing:.02em;}
+  .mobile-theme-toggle{background:#f7f8fa!important;border-color:#e0e4e9!important;color:#172033!important;}
+  .mobile-theme-options{
+    justify-self:end;display:grid;grid-template-columns:1fr 1fr;gap:3px;
+    padding:3px;border-radius:10px;background:#edf0f4;border:1px solid #dde2e8;
+  }
+  .mobile-theme-options>span{min-width:58px;padding:7px 9px;border-radius:7px;text-align:center;font-size:11px;font-weight:900;color:#69758a;}
+  #mobileLightOption.active{background:#fff;color:#172033;box-shadow:0 2px 8px rgba(23,32,51,.10);}
+  #mobileDarkOption.active{background:#172033;color:#fff;box-shadow:0 2px 8px rgba(23,32,51,.18);}
+  .mobile-theme-label{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important;}
+  .menu-btn{font-size:22px!important;font-weight:500!important;line-height:1!important;}
+
+  /* Overall mobile rhythm */
+  .home-section,.page-section,.gallery-section{padding-block:36px!important;}
+  .section-head{margin-bottom:16px!important;}
+  .section-head h2{font-size:27px!important;}
+  .section-head p{font-size:12.5px!important;line-height:1.5!important;}
+  .view-all{min-height:36px!important;padding:7px 10px!important;}
+  #homeClubsSection .section-head,#homeEventsSection .section-head{flex-direction:row!important;align-items:flex-end!important;justify-content:space-between!important;}
+  #homeClubsSection .section-head>div,#homeEventsSection .section-head>div{min-width:0!important;}
+  #homeClubsSection .view-all,#homeEventsSection .view-all{flex:0 0 auto!important;}
+  .directory-hero{min-height:175px!important;padding:18px!important;margin-top:12px!important;margin-bottom:17px!important;}
+  .directory-hero h1{font-size:31px!important;}
+  .directory-hero p{font-size:12.5px!important;line-height:1.48!important;}
+
+  /* Happening Today: compact phone-native two-row strip */
+  .today-strip-section{padding:9px 0 0!important;}
+  .today-strip{
+    display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+    grid-template-areas:"intro all" "events events"!important;
+    gap:9px 10px!important;padding:10px!important;overflow:hidden!important;
+    border-radius:14px!important;
+  }
+  .today-strip-intro{
+    grid-area:intro!important;width:auto!important;min-width:0!important;
+    border:0!important;padding:0!important;gap:8px!important;
+  }
+  .today-strip-intro small{font-size:8px!important;letter-spacing:.11em!important;}
+  .today-strip-intro strong{font-size:11px!important;white-space:normal!important;}
+  .today-strip-next{display:none!important;}
+  .today-strip-all{grid-area:all!important;align-self:center!important;margin:0!important;font-size:10px!important;}
+  .today-strip-events{
+    grid-area:events!important;width:100%!important;display:flex!important;gap:7px!important;
+    overflow-x:auto!important;padding:1px 1px 2px!important;scroll-snap-type:x proximity!important;
+  }
+  .today-mini{
+    flex:0 0 min(68vw,220px)!important;max-width:none!important;min-height:48px!important;
+    padding:8px 10px!important;scroll-snap-align:start!important;
+  }
+  .today-mini-time{font-size:10px!important;}
+  .today-mini-copy strong{font-size:11px!important;}
+  .today-mini-copy small{font-size:8.5px!important;}
+
+  /* Home clubs: horizontal discovery rail instead of a 3-card vertical wall */
+  #homeClubsSection .container{overflow:visible!important;}
+  #homeClubGrid{
+    display:flex!important;grid-template-columns:none!important;gap:12px!important;
+    overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;
+    scroll-padding-inline:0!important;-webkit-overflow-scrolling:touch!important;
+    scrollbar-width:none!important;padding:2px 14px 12px 0!important;margin-right:-14px!important;
+  }
+  #homeClubGrid::-webkit-scrollbar{display:none!important;}
+  #homeClubGrid .club-card{
+    flex:0 0 min(82vw,310px)!important;width:auto!important;height:auto!important;
+    scroll-snap-align:start!important;scroll-snap-stop:always!important;
+  }
+  #homeClubGrid .club-banner{aspect-ratio:16/7.7!important;}
+  #homeClubGrid .club-body{padding:13px 14px 14px!important;}
+  #homeClubGrid .club-logo{width:54px!important;height:54px!important;right:13px!important;top:-27px!important;}
+  #homeClubGrid .club-body h3{font-size:17px!important;margin-right:61px!important;margin-bottom:6px!important;}
+  #homeClubGrid .club-body p{-webkit-line-clamp:2!important;font-size:12px!important;line-height:1.45!important;}
+  #homeClubGrid .club-body .card-actions{padding-top:10px!important;margin-top:0!important;}
+  #homeClubGrid .club-body .btn{min-height:39px!important;}
+
+  /* Clubs directory: compact horizontal cards on phone */
+  #clubsPage .club-grid{display:grid!important;grid-template-columns:1fr!important;gap:10px!important;}
+  #clubsPage .club-card{
+    display:grid!important;grid-template-columns:108px minmax(0,1fr)!important;
+    min-height:140px!important;height:auto!important;overflow:hidden!important;
+  }
+  #clubsPage .club-card-cover-static{height:100%!important;min-height:140px!important;overflow:hidden!important;}
+  #clubsPage .club-banner{height:100%!important;min-height:140px!important;aspect-ratio:auto!important;}
+  #clubsPage .club-banner>img{height:100%!important;object-fit:cover!important;}
+  #clubsPage .club-logo{display:none!important;}
+  #clubsPage .club-body{padding:12px!important;justify-content:center!important;}
+  #clubsPage .club-body h3{font-size:16.5px!important;margin:0 0 5px!important;}
+  #clubsPage .club-body p{font-size:11.5px!important;line-height:1.42!important;-webkit-line-clamp:2!important;}
+  #clubsPage .club-chip{margin-bottom:6px!important;padding:4px 7px!important;font-size:8px!important;}
+  #clubsPage .club-body .card-actions{padding-top:8px!important;margin-top:0!important;}
+  #clubsPage .club-body .btn{min-height:36px!important;padding:7px 10px!important;}
+
+  /* Homepage Upcoming Events: preserve the new look, give text/actions breathing room */
+  #homeEventsSection .home-event-card,
+  #clubUpcomingEvents .home-event-card{
+    grid-template-columns:48px 72px minmax(0,1fr)!important;
+    min-height:104px!important;
+  }
+  #homeEventsSection .home-event-date-column,
+  #clubUpcomingEvents .home-event-date-column{
+    display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+    gap:4px!important;border-right:1px solid var(--line)!important;
+    background:linear-gradient(180deg,rgba(255,64,83,.07),rgba(255,64,83,.025))!important;
+  }
+  #homeEventsSection .home-event-date-column strong,
+  #clubUpcomingEvents .home-event-date-column strong{font-size:20px!important;font-weight:900!important;line-height:1!important;}
+  #homeEventsSection .home-event-date-column span,
+  #clubUpcomingEvents .home-event-date-column span{font-size:8px!important;font-weight:950!important;letter-spacing:.1em!important;color:var(--accent)!important;}
+  #homeEventsSection .home-event-media-wrap,
+  #clubUpcomingEvents .home-event-media-wrap,
+  #homeEventsSection .home-event-media,
+  #clubUpcomingEvents .home-event-media{min-height:104px!important;height:100%!important;}
+  #homeEventsSection .home-event-copy,
+  #clubUpcomingEvents .home-event-copy{padding:11px 10px!important;justify-content:center!important;}
+  #homeEventsSection .home-event-copy h3,
+  #clubUpcomingEvents .home-event-copy h3{font-size:16px!important;margin:3px 0 5px!important;-webkit-line-clamp:2!important;}
+  #homeEventsSection .home-event-copy p,
+  #clubUpcomingEvents .home-event-copy p{display:none!important;}
+  #homeEventsSection .home-event-heading-row,
+  #clubUpcomingEvents .home-event-heading-row{gap:5px!important;margin-bottom:2px!important;}
+  #homeEventsSection .event-badges,
+  #clubUpcomingEvents .event-badges{gap:5px!important;}
+  #homeEventsSection .event-badges .status,#homeEventsSection .event-badges .fresh-badge,#homeEventsSection .event-badges .featured-badge,#homeEventsSection .event-badges .registration-urgency,
+  #clubUpcomingEvents .event-badges .status,#clubUpcomingEvents .event-badges .fresh-badge,#clubUpcomingEvents .event-badges .featured-badge,#clubUpcomingEvents .event-badges .registration-urgency{
+    min-height:24px!important;padding:0 8px!important;display:inline-flex!important;align-items:center!important;font-size:8px!important;
+  }
+  #homeEventsSection .event-club,
+  #clubUpcomingEvents .event-club{font-size:9px!important;letter-spacing:.07em!important;}
+  #homeEventsSection .event-meta,
+  #clubUpcomingEvents .event-meta{gap:3px 9px!important;font-size:10.5px!important;line-height:1.35!important;}
+  #homeEventsSection .event-meta span:nth-child(2),
+  #clubUpcomingEvents .event-meta span:nth-child(2){max-width:none!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;}
+  #homeEventsSection .home-event-actions,
+  #clubUpcomingEvents .home-event-actions{
+    grid-column:1/-1!important;display:grid!important;grid-template-columns:minmax(0,1fr) auto!important;
+    align-items:center!important;gap:8px!important;padding:9px 10px 10px!important;
+    border-top:1px solid var(--line)!important;border-left:0!important;
+  }
+  #homeEventsSection .home-event-primary-actions,
+  #clubUpcomingEvents .home-event-primary-actions{display:flex!important;gap:7px!important;min-width:0!important;flex-wrap:wrap!important;}
+  #homeEventsSection .home-event-primary-actions .btn,
+  #clubUpcomingEvents .home-event-primary-actions .btn{min-height:38px!important;padding:7px 11px!important;flex:0 1 auto!important;}
+  #homeEventsSection .home-event-icon-actions,
+  #clubUpcomingEvents .home-event-icon-actions{display:flex!important;gap:7px!important;}
+  #homeEventsSection .home-event-actions .share-btn,#homeEventsSection .home-event-actions .save-btn,
+  #clubUpcomingEvents .home-event-actions .share-btn,#clubUpcomingEvents .home-event-actions .save-btn{
+    width:40px!important;height:40px!important;min-width:40px!important;min-height:40px!important;flex:0 0 40px!important;
+  }
+
+  /* Events directory: poster remains visible but does not consume a full screen */
+  #eventsPage .event-grid{display:grid!important;grid-template-columns:1fr!important;gap:11px!important;}
+  #eventsPage .event-card{display:grid!important;grid-template-columns:104px minmax(0,1fr)!important;height:auto!important;min-height:172px!important;}
+  #eventsPage .event-poster-wrap{height:100%!important;min-height:172px!important;}
+  #eventsPage .event-poster{height:100%!important;min-height:172px!important;}
+  #eventsPage .event-body{padding:12px!important;min-height:0!important;}
+  #eventsPage .event-body h3{font-size:17px!important;margin-bottom:5px!important;}
+  #eventsPage .event-body p{display:none!important;}
+  #eventsPage .event-body .event-meta{font-size:10.5px!important;gap:4px 9px!important;}
+  #eventsPage .event-body .card-actions{margin-top:9px!important;padding-top:0!important;gap:6px!important;}
+  #eventsPage .event-body .card-actions .btn{min-height:37px!important;padding:7px 10px!important;min-width:0!important;}
+  #eventsPage .event-body .card-actions .view-club-btn,#eventsPage .event-body .card-actions .register-btn{flex:1 1 80px!important;}
+  #eventsPage .event-body .card-actions .share-btn{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;flex:0 0 38px!important;}
+  #eventsPage .event-poster-wrap>.save-btn{width:38px!important;height:38px!important;min-width:38px!important;min-height:38px!important;}
+  #eventsPage .date-badge{width:44px!important;height:48px!important;left:7px!important;bottom:7px!important;}
+  #eventsPage .date-badge strong{font-size:17px!important;}
+
+  /* Club profile: same information, far less vertical waste */
+  .club-page-inner{width:min(calc(100% - 16px),1080px)!important;padding-top:6px!important;}
+  .club-topbar{padding:6px 0!important;gap:6px!important;}
+  .back-btn,.club-share-btn{min-height:40px!important;padding:8px 10px!important;font-size:11px!important;}
+  .club-cover{aspect-ratio:16/7.6!important;}
+  .club-identity{padding:0 13px 14px!important;}
+  .club-page-logo-wrap{width:78px!important;height:78px!important;margin-top:-37px!important;margin-bottom:9px!important;border-width:3px!important;}
+  .club-title-row{gap:8px!important;}
+  .club-identity h1{font-size:27px!important;line-height:1.02!important;}
+  .club-identity>p{font-size:12.5px!important;line-height:1.5!important;margin-top:7px!important;}
+  .club-meta-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:7px!important;margin-top:13px!important;}
+  .club-meta-card{padding:10px!important;border-radius:12px!important;}
+  .club-meta-card strong{font-size:8px!important;letter-spacing:.065em!important;line-height:1.25!important;}
+  .club-meta-card div{font-size:11px!important;margin-top:3px!important;line-height:1.35!important;}
+  .club-meta-card:nth-child(3) a,.club-meta-card:nth-child(4) a{font-size:0!important;text-decoration:none!important;}
+  .club-meta-card:nth-child(3) a:after{content:"Open Instagram ↗";font-size:11px;font-weight:850;}
+  .club-meta-card:nth-child(4) a:after{content:"Open WhatsApp ↗";font-size:11px;font-weight:850;}
+  #clubContent>.club-section{padding:14px!important;margin-top:10px!important;border-radius:16px!important;}
+  .club-section-head{margin-bottom:10px!important;gap:9px!important;}
+  .club-section-head h2{font-size:18px!important;}
+  .club-section-head:before{height:20px!important;width:4px!important;}
+  .club-section>p{font-size:12px!important;line-height:1.55!important;margin:8px 0 10px!important;}
+  .club-gallery-window{margin-inline:-2px!important;}
+  .club-gallery-track{padding:4px 2px 7px!important;gap:10px!important;}
+  .club-gallery-track img{width:min(68vw,250px)!important;min-height:130px!important;background:linear-gradient(110deg,var(--surface-2),color-mix(in srgb,var(--k-violet) 8%,var(--surface-2)),var(--surface-2))!important;}
+  .inline-loading{min-height:130px!important;padding:14px!important;}
+  .video-card{flex-basis:min(82vw,330px)!important;}
+
+  /* Homepage About: concise preview, not a second full About page */
+  #homeAboutSection .about-home-panel{padding:18px!important;gap:16px!important;border-radius:20px!important;}
+  #homeAboutSection .about-home-copy{padding:0!important;}
+  #homeAboutSection .about-home-copy h2{font-size:29px!important;margin:7px 0 10px!important;}
+  #homeAboutSection .about-home-copy>p{font-size:12.5px!important;line-height:1.55!important;}
+  #homeAboutSection .about-home-points{
+    display:flex!important;gap:9px!important;overflow-x:auto!important;scroll-snap-type:x mandatory!important;
+    scrollbar-width:none!important;padding:1px 2px 5px!important;
+  }
+  #homeAboutSection .about-home-points::-webkit-scrollbar{display:none!important;}
+  #homeAboutSection .about-point{flex:0 0 min(76vw,286px)!important;scroll-snap-align:start!important;padding:12px!important;grid-template-columns:36px 1fr!important;gap:10px!important;}
+  #homeAboutSection .about-point>span{width:32px!important;height:32px!important;border-radius:9px!important;font-size:9px!important;}
+  #homeAboutSection .about-point strong{font-size:13px!important;}
+  #homeAboutSection .about-point p{font-size:11.5px!important;line-height:1.45!important;}
+
+  /* Full About page: keep all content, tighten phone spacing */
+  #aboutPage .about-story-grid{gap:10px!important;}
+  #aboutPage .about-story-main,#aboutPage .about-side-note{padding:17px!important;border-radius:17px!important;}
+  #aboutPage .about-story-main h2{font-size:25px!important;}
+  #aboutPage .about-side-note{min-height:200px!important;}
+  #aboutPage .about-side-note h3{font-size:23px!important;}
+  #aboutPage .about-values{gap:9px!important;margin-top:10px!important;}
+  #aboutPage .about-value{padding:15px!important;border-radius:15px!important;}
+  #aboutPage .about-bottom-strip{padding:16px!important;margin-top:10px!important;}
+
+  /* Gallery / section transition: remove dead vertical space */
+  #gallery{padding-bottom:28px!important;}
+  #gallery .section-head{margin-bottom:9px!important;}
+  #gallery .gallery-viewport{padding:6px 0 2px!important;}
+  #homeAboutSection{padding-top:30px!important;}
+
+  /* Search: field gets the width; submit becomes a compact arrow control */
+  .search-panel{top:calc(var(--nav-h) + env(safe-area-inset-top) + 6px)!important;left:8px!important;right:8px!important;padding:8px!important;border-radius:15px!important;}
+  .search-row{gap:6px!important;}
+  .search-row input{min-width:0!important;padding:10px 11px!important;}
+  #searchGo{width:44px!important;min-width:44px!important;flex:0 0 44px!important;padding:0!important;font-size:0!important;border-radius:11px!important;}
+  #searchGo:before{content:"→";font-size:18px;line-height:1;}
+  .search-results{max-height:min(42dvh,330px)!important;}
+  .search-result{padding:9px!important;min-height:48px!important;}
+
+  /* Event modal: useful details first, poster does not dominate */
+  .modal-backdrop{padding:7px!important;align-items:center!important;}
+  .modal{width:calc(100vw - 14px)!important;max-height:calc(100dvh - 14px)!important;border-radius:18px!important;}
+  .modal-poster{order:-1!important;aspect-ratio:16/7.5!important;max-height:190px!important;min-height:0!important;}
+  .modal-copy{padding:18px!important;}
+  .modal-copy h2{font-size:27px!important;margin:7px 0 10px!important;}
+  .modal-description{margin-top:14px!important;line-height:1.55!important;font-size:13px!important;}
+  .modal-copy .card-actions{gap:7px!important;}
+  .modal-copy .card-actions .btn{flex:1 1 105px!important;}
+  .modal-meta span{padding:6px 8px!important;}
+  .modal-more{margin-top:14px!important;padding-top:12px!important;}
+  .close-btn{width:44px!important;height:44px!important;min-width:44px!important;min-height:44px!important;max-width:44px!important;max-height:44px!important;border-radius:50%!important;padding:0!important;display:grid!important;place-items:center!important;}
+
+  /* Touch controls keep a consistent hit area */
+  .save-btn,.share-btn,.icon-btn,.menu-btn{min-width:40px!important;min-height:40px!important;}
+}
+
+@media(max-width:430px){
+  #homeClubGrid .club-card{flex-basis:min(84vw,300px)!important;}
+  #homeEventsSection .home-event-card,#clubUpcomingEvents .home-event-card{grid-template-columns:46px 66px minmax(0,1fr)!important;}
+  #eventsPage .event-card{grid-template-columns:96px minmax(0,1fr)!important;}
+  .club-meta-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;}
+}
+
+@media(max-width:350px){
+  .mobile-theme-options>span{min-width:50px!important;padding-inline:6px!important;}
+  #homeEventsSection .home-event-card,#clubUpcomingEvents .home-event-card{grid-template-columns:44px 60px minmax(0,1fr)!important;}
+  #homeEventsSection .home-event-copy,#clubUpcomingEvents .home-event-copy{padding-inline:8px!important;}
+  #eventsPage .event-card{grid-template-columns:88px minmax(0,1fr)!important;}
+  .club-meta-card{padding:9px 8px!important;}
+}
+
 </style>
 
 </head>
@@ -2141,7 +2442,7 @@ body.light #homeEventsSection .home-event-actions{
     <a class="brand" id="brandHome" href="#home" aria-label="KAMPUS home"><span class="brand-main">KAMPUS<span class="brand-star">✦</span></span><small>YOUR CAMPUS. ALL IN ONE PLACE.</small></a>
     <div class="nav-links" id="navLinks">
       <a href="#home" data-route="home">Home</a><a href="#clubs" data-route="clubs">Clubs</a><a href="#events" data-route="events">Events</a><a href="#gallery" data-route="gallery">Gallery</a><a href="#about" data-route="about">About</a>
-      <button class="mobile-theme-toggle" id="mobileThemeBtn" type="button" aria-label="Switch theme">Theme <span id="mobileThemeLabel">Dark</span></button>
+      <button class="mobile-theme-toggle" id="mobileThemeBtn" type="button" aria-label="Appearance: dark mode active. Switch to light mode"><span class="mobile-theme-title">Appearance</span><span class="mobile-theme-options" aria-hidden="true"><span id="mobileLightOption">Light</span><span id="mobileDarkOption" class="active">Dark</span></span><span id="mobileThemeLabel" class="mobile-theme-label">Dark mode active</span></button>
     </div>
     <div class="nav-actions">
       <button class="menu-btn" id="menuBtn" type="button" aria-label="Open menu" aria-controls="navLinks">☰</button>
@@ -2383,7 +2684,10 @@ function applyTheme(){
   document.body.classList.toggle('light',light);
   $('#themeBtn').textContent=light?'☾':'☀';
   $('#themeBtn').setAttribute('aria-label',light?'Switch to dark mode':'Switch to light mode');
-  $('#mobileThemeLabel').textContent=light?'Light':'Dark';
+  const mobileLabel=$('#mobileThemeLabel'),lightOption=$('#mobileLightOption'),darkOption=$('#mobileDarkOption'),mobileBtn=$('#mobileThemeBtn');
+  if(mobileLabel)mobileLabel.textContent=light?'Light mode active':'Dark mode active';
+  lightOption?.classList.toggle('active',light);darkOption?.classList.toggle('active',!light);
+  mobileBtn?.setAttribute('aria-label',light?'Appearance: light mode active. Switch to dark mode':'Appearance: dark mode active. Switch to light mode');
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content',light?'#f7f7f4':'#0c0e10');
 }
 function toggleTheme(){
@@ -2409,7 +2713,7 @@ function renderMoreFromClub(e){const wrap=$('#modalMore');if(!wrap)return;const 
 
 function renderClubGallery(rows,name){const el=$('#clubGallery'),urls=(rows||[]).map(x=>x.image_url).filter(Boolean);if(!urls.length){el.innerHTML=emptyState('▧','No gallery photos yet','Photos from this club will appear here.');return}const doubled=[...urls,...urls];el.innerHTML=`<div class="club-gallery-track">${doubled.map((u,i)=>`<img src="${esc(u)}" alt="${esc(name)} gallery image ${(i%urls.length)+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=KAMPUS_IMAGE_FALLBACK" onclick="openLightboxFromUrls(${i%urls.length},${JSON.stringify(urls).replace(/"/g,'&quot;')})">`).join('')}</div>`}
 
-$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').onclick=()=>{const open=$('#navLinks').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',String(open));$('#menuBtn').setAttribute('aria-label',open?'Close menu':'Open menu')};$$('#navLinks a').forEach(a=>a.onclick=()=>{$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false')});$('#mobileThemeBtn').onclick=()=>{toggleTheme();$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false')};
+$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').onclick=()=>{const open=$('#navLinks').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',String(open));$('#menuBtn').setAttribute('aria-label',open?'Close menu':'Open menu');$('#menuBtn').textContent=open?'×':'☰'};$$('#navLinks a').forEach(a=>a.onclick=()=>{$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰'});$('#mobileThemeBtn').onclick=()=>{toggleTheme();$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰'};
 $('#searchBtn').setAttribute('aria-expanded','false');$('#searchBtn').onclick=()=>$('#searchPanel').classList.contains('hidden')?openSearch():closeSearch();let searchTimer=null;$('#searchInput').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderSearch,70)};$('#searchInput').addEventListener('keydown',handleSearchKey);$('#searchGo').onclick=runSearchSelection;
 $('#savedBtn').onclick=openSaved;$('#savedClose').onclick=closeSaved;$('#savedBackdrop').onclick=e=>{if(e.target===e.currentTarget)closeSaved()};$('#websiteShareBtn').onclick=shareKampusWebsite;$('#themeBtn').onclick=toggleTheme;
 $('#eventClose').onclick=()=>closeEvent();$('#eventModal').onclick=()=>closeEvent();$('#lightboxClose').onclick=()=>closeLightbox();$('#lightbox').onclick=e=>{if(e.target===$('#lightbox'))closeLightbox()};$('#lightboxPrev').onclick=e=>{e.stopPropagation();moveLightbox(-1)};$('#lightboxNext').onclick=e=>{e.stopPropagation();moveLightbox(1)};
@@ -2731,7 +3035,7 @@ function kampusGalleryCanAutoplay(scroller){
   const track=scroller.querySelector('.gallery-track,.club-gallery-track');
   return Boolean(track&&track.children.length>2&&scroller.scrollWidth>scroller.clientWidth+8);
 }
-function kampusPauseGallery(scroller,delay=2600){
+function kampusPauseGallery(scroller,delay=1600){
   const st=kampusMobileGalleryState.get(scroller);if(!st)return;
   st.interacting=false;st.pauseUntil=performance.now()+delay;st.last=0;
 }
@@ -2742,7 +3046,7 @@ function kampusGalleryFrame(scroller,ts){
       const dt=Math.min(48,ts-st.last);
       const track=scroller.querySelector('.gallery-track,.club-gallery-track');
       const half=track?track.scrollWidth/2:0;
-      scroller.scrollLeft += (24*dt)/1000; // calm continuous speed: 24 px/sec
+      scroller.scrollLeft += (44*dt)/1000; // mobile-only autoplay speed: 44 px/sec
       if(half>0&&scroller.scrollLeft>=half-1)scroller.scrollLeft-=half;
     }
     st.last=ts;
@@ -2751,10 +3055,10 @@ function kampusGalleryFrame(scroller,ts){
 }
 function initKampusMobileGallery(scroller){
   if(!scroller||kampusMobileGalleryState.has(scroller))return;
-  const st={interacting:false,pauseUntil:performance.now()+900,last:0,raf:0};
+  const st={interacting:false,pauseUntil:performance.now()+450,last:0,raf:0};
   kampusMobileGalleryState.set(scroller,st);
   const hold=()=>{st.interacting=true;st.last=0};
-  const release=()=>kampusPauseGallery(scroller,2600);
+  const release=()=>kampusPauseGallery(scroller,1600);
   scroller.addEventListener('pointerdown',hold,{passive:true});
   scroller.addEventListener('pointerup',release,{passive:true});
   scroller.addEventListener('pointercancel',release,{passive:true});
@@ -2762,7 +3066,7 @@ function initKampusMobileGallery(scroller){
   scroller.addEventListener('touchend',release,{passive:true});
   scroller.addEventListener('wheel',()=>kampusPauseGallery(scroller,3200),{passive:true});
   scroller.addEventListener('focusin',()=>kampusPauseGallery(scroller,3600),{passive:true});
-  scroller.addEventListener('click',()=>kampusPauseGallery(scroller,2600),{passive:true});
+  scroller.addEventListener('click',()=>kampusPauseGallery(scroller,1600),{passive:true});
   st.raf=requestAnimationFrame(t=>kampusGalleryFrame(scroller,t));
 }
 function initAllKampusMobileGalleries(root=document){
