@@ -2525,6 +2525,14 @@ body.light #homeEventsSection .home-event-actions{
   .club-meta-card{padding:9px 8px!important;}
 }
 
+/* === K badge preview: ONLY header badge change === */
+.brand{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;line-height:1;text-decoration:none;}
+.brand-copy{display:flex;flex-direction:column;justify-content:center;min-width:0;}
+.brand-k-badge{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:0 0 38px;background:#0d1016;color:#fff;font-weight:900;font-size:20px;letter-spacing:-.04em;box-shadow:0 10px 20px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.05);transform:rotate(-5deg);transition:transform .18s ease, box-shadow .18s ease;}
+@media(hover:hover) and (pointer:fine){.brand:hover .brand-k-badge{transform:rotate(-7deg) translateY(-1px) scale(1.04);box-shadow:0 14px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.05);}}
+@media(max-width:520px){.brand{gap:9px!important;}.brand-k-badge{width:34px;height:34px;flex-basis:34px;font-size:18px;border-radius:11px;}}
+@media(max-width:390px){.brand{gap:8px!important;}.brand-k-badge{width:32px;height:32px;flex-basis:32px;font-size:17px;border-radius:10px;}}
+
 </style>
 
 </head>
@@ -2532,7 +2540,7 @@ body.light #homeEventsSection .home-event-actions{
 <a class="skip-link" href="#mainContent">Skip to content</a>
 <nav class="nav" aria-label="Primary navigation">
   <div class="container nav-inner">
-    <a class="brand" id="brandHome" href="#home" aria-label="KAMPUS home"><span class="brand-main">KAMPUS<span class="brand-star">✦</span></span><small>YOUR CAMPUS. ALL IN ONE PLACE.</small></a>
+    <a class="brand" id="brandHome" href="#home" aria-label="KAMPUS home"><span class="brand-k-badge" aria-hidden="true">K</span><span class="brand-copy"><span class="brand-main">KAMPUS<span class="brand-star">✦</span></span><small>YOUR CAMPUS. ALL IN ONE PLACE.</small></span></a>
     <div class="nav-links" id="navLinks">
       <a href="#home" data-route="home">Home</a><a href="#clubs" data-route="clubs">Clubs</a><a href="#events" data-route="events">Events</a><a href="#gallery" data-route="gallery">Gallery</a><a href="#about" data-route="about">About</a>
       <button class="mobile-theme-toggle" id="mobileThemeBtn" type="button" aria-label="Appearance: dark mode active. Switch to light mode"><span class="mobile-theme-title">Appearance</span><span class="mobile-theme-options" aria-hidden="true"><span id="mobileLightOption">Light</span><span id="mobileDarkOption" class="active">Dark</span></span><span id="mobileThemeLabel" class="mobile-theme-label">Dark mode active</span></button>
