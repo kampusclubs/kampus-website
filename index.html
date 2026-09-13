@@ -2595,8 +2595,21 @@ body.light #homeEventsSection .home-event-actions{
 /* === K badge preview: ONLY header badge change === */
 .brand{display:flex!important;flex-direction:row!important;align-items:center;gap:10px;line-height:1;text-decoration:none;}
 .brand-copy{display:flex;flex-direction:column;justify-content:center;min-width:0;}
-.brand-k-badge{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:0 0 38px;background:#0d1016;color:#fff;font-weight:900;font-size:20px;letter-spacing:-.04em;box-shadow:0 10px 20px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.05);transform:rotate(-5deg);transition:transform .18s ease, box-shadow .18s ease;}
-@media(hover:hover) and (pointer:fine){.brand:hover .brand-k-badge{transform:rotate(-7deg) translateY(-1px) scale(1.04);box-shadow:0 14px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.05);}}
+@keyframes kampusKBadgeDance{
+  0%,100%{transform:translateY(0) rotate(-5deg) scale(1)}
+  22%{transform:translateY(-1.5px) rotate(-1.5deg) scale(1.012)}
+  48%{transform:translateY(.5px) rotate(-6.5deg) scale(.995)}
+  72%{transform:translateY(-1px) rotate(-3deg) scale(1.008)}
+}
+@keyframes kampusKBadgeDanceHover{
+  0%,100%{transform:translateY(-1px) rotate(-6deg) scale(1.035)}
+  25%{transform:translateY(-3px) rotate(1deg) scale(1.055)}
+  50%{transform:translateY(-1px) rotate(-9deg) scale(1.045)}
+  75%{transform:translateY(-3px) rotate(-2deg) scale(1.06)}
+}
+.brand-k-badge{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:0 0 38px;background:#0d1016;color:#fff;font-weight:900;font-size:20px;letter-spacing:-.04em;box-shadow:0 10px 20px rgba(0,0,0,.12), inset 0 1px 0 rgba(255,255,255,.05);transform-origin:50% 58%;animation:kampusKBadgeDance 3.9s ease-in-out infinite;will-change:transform;transition:box-shadow .18s ease;}
+@media(hover:hover) and (pointer:fine){.brand:hover .brand-k-badge{animation-name:kampusKBadgeDanceHover;animation-duration:1.25s;box-shadow:0 14px 26px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.05);}}
+@media(prefers-reduced-motion:reduce){.brand-k-badge,.brand:hover .brand-k-badge{animation:none!important;transform:rotate(-5deg)!important;}}
 @media(max-width:520px){.brand{gap:9px!important;}.brand-k-badge{width:34px;height:34px;flex-basis:34px;font-size:18px;border-radius:11px;}}
 @media(max-width:390px){.brand{gap:8px!important;}.brand-k-badge{width:32px;height:32px;flex-basis:32px;font-size:17px;border-radius:10px;}}
 
