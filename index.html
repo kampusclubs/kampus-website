@@ -56,6 +56,24 @@ body.light .nav{background:rgba(255,255,255,.92);border-color:var(--line);}
 .brand{display:flex;flex-direction:column;justify-content:center;line-height:1;min-width:0;}.brand-main{font-size:24px;white-space:nowrap;}.brand small{font-size:7px;margin-top:6px;white-space:nowrap;}
 .nav-links{height:100%;display:flex;justify-content:center;align-items:center;gap:30px;min-width:0;}.nav-links a{height:100%;display:flex;align-items:center;line-height:1;padding:2px 3px 0;position:relative;white-space:nowrap;}.nav-links a.active:after{content:"";position:absolute;left:2px;right:2px;bottom:12px;height:2px;border-radius:99px;}
 .nav-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center;}.icon-btn,.menu-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.10);background:#151d28;color:#edf2f8;display:grid;place-items:center;cursor:pointer;}.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}.menu-btn{display:none;font-size:18px;}.mobile-theme-toggle{display:none;}.mobile-share-backdrop{display:none;}.home-events-more-note{display:none;}
+
+/* Desktop share panel — Website + Club only. Mobile keeps its bottom sheet. */
+@media (min-width:761px){
+  .mobile-share-backdrop.desktop-share-open{position:fixed;inset:0;z-index:260;display:flex!important;align-items:center;justify-content:center;padding:24px;background:rgba(4,8,13,.58);backdrop-filter:blur(8px);}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-sheet{width:min(520px,calc(100vw - 48px));background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:22px;box-shadow:0 28px 90px rgba(0,0,0,.42);}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-handle{display:none;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-head h3{margin:5px 0 5px;font-size:24px;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-head p{margin:0;color:var(--muted);font-size:13px;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-close{width:42px;height:42px;min-width:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);color:var(--text);font-size:22px;display:grid;place-items:center;cursor:pointer;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-option{min-height:104px;border:1px solid var(--line);border-radius:16px;background:var(--surface-2);color:var(--text);display:grid;place-items:center;align-content:center;gap:9px;font-size:12px;font-weight:850;cursor:pointer;transition:transform .16s ease,border-color .16s ease,background .16s ease;}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-option:hover{transform:translateY(-3px);border-color:var(--line-strong);background:color-mix(in srgb,var(--surface-2) 82%,var(--accent) 18%);}
+  .mobile-share-backdrop.desktop-share-open .mobile-share-icon{width:38px;height:38px;border-radius:12px;background:color-mix(in srgb,var(--k-teal) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--k-teal) 34%,var(--line));display:grid;place-items:center;font-size:11px;font-weight:950;}
+  body.light .mobile-share-backdrop.desktop-share-open .mobile-share-sheet{background:#fff;}
+  body.light .mobile-share-backdrop.desktop-share-open .mobile-share-option,body.light .mobile-share-backdrop.desktop-share-open .mobile-share-close{background:#f5f7f9;}
+}
+
 body.light .icon-btn,body.light .menu-btn{background:#fff;color:#1c2735;border-color:#d6e0eb;}
 @media(hover:hover) and (pointer:fine){.icon-btn:hover,.menu-btn:hover{background:#202b38;border-color:#43536a;transform:translateY(-1px);}body.light .icon-btn:hover,body.light .menu-btn:hover{background:#f3f7fb;border-color:#bac8d9;}}
 
@@ -2695,10 +2713,7 @@ function kampusHomepageUrl(){
 async function shareKampusWebsite(){
   const url=kampusHomepageUrl(),title='KAMPUS',text='Campus life, all in one place.';
   if(innerWidth<=760){openMobileShareSheet({title,text,url});return;}
-  try{if(navigator.share){await navigator.share({url});return}}catch(err){if(err&&err.name==='AbortError')return}
-  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url);toast('KAMPUS link copied ✦');return}}catch{}
-  if(legacyCopyText(url)){toast('KAMPUS link copied ✦');return}
-  try{window.prompt('Copy the KAMPUS link:',url)}catch{}
+  openDesktopShareSheet({title,text,url});
 }
 function initGallery(){const track=$('#homeGalleryTrack');const urls=[...HOME_GALLERY,...HOME_GALLERY];track.innerHTML=urls.map((u,i)=>`<img src="${u}" alt="Campus gallery image ${(i%HOME_GALLERY.length)+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=KAMPUS_IMAGE_FALLBACK" onclick="openLightboxFromUrls(${i%HOME_GALLERY.length},HOME_GALLERY)">`).join('')}
 function openLightboxFromUrls(index,urls){const clean=[...new Set((urls||[]).filter(Boolean))];if(!clean.length)return;rememberFocus();state.lightboxImages=clean;state.lightboxIndex=Math.max(0,Math.min(Number(index)||0,clean.length-1));renderLightbox();setDialogOpen($('#lightbox'),true);requestAnimationFrame(()=>$('#lightboxClose').focus({preventScroll:true}));if(!state.lightboxHistoryPushed){history.pushState({lightbox:true},'',location.href);state.lightboxHistoryPushed=true}}
@@ -2811,10 +2826,16 @@ document.addEventListener('click',e=>{
 
 /* Mobile share sheet for Website + Club. Desktop sharing is intentionally left for the later desktop pass. */
 let kampusMobileSharePayload=null;
-function closeMobileShareSheet(){const back=$('#mobileShareBackdrop');if(!back)return;back.classList.remove('open');back.setAttribute('aria-hidden','true');kampusMobileSharePayload=null;syncBodyLock();}
-function openMobileShareSheet(payload){if(innerWidth>760)return false;kampusMobileSharePayload=payload;const back=$('#mobileShareBackdrop');if(!back)return false;$('#mobileShareTitle').textContent=payload.title||'Share KAMPUS';$('#mobileShareText').textContent=payload.text||'Choose how you want to share.';back.classList.add('open');back.setAttribute('aria-hidden','false');syncBodyLock();requestAnimationFrame(()=>$('#mobileShareClose')?.focus({preventScroll:true}));return true;}
+function configureShareSheetMode(mode){
+  const more=$('#mobileShareMore'),icon=more?.querySelector('.mobile-share-icon'),label=more?.querySelector('span:last-child');
+  if(mode==='desktop'){if(icon)icon.textContent='@';if(label)label.textContent='Email';}
+  else{if(icon)icon.textContent='↗';if(label)label.textContent='More apps';}
+}
+function closeMobileShareSheet(){const back=$('#mobileShareBackdrop');if(!back)return;back.classList.remove('open','desktop-share-open');back.setAttribute('aria-hidden','true');kampusMobileSharePayload=null;syncBodyLock();}
+function openMobileShareSheet(payload){if(innerWidth>760)return false;kampusMobileSharePayload=payload;const back=$('#mobileShareBackdrop');if(!back)return false;configureShareSheetMode('mobile');$('#mobileShareTitle').textContent=payload.title||'Share KAMPUS';$('#mobileShareText').textContent=payload.text||'Choose how you want to share.';back.classList.add('open');back.classList.remove('desktop-share-open');back.setAttribute('aria-hidden','false');syncBodyLock();requestAnimationFrame(()=>$('#mobileShareClose')?.focus({preventScroll:true}));return true;}
+function openDesktopShareSheet(payload){if(innerWidth<=760)return false;kampusMobileSharePayload=payload;const back=$('#mobileShareBackdrop');if(!back)return false;configureShareSheetMode('desktop');$('#mobileShareTitle').textContent=payload.title||'Share KAMPUS';$('#mobileShareText').textContent=payload.text||'Choose how you want to share.';back.classList.remove('open');back.classList.add('desktop-share-open');back.setAttribute('aria-hidden','false');requestAnimationFrame(()=>$('#mobileShareClose')?.focus({preventScroll:true}));return true;}
 async function copyMobileShareLink(){const p=kampusMobileSharePayload;if(!p)return;try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(p.url);else if(!legacyCopyText(p.url))throw new Error('copy unavailable');toast('Link copied ✓');closeMobileShareSheet()}catch{try{window.prompt('Copy this link:',p.url)}catch{}}}
-async function nativeMobileShare(){const p=kampusMobileSharePayload;if(!p)return;if(navigator.share){try{await navigator.share({title:p.title,text:p.text,url:p.url});closeMobileShareSheet();return}catch(err){if(err?.name==='AbortError')return}}toast('Sharing is not available here');}
+async function nativeMobileShare(){const p=kampusMobileSharePayload;if(!p)return;if(innerWidth>760){const subject=p.title||'KAMPUS';const body=[p.text,p.url].filter(Boolean).join('\n\n');window.location.href=`mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;closeMobileShareSheet();return;}if(navigator.share){try{await navigator.share({title:p.title,text:p.text,url:p.url});closeMobileShareSheet();return}catch(err){if(err?.name==='AbortError')return}}toast('Sharing is not available here');}
 function whatsappMobileShare(){const p=kampusMobileSharePayload;if(!p)return;const message=[p.text,p.url].filter(Boolean).join('\n\n');window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,'_blank','noopener');}
 $('#mobileShareClose')?.addEventListener('click',closeMobileShareSheet);$('#mobileShareBackdrop')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeMobileShareSheet()});$('#mobileShareCopy')?.addEventListener('click',copyMobileShareLink);$('#mobileShareMore')?.addEventListener('click',nativeMobileShare);$('#mobileShareWhatsApp')?.addEventListener('click',whatsappMobileShare);
 
@@ -2843,12 +2864,8 @@ async function shareClub(){
   const status=$('#clubShareStatus'),currentClub=state.currentClub;if(!currentClub)return;
   const url=location.href,title=`KAMPUS · ${currentClub.name}`,text=`Discover ${currentClub.name} at CHRIST University`;
   if(innerWidth<=760){openMobileShareSheet({title,text,url});if(status)status.textContent='';return;}
-  try{
-    if(navigator.share){await navigator.share({title,text,url});if(status)status.textContent='Shared.';toast('Shared ✓');return}
-    const shareText=`${title}\n\n${text}\n\n${url}`;
-    if(navigator.clipboard){await navigator.clipboard.writeText(shareText);if(status)status.textContent='Share text copied.';toast('Share text copied ✓');return}
-    const ta=document.createElement('textarea');ta.value=shareText;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';ta.style.pointerEvents='none';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,ta.value.length);const copied=Boolean(document.execCommand&&document.execCommand('copy'));ta.remove();if(copied){if(status)status.textContent='Share text copied.';toast('Share text copied ✓');return}if(status)status.textContent='Copy the URL from your browser to share.';
-  }catch(err){if(!err||err.name!=='AbortError'){if(status)status.textContent='Copy the URL from your browser to share.'}}
+  openDesktopShareSheet({title,text,url});
+  if(status)status.textContent='';
 }
 
 /* Compact homepage: no Recently Viewed. */
