@@ -234,7 +234,7 @@ body.light .club-card,body.light .event-card,body.light .home-event-card,body.li
 
 /* Image system: consistent ratios, graceful placeholders, fade-in */
 .media-shell{contain:paint;background:linear-gradient(135deg,#0e1723,#1b2839);position:relative;overflow:hidden;}.media-shell:before{opacity:.28;}.media-shell:after{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.07) 42%,transparent 64%);transform:translateX(-110%);animation:kampusShimmer 1.5s ease-in-out infinite;pointer-events:none;}.media-shell:has(img.loaded):after,.media-shell.media-error:after{display:none;}@keyframes kampusShimmer{to{transform:translateX(110%)}}
-.media-shell>img{opacity:0;transition:opacity .28s ease,transform .25s ease;}.media-shell>img.loaded{opacity:1;}.media-fallback{color:#8fa1b8;}.media-fallback .placeholder-mark{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(79,159,255,.15),rgba(128,108,255,.16));border:1px solid rgba(128,108,255,.25);font-size:22px;}.media-fallback small{color:#a8b4c5;}.club-banner{aspect-ratio:16/8.2;}.home-event-media-wrap{background:#0e151f;}.club-cover{aspect-ratio:16/6.4;}
+.media-shell>img{opacity:0;transition:opacity .28s ease,transform .25s ease;}.media-shell>img.loaded{opacity:1;}.media-fallback{color:#8fa1b8;}.media-fallback .placeholder-mark{width:46px;height:46px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(79,159,255,.15),rgba(128,108,255,.16));border:1px solid rgba(128,108,255,.25);font-size:22px;}.media-fallback small{color:#a8b4c5;}.media-shell.media-loaded .media-fallback{display:none!important;}.club-banner{aspect-ratio:16/8.2;}.home-event-media-wrap{background:#0e151f;}.club-cover{aspect-ratio:16/6.4;}
 
 /* Club category identity */
 .club-chip{display:inline-flex;align-items:center;gap:6px;width:max-content;max-width:100%;border-radius:999px;padding:5px 8px;font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase;border:1px solid var(--line);margin:0 0 8px;}.club-chip:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--chip,#8fa2bb);}
@@ -3013,14 +3013,14 @@ function mediaMarkup(url,alt,cls='',priority='lazy'){
   const[label,msg]=placeholderLabel(alt,cls),fallback=`<div class="media-fallback"><div><span class="placeholder-mark">✦</span><small>${label} · ${msg}</small></div></div>`;
   if(!url)return`<div class="media-shell media-error ${cls}">${fallback}</div>`;
   const eager=priority==='eager';
-  return`<div class="media-shell ${cls}" style="--media:url('${esc(url)}')">${fallback}<img src="${esc(url)}" alt="${esc(alt)}" loading="${eager?'eager':'lazy'}" ${eager?'fetchpriority="high"':'fetchpriority="low"'} decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.classList.add('media-error')"></div>`;
+  return`<div class="media-shell ${cls}" style="--media:url('${esc(url)}')">${fallback}<img src="${esc(url)}" alt="${esc(alt)}" loading="${eager?'eager':'lazy'}" ${eager?'fetchpriority="high"':'fetchpriority="low"'} decoding="async" onload="this.classList.add('loaded');this.parentElement.classList.add('media-loaded')" onerror="this.style.display='none';this.parentElement.classList.add('media-error')"></div>`;
 }
 
 function eventMediaMarkup(e,cls='',priority='lazy'){
   const category=eventCategory(e),eager=priority==='eager';
   const fallback=`<div class="media-fallback"><div><span class="placeholder-mark">✦</span><small>${esc(category)} · poster coming soon</small></div></div>`;
   if(!e.poster_url)return`<div class="media-shell media-error ${cls}">${fallback}</div>`;
-  return`<div class="media-shell ${cls}" style="--media:url('${esc(e.poster_url)}')">${fallback}<img src="${esc(e.poster_url)}" alt="${esc(e.name)} poster" loading="${eager?'eager':'lazy'}" ${eager?'fetchpriority="high"':'fetchpriority="low"'} decoding="async" onload="this.classList.add('loaded')" onerror="this.style.display='none';this.parentElement.classList.add('media-error')"></div>`;
+  return`<div class="media-shell ${cls}" style="--media:url('${esc(e.poster_url)}')">${fallback}<img src="${esc(e.poster_url)}" alt="${esc(e.name)} poster" loading="${eager?'eager':'lazy'}" ${eager?'fetchpriority="high"':'fetchpriority="low"'} decoding="async" onload="this.classList.add('loaded');this.parentElement.classList.add('media-loaded')" onerror="this.style.display='none';this.parentElement.classList.add('media-error')"></div>`;
 }
 
 function savedButton(e){
