@@ -2017,6 +2017,73 @@ body.light #homeEventsSection .home-event-actions{
   border-color:#d5dfeb;
 }
 
+/* Desktop/laptop only: keep View Club -> Upcoming Events as compact as Home. */
+@media(min-width:761px){
+  #clubUpcomingEvents .home-event-list{display:grid;gap:13px;}
+  #clubUpcomingEvents .home-event-card{
+    display:grid;
+    grid-template-columns:70px 118px minmax(0,1fr) minmax(235px,auto);
+    align-items:stretch;
+    min-height:118px;
+    overflow:hidden;
+    border-radius:20px;
+  }
+  #clubUpcomingEvents .home-event-date-column{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    gap:5px;
+    border-right:1px solid var(--line);
+    line-height:1;
+  }
+  #clubUpcomingEvents .home-event-date-column strong{font-size:26px;font-weight:900;letter-spacing:-.04em;}
+  #clubUpcomingEvents .home-event-date-column span{font-size:9px;font-weight:950;letter-spacing:.13em;text-transform:uppercase;}
+  #clubUpcomingEvents .home-event-media-wrap{
+    position:relative;
+    min-height:118px;
+    height:118px;
+    overflow:hidden;
+    border-right:1px solid var(--line);
+    background:var(--surface-2);
+  }
+  #clubUpcomingEvents .home-event-media{
+    width:100%;
+    height:118px;
+    min-height:118px;
+    max-height:118px;
+  }
+  #clubUpcomingEvents .home-event-copy{
+    min-width:0;
+    min-height:118px;
+    padding:17px 20px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+  #clubUpcomingEvents .home-event-heading-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px;}
+  #clubUpcomingEvents .home-event-copy h3{margin:2px 0 6px;font-size:20px;line-height:1.16;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  #clubUpcomingEvents .home-event-copy .event-meta{margin-top:0;gap:7px 14px;}
+  #clubUpcomingEvents .home-event-copy p{margin:7px 0 0;-webkit-line-clamp:1;font-size:12.5px;}
+  #clubUpcomingEvents .home-event-actions{
+    margin:0;
+    padding:18px 18px 18px 8px;
+    display:flex;
+    align-items:center;
+    justify-content:flex-end;
+    gap:14px;
+    flex-wrap:nowrap;
+    border-left:1px solid rgba(255,255,255,.045);
+  }
+  #clubUpcomingEvents .home-event-primary-actions,
+  #clubUpcomingEvents .home-event-icon-actions{display:flex;align-items:center;gap:9px;flex-wrap:nowrap;}
+  #clubUpcomingEvents .home-event-actions .btn{min-height:40px;padding-inline:15px;white-space:nowrap;}
+  #clubUpcomingEvents .home-event-actions .share-btn,
+  #clubUpcomingEvents .home-event-actions .save-btn{flex:0 0 40px;width:40px;height:40px;}
+  body.light #clubUpcomingEvents .home-event-media-wrap,
+  body.light #clubUpcomingEvents .home-event-actions{border-color:#d5dfeb;}
+}
+
 /* Let the existing entrance animation finish without permanently owning transform. */
 @media(prefers-reduced-motion:no-preference){
   .page-wrap.active .club-card,.page-wrap.active .event-card{animation-fill-mode:none;}
