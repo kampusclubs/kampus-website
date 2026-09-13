@@ -55,7 +55,7 @@ body.light .nav{background:rgba(255,255,255,.92);border-color:var(--line);}
 .nav-inner{height:100%;display:grid;grid-template-columns:230px 1fr 230px;align-items:center;gap:22px;min-width:0;}
 .brand{display:flex;flex-direction:column;justify-content:center;line-height:1;min-width:0;}.brand-main{font-size:24px;white-space:nowrap;}.brand small{font-size:7px;margin-top:6px;white-space:nowrap;}
 .nav-links{height:100%;display:flex;justify-content:center;align-items:center;gap:30px;min-width:0;}.nav-links a{height:100%;display:flex;align-items:center;line-height:1;padding:2px 3px 0;position:relative;white-space:nowrap;}.nav-links a.active:after{content:"";position:absolute;left:2px;right:2px;bottom:12px;height:2px;border-radius:99px;}
-.nav-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center;}.icon-btn,.menu-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.10);background:#151d28;color:#edf2f8;display:grid;place-items:center;cursor:pointer;}.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}.menu-btn{display:none;font-size:18px;}.mobile-theme-toggle{display:none;}
+.nav-actions{display:flex;justify-content:flex-end;gap:8px;align-items:center;}.icon-btn,.menu-btn{width:38px;height:38px;border-radius:50%;border:1px solid rgba(255,255,255,.10);background:#151d28;color:#edf2f8;display:grid;place-items:center;cursor:pointer;}.icon-btn svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;}.menu-btn{display:none;font-size:18px;}.mobile-theme-toggle{display:none;}.mobile-share-backdrop{display:none;}.home-events-more-note{display:none;}
 body.light .icon-btn,body.light .menu-btn{background:#fff;color:#1c2735;border-color:#d6e0eb;}
 @media(hover:hover) and (pointer:fine){.icon-btn:hover,.menu-btn:hover{background:#202b38;border-color:#43536a;transform:translateY(-1px);}body.light .icon-btn:hover,body.light .menu-btn:hover{background:#f3f7fb;border-color:#bac8d9;}}
 
@@ -2415,6 +2415,81 @@ body.light #homeEventsSection .home-event-actions{
 
   /* Touch controls keep a consistent hit area */
   .save-btn,.share-btn,.icon-btn,.menu-btn{min-width:40px!important;min-height:40px!important;}
+
+  /* MOBILE STABILIZATION — final mobile-only source of truth */
+  body.mobile-menu-open{overflow:hidden!important;}
+  body.mobile-menu-open:before{content:"";position:fixed;inset:var(--nav-h) 0 0;z-index:78;background:rgba(3,7,12,.46);backdrop-filter:blur(2px);}
+  .nav-links.open{z-index:92!important;box-shadow:0 18px 44px rgba(0,0,0,.32)!important;}
+  body:not(.light) .nav-links{background:#10151c!important;border-color:#2d3540!important;}
+  body:not(.light) .nav-links a{background:#171d25!important;border-color:#2a3340!important;color:#e9eef5!important;}
+  body:not(.light) .nav-links a:not(.active){color:#c8d0db!important;}
+  body:not(.light) .mobile-theme-toggle{background:#171d25!important;border-color:#2a3340!important;color:#f3f6fa!important;}
+  body:not(.light) .mobile-theme-options{background:#0f141b!important;border-color:#303946!important;}
+  body:not(.light) .mobile-theme-options>span{color:#aeb9c7!important;}
+  body:not(.light) #mobileDarkOption.active{background:#f3f5f7!important;color:#172033!important;box-shadow:none!important;}
+  body.light .nav-links{background:#ffffff!important;border-color:#dce2e8!important;box-shadow:0 18px 44px rgba(38,54,75,.15)!important;}
+  body.light .nav-links a{background:#f7f9fb!important;border-color:#e2e7ed!important;color:#4d5b70!important;}
+  body.light .nav-links a:not(.active){color:#4d5b70!important;}
+  body.light .mobile-theme-toggle{background:#f7f9fb!important;border-color:#e2e7ed!important;color:#172033!important;}
+  body.light .mobile-theme-options{background:#edf1f5!important;border-color:#dce2e8!important;}
+  body.light #mobileLightOption.active{background:#fff!important;color:#172033!important;}
+  body.light #homePage,body.light #clubsPage,body.light #eventsPage,body.light #aboutPage{background:var(--bg)!important;color:var(--text)!important;}
+  body.light .club-page{background:#f7f7f4!important;color:#172033!important;}
+  body.light .club-topbar{background:rgba(247,247,244,.94)!important;border-color:#d9dddf!important;}
+
+  .today-live-dot{position:relative!important;animation:kampusLivePulse 1.55s ease-out infinite!important;box-shadow:0 0 0 0 rgba(255,64,83,.44)!important;flex:0 0 9px!important;}
+  .today-live-dot:after{content:"";position:absolute;inset:-4px;border:1px solid rgba(255,64,83,.42);border-radius:50%;animation:kampusLiveRing 1.55s ease-out infinite;}
+  @keyframes kampusLiveRing{0%{transform:scale(.55);opacity:.7}75%,100%{transform:scale(1.8);opacity:0}}
+  .today-strip-events{scroll-snap-type:none!important;scroll-behavior:auto!important;overscroll-behavior-x:contain!important;-webkit-overflow-scrolling:touch!important;}
+  .today-mini{scroll-snap-align:none!important;}
+  .today-strip-all{min-width:52px!important;min-height:36px!important;display:inline-flex!important;align-items:center!important;justify-content:flex-end!important;padding:7px 2px 7px 8px!important;}
+
+  #homeClubGrid .club-card,#clubsPage .club-card{cursor:pointer!important;}
+  #homeClubGrid:after{content:"Swipe to explore →";flex:0 0 auto;align-self:center;font-size:9px;font-weight:850;letter-spacing:.04em;color:var(--muted);padding:0 10px;white-space:nowrap;}
+
+  #homeEventsSection .home-event-media-wrap,#clubUpcomingEvents .home-event-media-wrap{overflow:hidden!important;min-width:0!important;}
+  #homeEventsSection .home-event-media,#clubUpcomingEvents .home-event-media{width:100%!important;max-width:100%!important;overflow:hidden!important;}
+  #homeEventsSection .home-event-media img,#clubUpcomingEvents .home-event-media img{width:100%!important;height:100%!important;max-width:100%!important;object-fit:contain!important;}
+  #homeEventsSection .media-fallback small,#clubUpcomingEvents .media-fallback small{display:none!important;}
+  #homeEventsSection .media-fallback,#clubUpcomingEvents .media-fallback{font-size:24px!important;}
+  #clubUpcomingEvents .home-event-actions{grid-template-columns:minmax(0,1fr) auto!important;}
+  #clubUpcomingEvents .home-event-primary-actions:empty{display:none!important;}
+  #clubUpcomingEvents .home-event-icon-actions{grid-column:2!important;justify-self:end!important;}
+
+  #eventsPage .event-card.no-poster{grid-template-columns:1fr!important;min-height:0!important;}
+  #eventsPage .event-card.no-poster .event-poster-wrap{display:none!important;}
+  #eventsPage .event-card.no-poster .event-body{padding:14px!important;}
+  #eventsPage .event-card.no-poster .event-body p{display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important;overflow:hidden!important;}
+  #eventsPage .event-card:not(.no-poster) .event-poster-wrap{overflow:hidden!important;}
+  #eventsPage .event-card:not(.no-poster) .event-poster-wrap img{width:100%!important;height:100%!important;object-fit:contain!important;}
+
+  .gallery-loading{background:linear-gradient(100deg,var(--surface-2) 20%,color-mix(in srgb,var(--k-violet) 16%,var(--surface-2)) 38%,var(--surface-2) 56%)!important;background-size:220% 100%!important;animation:kampusGallerySkeleton 1.25s linear infinite!important;}
+  @keyframes kampusGallerySkeleton{to{background-position:-220% 0}}
+  .inline-loading{background:linear-gradient(100deg,var(--surface-2) 20%,color-mix(in srgb,var(--k-violet) 12%,var(--surface-2)) 40%,var(--surface-2) 60%)!important;background-size:220% 100%!important;animation:kampusGallerySkeleton 1.25s linear infinite!important;border-radius:14px!important;color:var(--muted)!important;}
+  .reveal-ready{opacity:1!important;transform:none!important;}
+
+  .home-events-more-note{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-top:11px!important;padding:10px 12px!important;border:1px solid var(--line)!important;border-radius:13px!important;background:var(--surface)!important;font-size:10.5px!important;color:var(--muted)!important;}
+  .home-events-more-note.hidden{display:none!important;}
+  .home-events-more-note a{font-weight:900!important;color:var(--accent)!important;white-space:nowrap!important;min-height:34px!important;display:inline-flex!important;align-items:center!important;}
+
+  .search-result span:not(.result-badge){line-height:1.35!important;}
+  .search-hint{display:none!important;}
+
+  .lightbox-prev{left:14px!important;}.lightbox-next{right:14px!important;}
+  .club-section>p{font-size:12.5px!important;line-height:1.62!important;}
+  .video-media{border-radius:12px!important;overflow:hidden!important;}
+
+  .mobile-share-backdrop{position:fixed;inset:0;z-index:260;background:rgba(4,8,13,.56);display:none;align-items:flex-end;padding:10px;}
+  .mobile-share-backdrop.open{display:flex!important;}
+  .mobile-share-sheet{width:100%;background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:9px 14px calc(14px + env(safe-area-inset-bottom));box-shadow:0 -18px 48px rgba(0,0,0,.30);}
+  .mobile-share-handle{width:40px;height:4px;border-radius:99px;background:var(--line-strong);margin:2px auto 12px;}
+  .mobile-share-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}
+  .mobile-share-head h3{margin:3px 0 3px;font-size:20px;}.mobile-share-head p{margin:0;font-size:11px;color:var(--muted);}
+  .mobile-share-close{width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--surface-2);color:var(--text);font-size:22px;display:grid;place-items:center;}
+  .mobile-share-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-top:16px;}
+  .mobile-share-option{min-height:82px;border:1px solid var(--line);border-radius:14px;background:var(--surface-2);color:var(--text);display:grid;place-items:center;align-content:center;gap:7px;font-size:11px;font-weight:850;}
+  .mobile-share-icon{width:34px;height:34px;border-radius:11px;background:color-mix(in srgb,var(--k-teal) 14%,var(--surface));border:1px solid color-mix(in srgb,var(--k-teal) 34%,var(--line));display:grid;place-items:center;font-size:11px;font-weight:950;}
+  body.light .mobile-share-sheet{background:#fff!important;}body.light .mobile-share-option,body.light .mobile-share-close{background:#f5f7f9!important;}
 }
 
 @media(max-width:430px){
@@ -2475,7 +2550,7 @@ body.light #homeEventsSection .home-event-actions{
 <main id="mainContent">
   <div id="homePage" class="page-wrap active">
     <section class="home-section" id="homeClubsSection"><div class="container"><div class="section-head"><div><div class="eyebrow">DISCOVER YOUR SPACE</div><h2>Explore clubs</h2><p class="muted">Find communities around business, arts, technology, gaming, social impact and more.</p></div><a class="view-all" href="#clubs">View all →</a></div><div class="club-grid" id="homeClubGrid"></div></div></section>
-    <section class="home-section" id="homeEventsSection"><div class="container"><div class="section-head"><div><div class="eyebrow">WHAT'S HAPPENING</div><h2>Upcoming events</h2><p class="muted">A quick look at what you can attend next.</p></div><a class="view-all" href="#events">View all →</a></div><div class="home-event-list" id="homeEventList"></div></div></section>
+    <section class="home-section" id="homeEventsSection"><div class="container"><div class="section-head"><div><div class="eyebrow">WHAT'S HAPPENING</div><h2>Upcoming events</h2><p class="muted">A quick look at what you can attend next.</p></div><a class="view-all" href="#events">View all →</a></div><div class="home-event-list" id="homeEventList"></div><div class="home-events-more-note hidden" id="homeEventsMoreNote"></div></div></section>
 <section class="gallery-section" id="gallery"><div class="container"><div class="section-head"><div><div class="eyebrow">CAMPUS MOMENTS</div><h2>Campus gallery</h2><p class="muted">A moving glimpse of life around campus.</p></div></div></div><div class="gallery-viewport"><div class="gallery-track" id="homeGalleryTrack"></div></div></section>
     <section class="home-section about-home-section about-static" id="homeAboutSection"><div class="container"><div class="about-home-panel">
       <div class="about-home-copy">
@@ -2527,6 +2602,17 @@ body.light #homeEventsSection .home-event-actions{
 <div class="modal-backdrop" id="eventModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-hidden="true"><div class="modal" onclick="event.stopPropagation()"><button class="close-btn modal-close" id="eventClose" type="button" aria-label="Close event details">×</button><div class="modal-grid"><div class="modal-copy"><div class="eyebrow">EVENT DETAILS</div><h2 id="modalTitle"></h2><div class="modal-meta" id="modalMeta"></div><div class="modal-description" id="modalDesc"></div><div class="card-actions" id="modalActions"></div><div class="modal-more hidden" id="modalMore"></div></div><div class="modal-poster" id="modalPoster"></div></div></div></div>
 <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer" aria-hidden="true"><button class="close-btn modal-close" id="lightboxClose" type="button" aria-label="Close image viewer">×</button><button class="lightbox-nav lightbox-prev" id="lightboxPrev" type="button" aria-label="Previous image">‹</button><img id="lightboxImg" alt="Enlarged gallery image"><button class="lightbox-nav lightbox-next" id="lightboxNext" type="button" aria-label="Next image">›</button><div class="lightbox-count" id="lightboxCount"></div></div>
 <div class="club-page" id="clubPage" role="dialog" aria-modal="true" aria-label="Club profile" aria-hidden="true"><div class="club-page-inner"><div class="club-topbar"><button class="back-btn" id="clubBack" type="button">← Back to clubs</button><div class="club-share-wrap"><button class="btn club-share-btn" id="clubShare" type="button">Share club</button><span class="club-share-status" id="clubShareStatus" aria-live="polite"></span></div></div><div id="clubContent"></div></div></div>
+<div class="mobile-share-backdrop" id="mobileShareBackdrop" aria-hidden="true">
+  <div class="mobile-share-sheet" role="dialog" aria-modal="true" aria-labelledby="mobileShareTitle" onclick="event.stopPropagation()">
+    <div class="mobile-share-handle" aria-hidden="true"></div>
+    <div class="mobile-share-head"><div><div class="eyebrow">SHARE</div><h3 id="mobileShareTitle">Share KAMPUS</h3><p id="mobileShareText">Choose how you want to share.</p></div><button class="mobile-share-close" id="mobileShareClose" type="button" aria-label="Close share options">×</button></div>
+    <div class="mobile-share-actions">
+      <button class="mobile-share-option" id="mobileShareWhatsApp" type="button"><span class="mobile-share-icon">WA</span><span>WhatsApp</span></button>
+      <button class="mobile-share-option" id="mobileShareMore" type="button"><span class="mobile-share-icon">↗</span><span>More apps</span></button>
+      <button class="mobile-share-option" id="mobileShareCopy" type="button"><span class="mobile-share-icon">⧉</span><span>Copy link</span></button>
+    </div>
+  </div>
+</div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -2576,10 +2662,10 @@ async function loadData(){renderLoading();if(typeof supabaseClient==='undefined'
 
 function cleanupSaved(source=state.events){const valid=new Set(source.filter(e=>!expired(e)).map(e=>String(e.id)));setSaved(getSaved().filter(id=>valid.has(id)))}
 function setPage(page){const changed=state.page!==page;state.page=page;['home','clubs','events','about'].forEach(p=>$(`#${p}Page`)?.classList.toggle('active',p===page));$('#homeHero').classList.toggle('hidden',page!=='home');if(page==='home')renderHappeningToday();else $('#todayStripSection')?.classList.add('hidden');$('#navLinks').classList.remove('open');
-$('#menuBtn').setAttribute('aria-expanded','false');updateNav();if(changed)window.scrollTo({top:0,behavior:'auto'})}
+$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰';document.body.classList.remove('mobile-menu-open');updateNav();if(changed)window.scrollTo({top:0,behavior:'auto'})}
 function updateNav(){const route=location.hash.replace('#','').split('/')[0]||'home';$$('[data-route]').forEach(a=>a.classList.toggle('active',a.dataset.route===route||route==='gallery'&&a.dataset.route==='gallery'))}
 function handleRoute(){const hash=location.hash||'#home';const cm=hash.match(/^#club\/(.+)$/),em=hash.match(/^#event\/(.+)$/);if(!em&&$('#eventModal').classList.contains('show'))closeEvent(false);if(cm){setPage('clubs');if(state.clubs.length)openClub(decodeURIComponent(cm[1]));return}closeClub(false);if(em){setPage('events');if(state.events.length)openEvent(decodeURIComponent(em[1]),false);return}if(hash==='#clubs')setPage('clubs');else if(hash==='#events')setPage('events');else if(hash==='#about')setPage('about');else if(hash==='#gallery'){setPage('home');requestAnimationFrame(()=>setTimeout(()=>$('#gallery').scrollIntoView({behavior:'smooth',block:'start'}),40))}else setPage('home')}
-function syncBodyLock(){const locked=$('#savedBackdrop').classList.contains('show')||$('#eventModal').classList.contains('show')||$('#lightbox').classList.contains('show')||$('#clubPage').classList.contains('show');document.body.style.overflow=locked?'hidden':''}
+function syncBodyLock(){const locked=$('#savedBackdrop').classList.contains('show')||$('#eventModal').classList.contains('show')||$('#lightbox').classList.contains('show')||$('#clubPage').classList.contains('show')||$('#mobileShareBackdrop')?.classList.contains('open');document.body.style.overflow=locked?'hidden':''}
 function rememberFocus(){const el=document.activeElement&&document.activeElement!==document.body?document.activeElement:null;state.focusStack.push(el)}
 function restoreFocus(){const el=state.focusStack.pop();if(el&&document.contains(el)){requestAnimationFrame(()=>{try{el.focus({preventScroll:true})}catch{el.focus()}})}}
 function setDialogOpen(el,on){el.classList.toggle('show',on);el.setAttribute('aria-hidden',String(!on));syncBodyLock()}
@@ -2607,22 +2693,10 @@ function kampusHomepageUrl(){
   catch{return location.href.split('#')[0].split('?')[0]}
 }
 async function shareKampusWebsite(){
-  const url=kampusHomepageUrl();
-  try{
-    if(navigator.share){
-      await navigator.share({url});
-      return;
-    }
-  }catch(err){
-    if(err&&err.name==='AbortError')return;
-  }
-  try{
-    if(navigator.clipboard&&window.isSecureContext){
-      await navigator.clipboard.writeText(url);
-      toast('KAMPUS link copied ✦');
-      return;
-    }
-  }catch{}
+  const url=kampusHomepageUrl(),title='KAMPUS',text='Campus life, all in one place.';
+  if(innerWidth<=760){openMobileShareSheet({title,text,url});return;}
+  try{if(navigator.share){await navigator.share({url});return}}catch(err){if(err&&err.name==='AbortError')return}
+  try{if(navigator.clipboard&&window.isSecureContext){await navigator.clipboard.writeText(url);toast('KAMPUS link copied ✦');return}}catch{}
   if(legacyCopyText(url)){toast('KAMPUS link copied ✦');return}
   try{window.prompt('Copy the KAMPUS link:',url)}catch{}
 }
@@ -2675,7 +2749,7 @@ function clearSearchAfterSelection(){const input=$('#searchInput');if(input)inpu
 function showSearchTargetOnHome(result){if(!result)return;closeSearch();if($('#clubPage').classList.contains('show'))closeClub(false);if($('#eventModal').classList.contains('show'))closeEvent(false);history.pushState(null,'','#home');setPage('home');if(result.kind==='club'){const target=state.clubs.find(c=>String(c.id)===String(result.id));if(target){const list=[target,...state.clubs.filter(c=>String(c.id)!==String(target.id))].slice(0,3);$('#homeClubGrid').innerHTML=list.map(clubCard).join('')}}else if(result.kind==='event'){const target=state.events.find(e=>String(e.id)===String(result.id));if(target){const list=[target,...sortEvents(state.events).filter(e=>String(e.id)!==String(target.id))].slice(0,3);$('#homeEventList').innerHTML=list.map(homeEventCard).join('')}}requestAnimationFrame(()=>setTimeout(()=>{const selector=result.kind==='club'?`#homeClubGrid [data-club-id="${CSS.escape(String(result.id))}"]`:`#homeEventList [data-event-id="${CSS.escape(String(result.id))}"]`;const el=$(selector);if(el){el.scrollIntoView({behavior:'smooth',block:'center'});el.classList.add('search-focus');setTimeout(()=>el.classList.remove('search-focus'),1700)}},80))}
 function scrollHomeSection(route){closeSearch();if($('#clubPage').classList.contains('show'))closeClub(false);if($('#eventModal').classList.contains('show'))closeEvent(false);history.pushState(null,'','#home');setPage('home');const map={'#clubs':'#homeClubsSection','#events':'#homeEventsSection','#gallery':'#gallery','#about':'#homeAboutSection','#home':'#homeHero'};requestAnimationFrame(()=>setTimeout(()=>$(map[route]||'#homeHero')?.scrollIntoView({behavior:'smooth',block:'start'}),70))}
 function runSearchSelection(){const q=$('#searchInput').value.trim();if(!q)return;const route=sectionRoute(q);if(route){scrollHomeSection(route);clearSearchAfterSelection();return}const res=buildSearchSuggestions();if(res.length){showSearchTargetOnHome(res[0]);clearSearchAfterSelection();return}renderSearch()}
-function renderSearch(){const input=$('#searchInput'),q=input.value.trim(),res=buildSearchSuggestions();state.searchResults=res;activeSearchSuggestion=-1;const route=sectionRoute(q);const clubs=res.filter(r=>r.kind==='club'),events=res.filter(r=>r.kind==='event');const group=(title,items)=>items.length?`<div class="search-group-label">${title}</div>${items.map(r=>{const i=res.indexOf(r);return`<div class="search-result" role="option" aria-selected="false" data-i="${i}"><div><span class="result-badge">${r.type}</span><strong>${esc(r.title)}</strong><span>${esc(r.sub||'')} · scroll to this on Home</span></div></div>`}).join('')}`:'';$('#searchResults').innerHTML=q?(route?`<div class="search-result" role="option" data-route="${route}"><div><span class="result-badge">SECTION</span><strong>Find ${esc(route.slice(1))} on Home</strong><span>Press Enter to scroll there</span></div></div>`:'')+(res.length?`${group('Clubs',clubs)}${group('Events',events)}<div class="search-hint">Use <kbd>↑</kbd> <kbd>↓</kbd> to move · <kbd>Enter</kbd> to select</div>`:(!route?'<div class="empty">No matching clubs or events.</div>':'')):'';input.setAttribute('aria-expanded',String(Boolean(q&&(route||res.length))));$$('.search-result[data-i]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.i];showSearchTargetOnHome(r);clearSearchAfterSelection()});$$('.search-result[data-route]').forEach(el=>el.onclick=()=>{scrollHomeSection(el.dataset.route);clearSearchAfterSelection()})}
+function renderSearch(){const input=$('#searchInput'),q=input.value.trim(),res=buildSearchSuggestions();state.searchResults=res;activeSearchSuggestion=-1;const route=sectionRoute(q);const clubs=res.filter(r=>r.kind==='club'),events=res.filter(r=>r.kind==='event');const group=(title,items)=>items.length?`<div class="search-group-label">${title}</div>${items.map(r=>{const i=res.indexOf(r);return`<div class="search-result" role="option" aria-selected="false" data-i="${i}"><div><span class="result-badge">${r.type}</span><strong>${esc(r.title)}</strong><span>${esc(r.sub||'')} · ${innerWidth<=760?(r.kind==='club'?'Open club':'View event'):'scroll to this on Home'}</span></div></div>`}).join('')}`:'';$('#searchResults').innerHTML=q?(route?`<div class="search-result" role="option" data-route="${route}"><div><span class="result-badge">SECTION</span><strong>${innerWidth<=760?'Go to':'Find'} ${esc(route.slice(1))}${innerWidth<=760?'':' on Home'}</strong><span>${innerWidth<=760?'Open this section on Home':'Press Enter to scroll there'}</span></div></div>`:'')+(res.length?`${group('Clubs',clubs)}${group('Events',events)}<div class="search-hint">Use <kbd>↑</kbd> <kbd>↓</kbd> to move · <kbd>Enter</kbd> to select</div>`:(!route?'<div class="empty">No matching clubs or events.</div>':'')):'';input.setAttribute('aria-expanded',String(Boolean(q&&(route||res.length))));$$('.search-result[data-i]').forEach(el=>el.onclick=()=>{const r=res[+el.dataset.i];showSearchTargetOnHome(r);clearSearchAfterSelection()});$$('.search-result[data-route]').forEach(el=>el.onclick=()=>{scrollHomeSection(el.dataset.route);clearSearchAfterSelection()})}
 function updateSearchHighlight(){const opts=$$('.search-result[data-i]');opts.forEach((el,i)=>{const on=i===activeSearchSuggestion;el.classList.toggle('active',on);el.setAttribute('aria-selected',String(on));if(on)el.scrollIntoView({block:'nearest'})})}
 function handleSearchKey(e){const opts=$$('.search-result[data-i]');if(e.key==='ArrowDown'&&opts.length){e.preventDefault();activeSearchSuggestion=(activeSearchSuggestion+1)%opts.length;updateSearchHighlight();return}if(e.key==='ArrowUp'&&opts.length){e.preventDefault();activeSearchSuggestion=activeSearchSuggestion<=0?opts.length-1:activeSearchSuggestion-1;updateSearchHighlight();return}if(e.key==='Enter'){e.preventDefault();if(activeSearchSuggestion>=0&&state.searchResults[activeSearchSuggestion]){showSearchTargetOnHome(state.searchResults[activeSearchSuggestion]);clearSearchAfterSelection()}else runSearchSelection();return}if(e.key==='Escape'){closeSearch();clearSearchAfterSelection()}}
 function openSearch(){$('#searchPanel').classList.remove('hidden');$('#searchBtn').setAttribute('aria-expanded','true');setTimeout(()=>$('#searchInput').focus(),20)}function closeSearch(){$('#searchPanel').classList.add('hidden');$('#searchBtn').setAttribute('aria-expanded','false');$('#searchInput').setAttribute('aria-expanded','false')}
@@ -2711,9 +2785,9 @@ function placeholderLabel(alt,cls){if(/event|poster/i.test(`${alt} ${cls}`))retu
 function showLoadError(msg){const html=`<div class="load-error"><div class="empty-state-icon">!</div><strong>Couldn’t load KAMPUS.</strong><div>${esc(msg)}</div><button class="btn primary" type="button" onclick="loadData()">Try again</button></div>`;$('#homeClubGrid').innerHTML=html;$('#homeEventList').innerHTML=html;$('#clubDirectory').innerHTML=html;$('#eventDirectory').innerHTML=html;$('#featuredEventWrap')?.classList.add('hidden')}
 function renderMoreFromClub(e){const wrap=$('#modalMore');if(!wrap)return;const others=sortEvents(state.events.filter(x=>x.club_id===e.club_id&&String(x.id)!==String(e.id)&&!expired(x))).slice(0,2);if(!others.length){wrap.classList.add('hidden');wrap.innerHTML='';return}wrap.innerHTML=`<h3>More from ${esc(e.club)}</h3><div class="more-events">${others.map(x=>`<button class="more-event" type="button" onclick="event.stopPropagation();history.replaceState(null,'','#event/${encodeURIComponent(String(x.id))}');openEvent('${esc(x.id)}',false)"><span class="more-event-date">${esc(x.day)}<br>${esc(x.month)}</span><span class="more-event-copy"><strong>${esc(x.name)}</strong><span>${esc(x.time||'Time TBA')} · ${esc(x.place||'Venue TBA')}</span></span><span class="more-event-arrow">→</span></button>`).join('')}</div>`;wrap.classList.remove('hidden')}
 
-function renderClubGallery(rows,name){const el=$('#clubGallery'),urls=(rows||[]).map(x=>x.image_url).filter(Boolean);if(!urls.length){el.innerHTML=emptyState('▧','No gallery photos yet','Photos from this club will appear here.');return}const doubled=[...urls,...urls];el.innerHTML=`<div class="club-gallery-track">${doubled.map((u,i)=>`<img src="${esc(u)}" alt="${esc(name)} gallery image ${(i%urls.length)+1}" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=KAMPUS_IMAGE_FALLBACK" onclick="openLightboxFromUrls(${i%urls.length},${JSON.stringify(urls).replace(/"/g,'&quot;')})">`).join('')}</div>`}
+function renderClubGallery(rows,name){const el=$('#clubGallery'),urls=(rows||[]).map(x=>x.image_url).filter(Boolean);if(!urls.length){el.innerHTML=emptyState('▧','No gallery photos yet','Photos from this club will appear here.');return}const doubled=[...urls,...urls];el.innerHTML=`<div class="club-gallery-track">${doubled.map((u,i)=>`<img class="gallery-loading" src="${esc(u)}" alt="${esc(name)} gallery image ${(i%urls.length)+1}" loading="lazy" decoding="async" onload="this.classList.remove('gallery-loading')" onerror="this.onerror=null;this.src=KAMPUS_IMAGE_FALLBACK;this.classList.remove('gallery-loading')" onclick="openLightboxFromUrls(${i%urls.length},${JSON.stringify(urls).replace(/"/g,'&quot;')})">`).join('')}</div>`}
 
-$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').onclick=()=>{const open=$('#navLinks').classList.toggle('open');$('#menuBtn').setAttribute('aria-expanded',String(open));$('#menuBtn').setAttribute('aria-label',open?'Close menu':'Open menu');$('#menuBtn').textContent=open?'×':'☰'};$$('#navLinks a').forEach(a=>a.onclick=()=>{$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰'});$('#mobileThemeBtn').onclick=()=>{toggleTheme();$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰'};
+$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').onclick=()=>{const open=$('#navLinks').classList.toggle('open');document.body.classList.toggle('mobile-menu-open',open&&innerWidth<=760);$('#menuBtn').setAttribute('aria-expanded',String(open));$('#menuBtn').setAttribute('aria-label',open?'Close menu':'Open menu');$('#menuBtn').textContent=open?'×':'☰'};$$('#navLinks a').forEach(a=>a.onclick=()=>{$('#navLinks').classList.remove('open');document.body.classList.remove('mobile-menu-open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰'});$('#mobileThemeBtn').onclick=()=>{toggleTheme();};
 $('#searchBtn').setAttribute('aria-expanded','false');$('#searchBtn').onclick=()=>$('#searchPanel').classList.contains('hidden')?openSearch():closeSearch();let searchTimer=null;$('#searchInput').oninput=()=>{clearTimeout(searchTimer);searchTimer=setTimeout(renderSearch,70)};$('#searchInput').addEventListener('keydown',handleSearchKey);$('#searchGo').onclick=runSearchSelection;
 $('#savedBtn').onclick=openSaved;$('#savedClose').onclick=closeSaved;$('#savedBackdrop').onclick=e=>{if(e.target===e.currentTarget)closeSaved()};$('#websiteShareBtn').onclick=shareKampusWebsite;$('#themeBtn').onclick=toggleTheme;
 $('#eventClose').onclick=()=>closeEvent();$('#eventModal').onclick=()=>closeEvent();$('#lightboxClose').onclick=()=>closeLightbox();$('#lightbox').onclick=e=>{if(e.target===$('#lightbox'))closeLightbox()};$('#lightboxPrev').onclick=e=>{e.stopPropagation();moveLightbox(-1)};$('#lightboxNext').onclick=e=>{e.stopPropagation();moveLightbox(1)};
@@ -2721,10 +2795,28 @@ $('#clubBack').onclick=()=>{if(history.length>1)history.back();else location.has
 $$('#eventFilters .pill').forEach(b=>b.onclick=()=>{state.eventWindow=b.dataset.window;renderEventDirectory()});$('#eventSort').onchange=e=>{state.eventSort=e.target.value;renderEventDirectory()};
 window.addEventListener('hashchange',handleRoute);window.addEventListener('popstate',()=>{if(state.ignoreNextPop){state.ignoreNextPop=false;return}if($('#lightbox').classList.contains('show')){state.lightboxHistoryPushed=false;closeLightbox(false);return}if($('#eventModal').classList.contains('show')&&!location.hash.startsWith('#event/')){state.eventHistoryPushed=false;closeEvent(false);handleRoute();return}handleRoute()});
 window.addEventListener('keydown',e=>{if(e.key==='Escape'){if($('#lightbox').classList.contains('show'))closeLightbox();else if($('#eventModal').classList.contains('show'))closeEvent();else if($('#savedBackdrop').classList.contains('show'))closeSaved()}if($('#lightbox').classList.contains('show')&&e.key==='ArrowLeft')moveLightbox(-1);if($('#lightbox').classList.contains('show')&&e.key==='ArrowRight')moveLightbox(1)});
-document.addEventListener('click',e=>{if(!$('#searchPanel').contains(e.target)&&!$('#searchBtn').contains(e.target))closeSearch();if(innerWidth<=760&&$('#navLinks').classList.contains('open')&&!$('#navLinks').contains(e.target)&&!$('#menuBtn').contains(e.target)){ $('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu') }});
+document.addEventListener('click',e=>{if(!$('#searchPanel').contains(e.target)&&!$('#searchBtn').contains(e.target))closeSearch();if(innerWidth<=760&&$('#navLinks').classList.contains('open')&&!$('#navLinks').contains(e.target)&&!$('#menuBtn').contains(e.target)){ $('#navLinks').classList.remove('open');document.body.classList.remove('mobile-menu-open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').setAttribute('aria-label','Open menu');$('#menuBtn').textContent='☰' }});
 let lightboxTouchX=null;$('#lightbox').addEventListener('touchstart',e=>{lightboxTouchX=e.changedTouches?.[0]?.clientX??null},{passive:true});$('#lightbox').addEventListener('touchend',e=>{if(lightboxTouchX===null)return;const x=e.changedTouches?.[0]?.clientX??lightboxTouchX,dx=x-lightboxTouchX;lightboxTouchX=null;if(Math.abs(dx)>45)moveLightbox(dx<0?1:-1)},{passive:true});
 function trapDialogFocus(e){if(e.key!=='Tab')return;const root=$('#lightbox').classList.contains('show')?$('#lightbox'):$('#eventModal').classList.contains('show')?$('#eventModal'):$('#savedBackdrop').classList.contains('show')?$('#savedBackdrop'):$('#clubPage').classList.contains('show')?$('#clubPage'):null;if(!root)return;const focusable=$$('button:not([disabled]):not([hidden]),a[href],input:not([disabled]),select:not([disabled]),[tabindex]:not([tabindex="-1"])',root).filter(el=>el.offsetParent!==null);if(!focusable.length)return;const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}
-document.addEventListener('keydown',trapDialogFocus);window.addEventListener('resize',()=>{if(innerWidth>760){$('#navLinks').classList.remove('open');$('#menuBtn').setAttribute('aria-expanded','false')}});
+document.addEventListener('keydown',trapDialogFocus);window.addEventListener('resize',()=>{if(innerWidth>760){$('#navLinks').classList.remove('open');document.body.classList.remove('mobile-menu-open');$('#menuBtn').setAttribute('aria-expanded','false');$('#menuBtn').textContent='☰'}});
+
+
+/* Mobile-only whole-card club navigation. Buttons, links and logos keep their own actions. */
+document.addEventListener('click',e=>{
+  if(innerWidth>760)return;
+  const card=e.target.closest('.club-card[data-club-slug]');if(!card)return;
+  if(e.target.closest('button,a,.zoomable-logo'))return;
+  location.hash=`#club/${encodeURIComponent(card.dataset.clubSlug)}`;
+});
+
+/* Mobile share sheet for Website + Club. Desktop sharing is intentionally left for the later desktop pass. */
+let kampusMobileSharePayload=null;
+function closeMobileShareSheet(){const back=$('#mobileShareBackdrop');if(!back)return;back.classList.remove('open');back.setAttribute('aria-hidden','true');kampusMobileSharePayload=null;syncBodyLock();}
+function openMobileShareSheet(payload){if(innerWidth>760)return false;kampusMobileSharePayload=payload;const back=$('#mobileShareBackdrop');if(!back)return false;$('#mobileShareTitle').textContent=payload.title||'Share KAMPUS';$('#mobileShareText').textContent=payload.text||'Choose how you want to share.';back.classList.add('open');back.setAttribute('aria-hidden','false');syncBodyLock();requestAnimationFrame(()=>$('#mobileShareClose')?.focus({preventScroll:true}));return true;}
+async function copyMobileShareLink(){const p=kampusMobileSharePayload;if(!p)return;try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(p.url);else if(!legacyCopyText(p.url))throw new Error('copy unavailable');toast('Link copied ✓');closeMobileShareSheet()}catch{try{window.prompt('Copy this link:',p.url)}catch{}}}
+async function nativeMobileShare(){const p=kampusMobileSharePayload;if(!p)return;if(navigator.share){try{await navigator.share({title:p.title,text:p.text,url:p.url});closeMobileShareSheet();return}catch(err){if(err?.name==='AbortError')return}}toast('Sharing is not available here');}
+function whatsappMobileShare(){const p=kampusMobileSharePayload;if(!p)return;const message=[p.text,p.url].filter(Boolean).join('\n\n');window.open(`https://wa.me/?text=${encodeURIComponent(message)}`,'_blank','noopener');}
+$('#mobileShareClose')?.addEventListener('click',closeMobileShareSheet);$('#mobileShareBackdrop')?.addEventListener('click',e=>{if(e.target===e.currentTarget)closeMobileShareSheet()});$('#mobileShareCopy')?.addEventListener('click',copyMobileShareLink);$('#mobileShareMore')?.addEventListener('click',nativeMobileShare);$('#mobileShareWhatsApp')?.addEventListener('click',whatsappMobileShare);
 
 const brandHome=$('#brandHome');
 if(brandHome){brandHome.addEventListener('click',e=>{
@@ -2748,49 +2840,15 @@ state.theme='dark';try{localStorage.removeItem('kampusTheme')}catch{}applyTheme(
 
 /* Same Share Club flow as index.html + local file fallback. */
 async function shareClub(){
-  const status=$('#clubShareStatus');
-  const currentClub=state.currentClub;
-  if(!currentClub)return;
-  const url=location.href;
-  const title=`KAMPUS · ${currentClub.name}`;
-  const text=`Discover ${currentClub.name} at CHRIST University`;
-
+  const status=$('#clubShareStatus'),currentClub=state.currentClub;if(!currentClub)return;
+  const url=location.href,title=`KAMPUS · ${currentClub.name}`,text=`Discover ${currentClub.name} at CHRIST University`;
+  if(innerWidth<=760){openMobileShareSheet({title,text,url});if(status)status.textContent='';return;}
   try{
-    if(navigator.share){
-      await navigator.share({title,text,url});
-      if(status)status.textContent='Shared.';
-      toast('Shared ✓');
-      return;
-    }
+    if(navigator.share){await navigator.share({title,text,url});if(status)status.textContent='Shared.';toast('Shared ✓');return}
     const shareText=`${title}\n\n${text}\n\n${url}`;
-    if(navigator.clipboard){
-      await navigator.clipboard.writeText(shareText);
-      if(status)status.textContent='Share text copied.';
-      toast('Share text copied ✓');
-      return;
-    }
-    const ta=document.createElement('textarea');
-    ta.value=shareText;
-    ta.setAttribute('readonly','');
-    ta.style.position='fixed';
-    ta.style.opacity='0';
-    ta.style.pointerEvents='none';
-    document.body.appendChild(ta);
-    ta.select();
-    ta.setSelectionRange(0,ta.value.length);
-    const copied=Boolean(document.execCommand&&document.execCommand('copy'));
-    ta.remove();
-    if(copied){
-      if(status)status.textContent='Share text copied.';
-      toast('Share text copied ✓');
-      return;
-    }
-    if(status)status.textContent='Copy the URL from your browser to share.';
-  }catch(err){
-    if(!err||err.name!=='AbortError'){
-      if(status)status.textContent='Copy the URL from your browser to share.';
-    }
-  }
+    if(navigator.clipboard){await navigator.clipboard.writeText(shareText);if(status)status.textContent='Share text copied.';toast('Share text copied ✓');return}
+    const ta=document.createElement('textarea');ta.value=shareText;ta.setAttribute('readonly','');ta.style.position='fixed';ta.style.opacity='0';ta.style.pointerEvents='none';document.body.appendChild(ta);ta.select();ta.setSelectionRange(0,ta.value.length);const copied=Boolean(document.execCommand&&document.execCommand('copy'));ta.remove();if(copied){if(status)status.textContent='Share text copied.';toast('Share text copied ✓');return}if(status)status.textContent='Copy the URL from your browser to share.';
+  }catch(err){if(!err||err.name!=='AbortError'){if(status)status.textContent='Copy the URL from your browser to share.'}}
 }
 
 /* Compact homepage: no Recently Viewed. */
@@ -2856,7 +2914,7 @@ function eventStatus(e){return eventBadges(e)}
 /* Support a registration deadline if the admin/database provides one; otherwise nothing is invented. */
 function mapEvent(r,names){
   const d=r.event_date?new Date(r.event_date+'T00:00:00'):null;
-  return{id:r.id,club_id:r.club_id,name:r.title||'Event',desc:r.description||'',club:names[r.club_id]||'Club',place:r.venue||'',event_date:r.event_date||'',day:d?String(d.getDate()):'--',month:d?d.toLocaleString('en-US',{month:'short'}).toUpperCase():'',time:formatTime(r.event_time),raw_time:r.event_time||'',end_time:r.event_end_time||r.end_time||'',registration_link:r.registration_link||'',registration_deadline:r.registration_deadline||r.registration_closes_at||r.registration_end||'',poster_url:r.event_poster_url||'',created_at:r.created_at||'',featured:Boolean(r.is_featured||r.featured)};
+  return{id:r.id,club_id:r.club_id,name:r.title||'Event',desc:r.description||'',club:names[r.club_id]||'Club',place:r.venue||'',event_date:r.event_date||'',day:d?String(d.getDate()):'--',month:d?d.toLocaleString('en-US',{month:'short'}).toUpperCase():'',time:formatTime(r.event_time),raw_time:r.event_time||'',end_time:r.event_end_time||r.end_time||'',registration_link:r.registration_link||'',registration_deadline:r.registration_deadline||r.registration_closes_at||r.registration_end||'',poster_url:r.event_poster_url||(innerWidth<=760?(r.poster_url||r.poster||r.image_url||r.image||''):''),created_at:r.created_at||'',featured:Boolean(r.is_featured||r.featured)};
 }
 
 function mediaMarkup(url,alt,cls='',priority='lazy'){
@@ -2906,11 +2964,11 @@ async function shareEvent(id,btn){
 function clubCard(c,priority='lazy'){
   const tone=categoryToneName(c.category);const cover=`<div class="club-card-cover-static">${mediaMarkup(c.cover_url,`${c.name} banner`,'club-banner',priority)}</div>`;
   const logo=c.logo_url?`<img class="club-logo zoomable-logo" src="${esc(c.logo_url)}" alt="${esc(c.name)} logo" loading="${priority==='eager'?'eager':'lazy'}" decoding="async" onerror="this.remove()" title="Click to enlarge logo" onclick="event.stopPropagation();openLightboxFromUrls(0,${lightboxJsArray([c.logo_url])})">`:'';
-  return`<article class="club-card" data-tone="${tone}" data-club-id="${esc(c.id)}">${cover}<div class="club-body${c.logo_url?'':' no-logo'}">${logo}<span class="club-chip" data-cat="${esc(c.category)}">${esc(c.category)}</span><h3>${esc(c.name)}</h3><p>${esc(c.desc||'Explore this campus community and see what they are up to.')}</p><div class="card-actions"><button class="btn primary" type="button" aria-label="View ${esc(c.name)} club" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button></div></div></article>`;
+  return`<article class="club-card" data-tone="${tone}" data-club-id="${esc(c.id)}" data-club-slug="${esc(c.slug)}">${cover}<div class="club-body${c.logo_url?'':' no-logo'}">${logo}<span class="club-chip" data-cat="${esc(c.category)}">${esc(c.category)}</span><h3>${esc(c.name)}</h3><p>${esc(c.desc||'Explore this campus community and see what they are up to.')}</p><div class="card-actions"><button class="btn primary" type="button" aria-label="View ${esc(c.name)} club" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button></div></div></article>`;
 }
-function homeEventCard(e,priority='lazy'){
-  const c=state.clubs.find(x=>x.id===e.club_id),tone=eventToneName(e);
-  return`<article class="home-event-card clickable-card" data-tone="${tone}" data-event-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Open ${esc(e.name)} event details" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}">
+function homeEventCard(e,priority='lazy',includeClub=true){
+  const c=state.clubs.find(x=>x.id===e.club_id),tone=eventToneName(e),posterClass=e.poster_url?'':' no-poster';
+  return`<article class="home-event-card clickable-card${posterClass}" data-tone="${tone}" data-event-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Open ${esc(e.name)} event details" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}">
     <div class="home-event-date-column"><strong>${esc(e.day)}</strong><span>${esc(e.month)}</span></div>
     <div class="home-event-media-wrap">${eventMediaMarkup(e,'home-event-media',priority)}</div>
     <div class="home-event-copy">
@@ -2920,14 +2978,14 @@ function homeEventCard(e,priority='lazy'){
       <p>${esc(e.desc||'Open the event to see the details.')}</p>
     </div>
     <div class="home-event-actions" aria-label="Event actions">
-      <div class="home-event-primary-actions">${c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}</div>
+      <div class="home-event-primary-actions">${includeClub&&c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}</div>
       <div class="home-event-icon-actions">${shareButton(e)}${savedButton(e)}</div>
     </div>
   </article>`;
 }
 function eventCard(e){
   const c=state.clubs.find(x=>x.id===e.club_id),tone=eventToneName(e);
-  return`<article class="event-card clickable-card" data-tone="${tone}" data-event-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Open ${esc(e.name)} event details" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}"><div class="event-poster-wrap">${eventMediaMarkup(e,'event-poster')}<div class="date-badge"><strong>${esc(e.day)}</strong><span>${esc(e.month)}</span></div>${savedButton(e)}</div><div class="event-body">${eventBadges(e)}<div class="event-club">${esc(e.club)}</div><h3>${esc(e.name)}</h3><div class="event-meta"><span>${esc(e.time||'Time TBA')}</span><span>${esc(e.place||'Venue TBA')}</span></div><p>${esc(e.desc||'Open the event to see the details.')}</p><div class="card-actions">${c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}${shareButton(e)}</div></div></article>`;
+  return`<article class="event-card clickable-card${e.poster_url?'':' no-poster'}" data-tone="${tone}" data-event-id="${esc(e.id)}" tabindex="0" role="button" aria-label="Open ${esc(e.name)} event details" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}"><div class="event-poster-wrap">${eventMediaMarkup(e,'event-poster')}<div class="date-badge"><strong>${esc(e.day)}</strong><span>${esc(e.month)}</span></div>${savedButton(e)}</div><div class="event-body">${eventBadges(e)}<div class="event-club">${esc(e.club)}</div><h3>${esc(e.name)}</h3><div class="event-meta"><span>${esc(e.time||'Time TBA')}</span><span>${esc(e.place||'Venue TBA')}</span></div><p>${esc(e.desc||'Open the event to see the details.')}</p><div class="card-actions">${c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}${shareButton(e)}</div></div></article>`;
 }
 function emptyState(icon,title,text){return`<div class="empty"><div class="empty-state-icon">${icon}</div><strong>${esc(title)}</strong><span>${esc(text)}</span></div>`}
 
@@ -2936,13 +2994,15 @@ function renderHappeningToday(){
   const today=sortEvents(state.events.filter(e=>isToday(e)&&!expired(e)));if(!today.length){section.classList.add('hidden');wrap.innerHTML='';return}
   const now=Date.now();const live=today.find(e=>eventTimingStatus(e).key==='now');const next=today.map(e=>({e,start:parseLocalEventDateTime(e.event_date,e.raw_time)})).filter(x=>x.start&&x.start.getTime()>now).sort((a,b)=>a.start-b.start)[0];
   count.innerHTML=`${today.length} event${today.length===1?'':'s'} today${live?' · <span class="today-live-copy">Live now</span>':''}<span class="today-strip-next">${live?'Something is happening right now.':next?`Next at ${esc(next.e.time||'later today')} · ${esc(next.e.name)}`:'See what is still happening today.'}</span>`;
-  wrap.innerHTML=today.slice(0,4).map(e=>{const tone=eventToneName(e);return`<button class="today-mini" data-tone="${tone}" type="button" onclick="openEvent('${esc(e.id)}')" aria-label="Open ${esc(e.name)}"><span class="today-mini-time">${esc(e.time||'Today')}</span><span class="today-mini-copy"><strong>${esc(e.name)}</strong><small>${esc(e.club)}</small></span></button>`}).join('');
-  section.classList.remove('hidden');scheduleRevealAnimations(section);
+  const card=(e,duplicate=false)=>{const tone=eventToneName(e);return`<button class="today-mini${duplicate?' today-mini-clone':''}" data-tone="${tone}" type="button" ${duplicate?'tabindex="-1" aria-hidden="true"':''} onclick="openEvent('${esc(e.id)}')" aria-label="Open ${esc(e.name)}"><span class="today-mini-time">${esc(e.time||'Today')}</span><span class="today-mini-copy"><strong>${esc(e.name)}</strong><small>${esc(e.club)}</small></span></button>`};
+  const visible=today.slice(0,4);wrap.innerHTML=visible.map(e=>card(e)).join('')+(innerWidth<=760&&visible.length>1?visible.map(e=>card(e,true)).join(''):'');
+  section.classList.remove('hidden');scheduleRevealAnimations(section);requestAnimationFrame(()=>initKampusTodayRail(wrap));
 }
 function renderHome(){
   const clubs=state.clubs.slice(0,3),events=sortEvents(state.events).slice(0,3);
   $('#homeClubGrid').innerHTML=clubs.length?clubs.map((c,i)=>clubCard(c,i===0?'eager':'lazy')).join(''):emptyState('✦','Clubs are on the way','New club profiles will appear here as soon as they are published.');
   $('#homeEventList').innerHTML=events.length?events.map((e,i)=>homeEventCard(e,i===0?'eager':'lazy')).join(''):emptyState('○','Campus is quiet for now','New events will pop up here as soon as clubs publish them.');
+  const more=$('#homeEventsMoreNote');if(more){const total=sortEvents(state.events).length;more.classList.toggle('hidden',total<=events.length);more.innerHTML=total>events.length?`<span>Showing ${events.length} of ${total} upcoming events</span><a href="#events">View all events →</a>`:'';}
   renderHappeningToday();scheduleRevealAnimations($('#homePage'));
 }
 function renderClubFilters(){
@@ -2970,7 +3030,7 @@ function renderFeaturedEvent(){
   const c=state.clubs.find(x=>x.id===e.club_id),tone=eventToneName(e);wrap.innerHTML=`<article class="featured-event clickable-card" data-tone="${tone}" tabindex="0" role="button" aria-label="Open featured event ${esc(e.name)}" onclick="openEvent('${esc(e.id)}')" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openEvent('${esc(e.id)}')}"><div class="featured-event-media">${eventMediaMarkup(e,'event-poster','eager')}</div><div class="featured-event-copy">${eventBadges(e)}<h2>${esc(e.name)}</h2><div class="event-meta"><span>${esc(e.club)}</span><span>${esc(formatEventDate(e.event_date))}</span><span>${esc(e.time||'Time TBA')}</span><span>${esc(e.place||'Venue TBA')}</span></div><p>${esc(e.desc||'Open the event to see what is happening and how to join.')}</p><div class="card-actions">${c?`<button class="btn view-club-btn" type="button" onclick="event.stopPropagation();location.hash='#club/${encodeURIComponent(c.slug)}'">View club</button>`:''}${e.registration_link?`<a class="btn register-btn" href="${esc(e.registration_link)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Register</a>`:''}${shareButton(e)}${savedButton(e)}</div></div></article>`;wrap.classList.remove('hidden');
 }
 function renderAll(){renderHome();renderClubDirectory();renderEventDirectory();updateNav();updatePageMetadata();}
-function refreshOpenClubEvents(){const el=$('#clubUpcomingEvents');if(!el||!state.currentClub)return;const list=sortEvents(state.events.filter(e=>e.club_id===state.currentClub.id&&!expired(e)));el.innerHTML=list.length?list.map(homeEventCard).join(''):emptyState('○','Nothing scheduled yet','This club has no upcoming events right now.');scheduleRevealAnimations(el)}
+function refreshOpenClubEvents(){const el=$('#clubUpcomingEvents');if(!el||!state.currentClub)return;const list=sortEvents(state.events.filter(e=>e.club_id===state.currentClub.id&&!expired(e)));el.innerHTML=list.length?list.map(e=>homeEventCard(e,'lazy',innerWidth>760)).join(''):emptyState('○','Nothing scheduled yet','This club has no upcoming events right now.');scheduleRevealAnimations(el)}
 
 function renderSaved(){
   const ids=getSaved(),list=ids.map(id=>state.events.find(e=>String(e.id)===String(id))).filter(Boolean).sort((a,b)=>String(a.event_date).localeCompare(String(b.event_date))||String(a.raw_time||'').localeCompare(String(b.raw_time||'')));
@@ -2986,7 +3046,7 @@ async function openClub(key){
   if($('#clubPage').classList.contains('show')&&state.currentClub?.id===c.id)return;
   state.currentClub=c;const events=sortEvents(state.events.filter(e=>e.club_id===c.id&&!expired(e)));
   const logo=c.logo_url?`<div class="club-page-logo-wrap zoomable-logo" role="button" tabindex="0" aria-label="Enlarge ${esc(c.name)} logo" title="Click to enlarge logo" onclick="event.stopPropagation();openLightboxFromUrls(0,${lightboxJsArray([c.logo_url])})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openLightboxFromUrls(0,${lightboxJsArray([c.logo_url])})}"><img src="${esc(c.logo_url)}" alt="${esc(c.name)} logo" loading="eager" decoding="async" onerror="this.parentElement.remove()"></div>`:'';
-  $('#clubContent').innerHTML=`<div class="club-hero-card"><div class="club-cover-static">${mediaMarkup(c.cover_url,`${c.name} banner`,'club-cover','eager')}</div><div class="club-identity">${logo}<div class="club-title-row"><h1>${esc(c.name)}</h1><span class="club-chip" data-cat="${esc(c.category)}">${esc(c.category)}</span></div><p>${esc(c.desc||'Explore this campus community and what they are creating.')}</p><div class="club-meta-grid"><div class="club-meta-card"><strong>Student Head</strong><div>${esc(c.head)}</div></div><div class="club-meta-card"><strong>Faculty Coordinator</strong><div>${esc(c.faculty)}</div></div><div class="club-meta-card"><strong>Instagram</strong><div>${contactLink(c.instagram,'instagram')}</div></div><div class="club-meta-card"><strong>WhatsApp</strong><div>${contactLink(c.whatsapp,'whatsapp')}</div></div></div></div></div><section class="club-section"><div class="club-section-head"><h2>About the club</h2></div><p>${esc(c.about||'No additional information has been added yet.')}</p></section><section class="club-section"><div class="club-section-head"><h2>Gallery</h2></div><p>A glimpse into the people and moments around the club.</p><div class="club-gallery-window" id="clubGallery"><div class="inline-loading" role="status">Bringing the gallery in…</div></div></section><section class="club-section hidden" id="clubVideosSection"><div class="club-section-head"><h2>Videos</h2></div><div class="club-video-window" id="clubVideos"></div></section><section class="club-section"><div class="club-section-head"><h2>Upcoming events</h2></div><div class="home-event-list" id="clubUpcomingEvents">${events.length?events.map(e=>homeEventCard(e)).join(''):emptyState('○','Nothing scheduled yet','This club has no upcoming events right now.')}</div></section>`;
+  $('#clubContent').innerHTML=`<div class="club-hero-card"><div class="club-cover-static">${mediaMarkup(c.cover_url,`${c.name} banner`,'club-cover','eager')}</div><div class="club-identity">${logo}<div class="club-title-row"><h1>${esc(c.name)}</h1><span class="club-chip" data-cat="${esc(c.category)}">${esc(c.category)}</span></div><p>${esc(c.desc||'Explore this campus community and what they are creating.')}</p><div class="club-meta-grid"><div class="club-meta-card"><strong>Student Head</strong><div>${esc(c.head)}</div></div><div class="club-meta-card"><strong>Faculty Coordinator</strong><div>${esc(c.faculty)}</div></div><div class="club-meta-card"><strong>Instagram</strong><div>${contactLink(c.instagram,'instagram')}</div></div><div class="club-meta-card"><strong>WhatsApp</strong><div>${contactLink(c.whatsapp,'whatsapp')}</div></div></div></div></div><section class="club-section"><div class="club-section-head"><h2>About the club</h2></div><p>${esc(c.about||'No additional information has been added yet.')}</p></section><section class="club-section"><div class="club-section-head"><h2>Gallery</h2></div><p>A glimpse into the people and moments around the club.</p><div class="club-gallery-window" id="clubGallery"><div class="inline-loading" role="status">Bringing the gallery in…</div></div></section><section class="club-section hidden" id="clubVideosSection"><div class="club-section-head"><h2>Videos</h2></div><div class="club-video-window" id="clubVideos"></div></section><section class="club-section"><div class="club-section-head"><h2>Upcoming events</h2></div><div class="home-event-list" id="clubUpcomingEvents">${events.length?events.map(e=>homeEventCard(e,'lazy',innerWidth>760)).join(''):emptyState('○','Nothing scheduled yet','This club has no upcoming events right now.')}</div></section>`;
   rememberFocus();setDialogOpen($('#clubPage'),true);$('#clubPage').scrollTop=0;requestAnimationFrame(()=>{$('#clubBack').focus({preventScroll:true});scheduleRevealAnimations($('#clubContent'))});
   const[photos,videos]=await Promise.all([fetchClubGallery(c.id),fetchClubVideos(c.id)]);if(state.currentClub?.id===c.id){renderClubGallery(photos,c.name);renderClubVideos(videos,c.name);requestAnimationFrame(()=>scheduleRevealAnimations($('#clubContent')))}
 }
@@ -2997,7 +3057,7 @@ function openEvent(id,push=true){
   state.currentEventId=String(e.id);rememberFocus();const modal=$('#eventModal .modal');modal?.setAttribute('data-tone',eventToneName(e));
   let badge=$('#modalUrgency');if(!badge){badge=document.createElement('div');badge.id='modalUrgency';badge.className='modal-urgency';$('#modalTitle')?.before(badge)}badge.innerHTML=eventBadges(e);
   $('#modalTitle').textContent=e.name;$('#modalMeta').innerHTML=`<span>${esc(e.club)}</span><span>${esc(formatEventDate(e.event_date))}</span>${e.time?`<span>${esc(e.time)}</span>`:''}${e.place?`<span>${esc(e.place)}</span>`:''}`;$('#modalDesc').textContent=e.desc||'The club has not added a longer description yet.';$('#modalActions').innerHTML=eventActions(e,true);renderMoreFromClub(e);
-  const p=$('#modalPoster');if(e.poster_url){p.style.setProperty('--modal-poster',`url("${String(e.poster_url).replace(/"/g,'%22')}")`);p.innerHTML=`<img src="${esc(e.poster_url)}" alt="${esc(e.name)} poster" title="Click to enlarge poster" decoding="async" onerror="this.style.display='none'" onclick="event.stopPropagation();openLightboxFromUrls(0,${lightboxJsArray([e.poster_url])})">`}else{p.style.removeProperty('--modal-poster');p.innerHTML=emptyState('○','Poster coming soon','You can still read the event details and register from here.')}
+  const p=$('#modalPoster');if(e.poster_url){p.style.setProperty('--modal-poster',`url("${String(e.poster_url).replace(/"/g,'%22')}")`);p.innerHTML=`<img src="${esc(e.poster_url)}" alt="${esc(e.name)} poster" title="Click to enlarge poster" decoding="async" onerror="if(innerWidth<=760){this.parentElement.innerHTML=emptyState('○','Poster unavailable','Event details are still available here.')}else{this.style.display='none'}" onclick="event.stopPropagation();openLightboxFromUrls(0,${lightboxJsArray([e.poster_url])})">`}else{p.style.removeProperty('--modal-poster');p.innerHTML=emptyState('○','Poster coming soon','You can still read the event details and register from here.')}
   setDialogOpen($('#eventModal'),true);requestAnimationFrame(()=>$('#eventClose').focus({preventScroll:true}));if(push&&!location.hash.startsWith('#event/')){state.eventOriginHash=location.hash||'#home';state.eventHistoryPushed=true;history.pushState({eventModal:true,origin:state.eventOriginHash},'',`#event/${encodeURIComponent(e.id)}`)}else if(!push&&!location.hash.startsWith('#event/'))state.eventHistoryPushed=false;
 }
 
@@ -3012,6 +3072,7 @@ function renderLightbox(){
 /* Reveal only once, and respect reduced-motion/save-data users. */
 let kampusRevealObserver=null;
 function scheduleRevealAnimations(root=document){
+  if(innerWidth<=760){$$('.reveal-ready',root).forEach(el=>el.classList.remove('reveal-ready'));return;}
   if(matchMedia('(prefers-reduced-motion: reduce)').matches||navigator.connection?.saveData)return;
   if(!('IntersectionObserver'in window))return;
   if(!kampusRevealObserver)kampusRevealObserver=new IntersectionObserver(entries=>entries.forEach(en=>{if(en.isIntersecting){en.target.classList.add('reveal-in');kampusRevealObserver.unobserve(en.target)}}),{threshold:.08,rootMargin:'0px 0px -18px 0px'});
@@ -3026,6 +3087,18 @@ $('#lightbox')?.addEventListener('touchend',()=>{kampusSwipeStart=null;const img
 
 /* Save-data users get a static gallery instead of a continuous animation. */
 
+
+/* Mobile Happening Today rail: continuous and touch-friendly. */
+const kampusTodayRailState=new WeakMap();
+function initKampusTodayRail(scroller){
+  if(!scroller||innerWidth>760)return;
+  let st=kampusTodayRailState.get(scroller);
+  if(st){st.pauseUntil=performance.now()+650;return;}
+  st={interacting:false,pauseUntil:performance.now()+650,last:0,raf:0};kampusTodayRailState.set(scroller,st);
+  const hold=()=>{st.interacting=true;st.last=0};const release=()=>{st.interacting=false;st.pauseUntil=performance.now()+1300;st.last=0};
+  scroller.addEventListener('touchstart',hold,{passive:true});scroller.addEventListener('touchend',release,{passive:true});scroller.addEventListener('pointerdown',hold,{passive:true});scroller.addEventListener('pointerup',release,{passive:true});scroller.addEventListener('pointercancel',release,{passive:true});
+  const frame=ts=>{if(!document.hidden&&innerWidth<=760&&!matchMedia('(prefers-reduced-motion: reduce)').matches&&!st.interacting&&ts>=st.pauseUntil){if(st.last){const dt=Math.min(48,ts-st.last),half=scroller.scrollWidth/2;if(half>0){scroller.scrollLeft+=(24*dt)/1000;if(scroller.scrollLeft>=half-1)scroller.scrollLeft-=half}}st.last=ts}else st.last=0;st.raf=requestAnimationFrame(frame)};st.raf=requestAnimationFrame(frame);
+}
 
 /* Mobile gallery autoplay: continuous, touch-friendly and looped. */
 const kampusMobileGalleryState=new WeakMap();
